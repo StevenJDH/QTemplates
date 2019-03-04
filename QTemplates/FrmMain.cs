@@ -35,26 +35,26 @@ namespace QTemplates
     public partial class FrmMain : Form
     {
         private readonly GlobalHotKey _globalHotKey;
-        private bool _startupHidden;
+        private bool _startupVisible;
         private readonly IUnitOfWork _unitOfWork;
         private string _lastTemplateUsed;
-
         private readonly Dictionary<string, IPlugin> _pluginsDictionary;
         private readonly IHost _host;
 
         public FrmMain()
         {
             InitializeComponent();
+
             _unitOfWork = new UnitOfWork(new AppDbContext());
             _globalHotKey = new GlobalHotKey();
-            _startupHidden = false;
+            _startupVisible = false;
             _lastTemplateUsed = "<[ No templates used yet ]>";
 
             _host = new Host();
             _pluginsDictionary = PluginProvider.Instance.LoadPlugins("Plugins");
             foreach (var entry in _pluginsDictionary)
             {
-                mnuTools.DropDownItems.Add(new ToolStripMenuItem(entry.Key, null, mnuPluginSelected_Click));
+                mnuTools.DropDownItems.Add(new ToolStripMenuItem(entry.Key, null, MnuPluginSelected_Click));
             }
            
             // Hotkey for showing template selector.
@@ -73,23 +73,27 @@ namespace QTemplates
             notifyIcon1.Visible = true;
         }
 
-        private void mnuPluginSelected_Click(object sender, System.EventArgs e)
+        /// <summary>
+        /// Click event used by plugins, which is determined by the plugin's name. 
+        /// </summary>
+        /// <param name="sender">The plugin being clicked in the menu</param>
+        /// <param name="e">This is not used</param>
+        private void MnuPluginSelected_Click(object sender, System.EventArgs e)
         {
-            ToolStripMenuItem clickedPlugin = sender as ToolStripMenuItem;
-            string key = clickedPlugin?.Text ?? "";
-
+            ToolStripMenuItem clickedMenuItem = sender as ToolStripMenuItem;
+            string key = clickedMenuItem?.Text ?? "";
+            
             if (_pluginsDictionary.ContainsKey(key))
             {
                 IPlugin plugin = _pluginsDictionary[key];
-                plugin.Initialize(_host);
-                MessageBox.Show($"{plugin.Title}: {plugin.Description}");
+                plugin.Initialize(_host); // Passes instance to share functionality with plugin.
                 plugin.InvokeAction();
             }
         }
 
         /// <summary>
         /// Overrides the defaults to allow the main form to start hidden. This method is used by the
-        /// framework, we do not use it directly. Instead, control it via the _startupHidden instance
+        /// framework, we do not use it directly. Instead, control it via the _startupVisible instance
         /// variable. Then once things are loaded, set this variable to true as well as the form's
         /// Visible property before trying to call show on it. Once show is called, the from's load
         /// event will be raised.
@@ -97,7 +101,7 @@ namespace QTemplates
         /// <param name="value">True for the default and false for hidden startup</param>
         protected override void SetVisibleCore(bool value)
         {
-            base.SetVisibleCore(_startupHidden ? value : _startupHidden);
+            base.SetVisibleCore(_startupVisible ? value : _startupVisible);
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -116,21 +120,24 @@ namespace QTemplates
             {
                 cmbCategory.Items.Add(entry.Name);
             }
+            cmbCategory.Text = "All";
         }
 
         private void FrmMain_Closing(object sender, FormClosingEventArgs e)
         {
             notifyIcon1.Visible = false;
             _globalHotKey.RemoveHotKey(123);
+            _globalHotKey.RemoveHotKey(456);
             _globalHotKey.Dispose();
             _unitOfWork.Dispose();
         }
 
         private void NotifyIcon1_DoubleClick(object sender, MouseEventArgs e)
         {
-            // Resets form state that enables it to load to system tray cleanly.
-            _startupHidden = true;
-            this.Visible = _startupHidden;
+            // Resets form state that enables the form to load to system tray directly on first load.
+            _startupVisible = true;
+            this.Visible = _startupVisible;
+
             this.Show();
         }
 
@@ -152,42 +159,42 @@ namespace QTemplates
             }
         }
 
-        private void cmbLang_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lstTemplates.Items.Clear();
-
-            _unitOfWork.Versions.GetVersionsWithAll()
-                .Where(v => v.Language.Name == cmbLang.Text)
-                .Select(v => v.Template.Title)
-                .Distinct()
-                .ToList()
-                .ForEach(t => lstTemplates.Items.Add(t));
+            FilterList();
         }
 
-        private void cmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterList();
+        }
+
+        /// <summary>
+        /// Filters the template list based on the selected language and category chosen.
+        /// </summary>
+        private void FilterList()
         {
             lstTemplates.Items.Clear();
 
             if (cmbCategory.Text == "All")
             {
-                _unitOfWork.Templates.GetAll()
-                    .Select(t => t.Title)
-                    .Distinct()
+                _unitOfWork.Versions.GetVersionsWithAll()
+                    .Where(v => v.Language.Name == cmbLang.Text)
+                    .Select(v => v.Template.Title)
                     .ToList()
                     .ForEach(t => lstTemplates.Items.Add(t));
             }
             else
             {
-                _unitOfWork.Templates.GetAll()
-                    .Where(c => c.Category.Name == cmbCategory.Text)
-                    .Select(t => t.Title)
-                    .Distinct()
+                _unitOfWork.Versions.GetVersionsWithAll()
+                    .Where(v => v.Template.Category.Name == cmbCategory.Text && v.Language.Name == cmbLang.Text)
+                    .Select(v => v.Template.Title)
                     .ToList()
                     .ForEach(t => lstTemplates.Items.Add(t));
             }
         }
 
-        private void btnUse_Click(object sender, EventArgs e)
+        private void BtnUse_Click(object sender, EventArgs e)
         {
             if (lstTemplates.Text == "")
             {
@@ -198,8 +205,7 @@ namespace QTemplates
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLang.Text);
 
             _lastTemplateUsed = version?.Message ?? "<[ Template not found ]>";
-            Clipboard.SetText(version?.Message ?? "<[ Template not found ]>");
-
+            Clipboard.SetText(_lastTemplateUsed);
             BtnHide_Click(this, EventArgs.Empty);
         }
     }

@@ -105,7 +105,7 @@
             this.cmbLang.Name = "cmbLang";
             this.cmbLang.Size = new System.Drawing.Size(256, 21);
             this.cmbLang.TabIndex = 1;
-            this.cmbLang.SelectedIndexChanged += new System.EventHandler(this.cmbLang_SelectedIndexChanged);
+            this.cmbLang.SelectedIndexChanged += new System.EventHandler(this.CmbLang_SelectedIndexChanged);
             // 
             // btnUse
             // 
@@ -115,7 +115,7 @@
             this.btnUse.TabIndex = 2;
             this.btnUse.Text = "Use";
             this.btnUse.UseVisualStyleBackColor = true;
-            this.btnUse.Click += new System.EventHandler(this.btnUse_Click);
+            this.btnUse.Click += new System.EventHandler(this.BtnUse_Click);
             // 
             // cmbCategory
             // 
@@ -127,7 +127,7 @@
             this.cmbCategory.Name = "cmbCategory";
             this.cmbCategory.Size = new System.Drawing.Size(256, 21);
             this.cmbCategory.TabIndex = 3;
-            this.cmbCategory.SelectedIndexChanged += new System.EventHandler(this.cmbCategory_SelectedIndexChanged);
+            this.cmbCategory.SelectedIndexChanged += new System.EventHandler(this.CmbCategory_SelectedIndexChanged);
             // 
             // lstTemplates
             // 
