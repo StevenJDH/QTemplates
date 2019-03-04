@@ -52,8 +52,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cmbLangFilter = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -70,7 +68,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(8, 104);
+            this.label3.Location = new System.Drawing.Point(8, 56);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(256, 16);
             this.label3.TabIndex = 16;
@@ -78,7 +76,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(8, 56);
+            this.label2.Location = new System.Drawing.Point(8, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(256, 16);
             this.label2.TabIndex = 15;
@@ -95,7 +93,7 @@
             // lstTemplates
             // 
             this.lstTemplates.FormattingEnabled = true;
-            this.lstTemplates.Location = new System.Drawing.Point(8, 120);
+            this.lstTemplates.Location = new System.Drawing.Point(8, 72);
             this.lstTemplates.Name = "lstTemplates";
             this.lstTemplates.Size = new System.Drawing.Size(256, 264);
             this.lstTemplates.TabIndex = 13;
@@ -107,7 +105,7 @@
             this.cmbCategoryVersions.FormattingEnabled = true;
             this.cmbCategoryVersions.Items.AddRange(new object[] {
             "All"});
-            this.cmbCategoryVersions.Location = new System.Drawing.Point(8, 72);
+            this.cmbCategoryVersions.Location = new System.Drawing.Point(8, 24);
             this.cmbCategoryVersions.Name = "cmbCategoryVersions";
             this.cmbCategoryVersions.Size = new System.Drawing.Size(256, 21);
             this.cmbCategoryVersions.TabIndex = 12;
@@ -170,7 +168,7 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(8, 392);
+            this.label5.Location = new System.Drawing.Point(8, 344);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(256, 16);
             this.label5.TabIndex = 23;
@@ -180,7 +178,7 @@
             // 
             this.cmbLangVersions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLangVersions.FormattingEnabled = true;
-            this.cmbLangVersions.Location = new System.Drawing.Point(8, 408);
+            this.cmbLangVersions.Location = new System.Drawing.Point(8, 360);
             this.cmbLangVersions.Name = "cmbLangVersions";
             this.cmbLangVersions.Size = new System.Drawing.Size(256, 21);
             this.cmbLangVersions.TabIndex = 22;
@@ -296,34 +294,13 @@
             this.label7.TabIndex = 31;
             this.label7.Text = "Message:";
             // 
-            // label8
-            // 
-            this.label8.Location = new System.Drawing.Point(8, 8);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(256, 16);
-            this.label8.TabIndex = 33;
-            this.label8.Text = "Language:";
-            // 
-            // cmbLangFilter
-            // 
-            this.cmbLangFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLangFilter.FormattingEnabled = true;
-            this.cmbLangFilter.Items.AddRange(new object[] {
-            "All"});
-            this.cmbLangFilter.Location = new System.Drawing.Point(8, 24);
-            this.cmbLangFilter.Name = "cmbLangFilter";
-            this.cmbLangFilter.Size = new System.Drawing.Size(256, 21);
-            this.cmbLangFilter.TabIndex = 32;
-            // 
             // FrmManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MintCream;
-            this.ClientSize = new System.Drawing.Size(1034, 531);
+            this.ClientSize = new System.Drawing.Size(1030, 527);
             this.ControlBox = false;
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.cmbLangFilter);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label5);
@@ -378,7 +355,5 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox cmbLangFilter;
     }
 }

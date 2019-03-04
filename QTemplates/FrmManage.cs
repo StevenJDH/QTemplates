@@ -57,7 +57,6 @@ namespace QTemplates
             var languages = _unitOfWork.Languages.GetAll();
             foreach (var entry in languages)
             {
-                cmbLangFilter.Items.Add(entry.Name);
                 cmbLang.Items.Add(entry.Name);
             }
 
@@ -77,7 +76,6 @@ namespace QTemplates
             {
                 _unitOfWork.Templates.GetAll()
                     .Select(t => t.Title)
-                    .Distinct()
                     .ToList()
                     .ForEach(t => lstTemplates.Items.Add(t));
             }
@@ -86,7 +84,6 @@ namespace QTemplates
                 _unitOfWork.Templates.GetAll()
                     .Where(c => c.Category.Name == cmbCategoryVersions.Text)
                     .Select(t => t.Title)
-                    .Distinct()
                     .ToList()
                     .ForEach(t => lstTemplates.Items.Add(t));
             }
@@ -273,11 +270,12 @@ namespace QTemplates
             {
                 return;
             }
+            cmbLangVersions.Items.Clear();
             var versions = _unitOfWork.Versions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
+                .Select(v => v.Language.Name)
                 .ToList();
-            cmbLangVersions.Items.Clear();
-            versions.ForEach(v => cmbLangVersions.Items.Add(v.Language.Name));
+            versions.ForEach(v => cmbLangVersions.Items.Add(v));
             cmbLangVersions.SelectedIndex = 0;
         }
     }
