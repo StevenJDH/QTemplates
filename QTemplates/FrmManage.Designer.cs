@@ -97,7 +97,7 @@
             this.lstTemplates.Name = "lstTemplates";
             this.lstTemplates.Size = new System.Drawing.Size(256, 264);
             this.lstTemplates.TabIndex = 13;
-            this.lstTemplates.Click += new System.EventHandler(this.lstTemplates_Click);
+            this.lstTemplates.Click += new System.EventHandler(this.LstTemplates_Click);
             // 
             // cmbCategoryVersions
             // 
@@ -109,7 +109,7 @@
             this.cmbCategoryVersions.Name = "cmbCategoryVersions";
             this.cmbCategoryVersions.Size = new System.Drawing.Size(256, 21);
             this.cmbCategoryVersions.TabIndex = 12;
-            this.cmbCategoryVersions.SelectedIndexChanged += new System.EventHandler(this.cmbCategoryVersions_SelectedIndexChanged);
+            this.cmbCategoryVersions.SelectedIndexChanged += new System.EventHandler(this.CmbCategoryVersions_SelectedIndexChanged);
             // 
             // cmbLang
             // 
@@ -164,7 +164,7 @@
             this.btnNewVersion.TabIndex = 21;
             this.btnNewVersion.Text = "New Version";
             this.btnNewVersion.UseVisualStyleBackColor = true;
-            this.btnNewVersion.Click += new System.EventHandler(this.btnNewVersion_Click);
+            this.btnNewVersion.Click += new System.EventHandler(this.BtnNewVersion_Click);
             // 
             // label5
             // 
@@ -182,7 +182,7 @@
             this.cmbLangVersions.Name = "cmbLangVersions";
             this.cmbLangVersions.Size = new System.Drawing.Size(256, 21);
             this.cmbLangVersions.TabIndex = 22;
-            this.cmbLangVersions.SelectedIndexChanged += new System.EventHandler(this.cmbLangVersions_SelectedIndexChanged);
+            this.cmbLangVersions.SelectedIndexChanged += new System.EventHandler(this.CmbLangVersions_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -209,7 +209,7 @@
             this.btnDeleteVersion.TabIndex = 26;
             this.btnDeleteVersion.Text = "Delete Version";
             this.btnDeleteVersion.UseVisualStyleBackColor = true;
-            this.btnDeleteVersion.Click += new System.EventHandler(this.btnDeleteVersion_Click);
+            this.btnDeleteVersion.Click += new System.EventHandler(this.BtnDeleteVersion_Click);
             // 
             // btnDelete
             // 
@@ -219,7 +219,7 @@
             this.btnDelete.TabIndex = 27;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // btnSaveChanges
             // 
@@ -229,7 +229,7 @@
             this.btnSaveChanges.TabIndex = 28;
             this.btnSaveChanges.Text = "Save Changes";
             this.btnSaveChanges.UseVisualStyleBackColor = true;
-            this.btnSaveChanges.Click += new System.EventHandler(this.btnSaveChanges_Click);
+            this.btnSaveChanges.Click += new System.EventHandler(this.BtnSaveChanges_Click);
             // 
             // btnSaveVersionChanges
             // 
@@ -239,7 +239,7 @@
             this.btnSaveVersionChanges.TabIndex = 29;
             this.btnSaveVersionChanges.Text = "Save Version";
             this.btnSaveVersionChanges.UseVisualStyleBackColor = true;
-            this.btnSaveVersionChanges.Click += new System.EventHandler(this.btnSaveVersionChanges_Click);
+            this.btnSaveVersionChanges.Click += new System.EventHandler(this.BtnSaveVersionChanges_Click);
             // 
             // tabControl1
             // 

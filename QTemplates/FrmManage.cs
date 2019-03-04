@@ -22,7 +22,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
-using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -68,7 +67,7 @@ namespace QTemplates
             }
         }
  
-        private void cmbCategoryVersions_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbCategoryVersions_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstTemplates.Items.Clear();
 
@@ -128,6 +127,7 @@ namespace QTemplates
             }
             catch (DbEntityValidationException ex)
             {
+                // TODO: if version creation fails, it should remove the initial tamplate created.
                 var sb = new StringBuilder();
                 foreach (var err in ex.EntityValidationErrors)
                 {
@@ -142,25 +142,25 @@ namespace QTemplates
             }
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void BtnDelete_Click(object sender, EventArgs e)
         {
-            var id = _unitOfWork.Templates.GetId(lstTemplates.Text);
-            if (id != null)
+            var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
+            if (template == null)
             {
-                var template = _unitOfWork.Templates.GetRecord((int)id);
-                _unitOfWork.Templates.Remove(template);
-                _unitOfWork.Complete();
-                MessageBox.Show("The template and all of its associated translations have been removed.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                lstTemplates.Items.Remove(lstTemplates.Text);
-                cmbLangVersions.Items.Clear();
-                txtTitle.Text = "";
-                txtMessage.Text = "";
-                cmbLang.Text = "";
-                cmbCategory.Text = "";
+                return;
             }
+            _unitOfWork.Templates.Remove(template);
+            _unitOfWork.Complete();
+            MessageBox.Show("The template and all of its associated translations have been removed.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            lstTemplates.Items.Remove(lstTemplates.Text);
+            cmbLangVersions.Items.Clear();
+            txtTitle.Text = "";
+            txtMessage.Text = "";
+            cmbLang.Text = "";
+            cmbCategory.Text = "";
         }
 
-        private void btnDeleteVersion_Click(object sender, EventArgs e)
+        private void BtnDeleteVersion_Click(object sender, EventArgs e)
         {
             if (cmbLangVersions.Text == "English")
             {
@@ -180,7 +180,7 @@ namespace QTemplates
             cmbLangVersions.SelectedIndex = 0;
         }
 
-        private void btnNewVersion_Click(object sender, EventArgs e)
+        private void BtnNewVersion_Click(object sender, EventArgs e)
         {
             if (cmbLangVersions.Text == cmbLang.Text)
             {
@@ -215,7 +215,7 @@ namespace QTemplates
             cmbLangVersions.Items.Add(cmbLang.Text);
         }
 
-        private void btnSaveChanges_Click(object sender, EventArgs e)
+        private void BtnSaveChanges_Click(object sender, EventArgs e)
         {
             var template = _unitOfWork.Templates
                 .FirstOrDefault(t => t.Title == lstTemplates.Text);
@@ -238,7 +238,7 @@ namespace QTemplates
             cmbCategory.Text = "";
         }
 
-        private void btnSaveVersionChanges_Click(object sender, EventArgs e)
+        private void BtnSaveVersionChanges_Click(object sender, EventArgs e)
         {
             var version = _unitOfWork.Versions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
@@ -252,22 +252,19 @@ namespace QTemplates
             MessageBox.Show($"Changes to the '{cmbLangVersions.Text}' version were saved successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void cmbLangVersions_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbLangVersions_SelectedIndexChanged(object sender, EventArgs e)
         {
             var version = _unitOfWork.Versions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
-            //if (version == null)
-            //{
-            //    return;
-            //}
-            txtTitle.Text = version.Template.Title;
-            txtMessage.Text = version.Message;
-            cmbLang.Text = version.Language.Name;
-            cmbCategory.Text = version.Template.Category.Name;
+
+            txtTitle.Text = version?.Template.Title ?? "";
+            txtMessage.Text = version?.Message ?? "";
+            cmbLang.Text = version?.Language.Name ?? "";
+            cmbCategory.Text = version?.Template.Category.Name ?? "";
 
         }
 
-        private void lstTemplates_Click(object sender, EventArgs e)
+        private void LstTemplates_Click(object sender, EventArgs e)
         {
             if (lstTemplates.Text == "")
             {
