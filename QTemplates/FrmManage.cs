@@ -172,9 +172,12 @@ namespace QTemplates
                 return;
             }
 
-            var version = _unitOfWork.Versions.FirstOrDefault(v => v.Language.Name == cmbLangVersions.Text);
+            var version = _unitOfWork.Versions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
             _unitOfWork.Versions.Remove(version);
             _unitOfWork.Complete();
+            MessageBox.Show($"The '{cmbLangVersions.Text}' version of the selected template was deleted successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            cmbLangVersions.Items.Remove(cmbLangVersions.Text);
+            cmbLangVersions.SelectedIndex = 0;
         }
 
         private void btnNewVersion_Click(object sender, EventArgs e)
