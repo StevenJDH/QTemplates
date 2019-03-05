@@ -23,6 +23,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using QInterfaces;
@@ -66,6 +67,7 @@ namespace QTemplates
             _globalHotKey.AddHotKey(456, GlobalHotKey.CTRL + GlobalHotKey.SHIFT, Keys.T, () =>
             {
                 Clipboard.SetText(_lastTemplateUsed);
+                Thread.Sleep(600); // Delay to allow time for the text to set in clipboard or you only get SYN.
                 SendKeys.Send("^(v)");
             });
 
