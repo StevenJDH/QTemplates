@@ -18,12 +18,23 @@
 
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.SQLite;
 
 namespace QTemplates.Models
 {
+    [DbConfigurationType(typeof(SqliteConfiguration))]
     public class AppDbContext : DbContext
     {
-        public AppDbContext()
+        private static readonly SQLiteConnection SQLiteConnectionString = new SQLiteConnection()
+        {
+            ConnectionString = (new SQLiteConnectionStringBuilder() // @"data source=...\QTemplates.sqlite3;foreign keys=True"
+                {
+                    DataSource = @".\QTemplates.sqlite3",
+                    ForeignKeys = true
+                }).ConnectionString
+        };
+
+        public AppDbContext() : base (SQLiteConnectionString, true)
         {
             // Forces code first migrations to be ignored.
             Database.SetInitializer<AppDbContext>(null);
