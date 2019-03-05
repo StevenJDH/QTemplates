@@ -26,13 +26,6 @@ namespace QTemplates.Models.Repositories.Interfaces
 {
     public interface ITemplateRepository : IRepository<Template>
     {
-        int? GetId(string title); // TODO: maybe include this in IRepository instead to reduce code duplication.
-
-        /// <summary>
-        /// Gets a flat collection of templates with eager-loaded navigation properties 
-        /// for Languages and Categories.
-        /// </summary>
-        /// <returns>All templates and all navigation properties.</returns>
-        IEnumerable<Template> GetTemplatesWithAll();
+        
     }
 }

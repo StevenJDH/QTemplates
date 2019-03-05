@@ -41,7 +41,8 @@ namespace QTemplates.Models.Repositories
             return _context.Versions
                 .Include(v => v.Language)
                 .Include(v => v.Template)
-                .Include(v => v.Template.Category) // TODO: .OrderBy(v => v.Template.Title)
+                .Include(v => v.Template.Category)
+                .OrderBy(v => v.Template.Title)
                 .ToList();
         }
     }

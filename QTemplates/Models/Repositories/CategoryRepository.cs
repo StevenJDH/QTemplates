@@ -33,10 +33,5 @@ namespace QTemplates.Models.Repositories
         {
             _context = context;
         }
-
-        public int? GetId(string category)
-        {
-            return _context.Categories.FirstOrDefault(l => l.Name == category)?.CategoryId;
-        }
     }
 }

@@ -26,6 +26,6 @@ namespace QTemplates.Models.Repositories.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        int? GetId(string category);
+
     }
 }

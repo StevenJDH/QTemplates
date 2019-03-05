@@ -45,7 +45,7 @@ namespace QTemplates.Models.Repositories
         public IEnumerable<TEntity> GetAll() => _entity.ToList();
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) =>
-            _entity.Where(predicate);
+            _entity.Where(predicate).ToList();
 
         // Will return just the first result if more than one result is returned.
         public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate) =>

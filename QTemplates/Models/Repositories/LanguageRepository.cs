@@ -33,10 +33,5 @@ namespace QTemplates.Models.Repositories
         {
             _context = context;
         }
-
-        public int? GetId(string language)
-        {
-           return _context.Languages.FirstOrDefault(l => l.Name == language)?.LanguageId;
-        }
     }
 }

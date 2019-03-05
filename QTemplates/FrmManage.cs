@@ -93,7 +93,7 @@ namespace QTemplates
             var template = new Template()
             {
                 Title = txtTitle.Text,
-                CategoryId = _unitOfWork.Categories.GetId(cmbCategoryVersions.Text)
+                CategoryId = _unitOfWork.Categories.FirstOrDefault(c => c.Name == cmbCategoryVersions.Text).CategoryId
             };
             _unitOfWork.Templates.Add(template);
             try
@@ -109,8 +109,8 @@ namespace QTemplates
             var version = new Models.Version()
             {
                 Message = txtMessage.Text,
-                TemplateId = _unitOfWork.Templates.GetId(template.Title),
-                LanguageId = _unitOfWork.Languages.GetId(cmbLang.Text),
+                TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == template.Title).TemplateId,
+                LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
             };
             _unitOfWork.Versions.Add(version);
 
@@ -127,7 +127,7 @@ namespace QTemplates
             }
             catch (DbEntityValidationException ex)
             {
-                // TODO: if version creation fails, it should remove the initial tamplate created.
+                // TODO: if version creation fails, it should remove the initial template created.
                 var sb = new StringBuilder();
                 foreach (var err in ex.EntityValidationErrors)
                 {
@@ -201,8 +201,8 @@ namespace QTemplates
             var version = new Models.Version()
             {
                 Message = txtMessage.Text,
-                TemplateId = _unitOfWork.Templates.GetId(lstTemplates.Text),
-                LanguageId = _unitOfWork.Languages.GetId(cmbLang.Text),
+                TemplateId = _unitOfWork.Templates.FirstOrDefault( t => t.Title == lstTemplates.Text).TemplateId,
+                LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
             };
             _unitOfWork.Versions.Add(version);
             _unitOfWork.Complete();

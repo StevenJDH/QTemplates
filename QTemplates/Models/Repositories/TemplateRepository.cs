@@ -34,20 +34,5 @@ namespace QTemplates.Models.Repositories
         {
             _context = context;
         }
-
-        public int? GetId(string title)
-        {
-            return _context.Templates.FirstOrDefault(t => t.Title == title)?.TemplateId;
-        }
-
-        public IEnumerable<Template> GetTemplatesWithAll()
-        {
-            // The Includes are to eager load the navigation properties.
-            return _context.Templates
-                .Include(t => t.Category)
-                .Include(t => t.Versions)
-                .OrderBy(t => t.Title)
-                .ToList();
-        }
     }
 }

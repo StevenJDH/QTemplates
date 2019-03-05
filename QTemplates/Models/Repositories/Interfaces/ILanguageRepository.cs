@@ -26,6 +26,6 @@ namespace QTemplates.Models.Repositories.Interfaces
 {
     public interface ILanguageRepository : IRepository<Language>
     {
-        int? GetId(string language);
+
     }
 }
