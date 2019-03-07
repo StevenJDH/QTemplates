@@ -187,14 +187,9 @@ namespace QTemplates
                 MessageBox.Show($"There is already an '{cmbLangVersions.Text}' version.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (cmbLang.Text == "English")
+            if (cmbLang.Text == "English")
             {
                 MessageBox.Show("You cannot create another 'English' version as this is created by default.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            else if (cmbCategoryVersions.Text != cmbCategory.Text)
-            {
-                MessageBox.Show($"The category '{cmbCategoryVersions.Text}' must be kept the same for all versions of a template.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -213,8 +208,10 @@ namespace QTemplates
 
             MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created with the ID: {versionCreated.VersionId} successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cmbLangVersions.Items.Add(cmbLang.Text);
+            cmbLangVersions.Text = cmbLang.Text;
         }
 
+        // TODO: Don't forget to support category changes.
         private void BtnSaveChanges_Click(object sender, EventArgs e)
         {
             var template = _unitOfWork.Templates
@@ -238,6 +235,7 @@ namespace QTemplates
             cmbCategory.Text = "";
         }
 
+        // TODO: Don't forget to support language change on version.
         private void BtnSaveVersionChanges_Click(object sender, EventArgs e)
         {
             var version = _unitOfWork.Versions
