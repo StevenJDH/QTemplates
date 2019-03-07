@@ -105,7 +105,7 @@
             this.cmbLang.Name = "cmbLang";
             this.cmbLang.Size = new System.Drawing.Size(256, 21);
             this.cmbLang.TabIndex = 1;
-            this.cmbLang.SelectedIndexChanged += new System.EventHandler(this.CmbLang_SelectedIndexChanged);
+            this.cmbLang.DropDownClosed += new System.EventHandler(this.CmbLang_DropDownClosed);
             // 
             // btnUse
             // 
@@ -127,7 +127,7 @@
             this.cmbCategory.Name = "cmbCategory";
             this.cmbCategory.Size = new System.Drawing.Size(256, 21);
             this.cmbCategory.TabIndex = 3;
-            this.cmbCategory.SelectedIndexChanged += new System.EventHandler(this.CmbCategory_SelectedIndexChanged);
+            this.cmbCategory.DropDownClosed += new System.EventHandler(this.CmbCategory_DropDownClosed);
             // 
             // lstTemplates
             // 

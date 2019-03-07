@@ -108,8 +108,6 @@ namespace QTemplates
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            // Loading the template list is not needed because the cmbCategoryVersions index change event will do it.
-
             var languages = _unitOfWork.Languages.GetAll();
             foreach (var entry in languages)
             {
@@ -123,6 +121,8 @@ namespace QTemplates
                 cmbCategory.Items.Add(entry.Name);
             }
             cmbCategory.Text = "All";
+
+            FilterList();
         }
 
         private void FrmMain_Closing(object sender, FormClosingEventArgs e)
@@ -159,14 +159,16 @@ namespace QTemplates
             {
                 frm.ShowDialog();
             }
+
+            FilterList();
         }
 
-        private void CmbLang_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbLang_DropDownClosed(object sender, EventArgs e)
         {
             FilterList();
         }
 
-        private void CmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbCategory_DropDownClosed(object sender, EventArgs e)
         {
             FilterList();
         }
