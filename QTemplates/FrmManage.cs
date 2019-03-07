@@ -41,7 +41,6 @@ namespace QTemplates
         {
             InitializeComponent();
             _unitOfWork = unitOfWork;
-            cmbCategoryVersions.SelectedIndex = 0;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -49,6 +48,7 @@ namespace QTemplates
             this.Close();
         }
 
+        // TODO: Fix exception when calling close on context menu when this form is open.
         private void FrmManage_Load(object sender, EventArgs e)
         {
             // Loading the template list is not needed because the cmbCategoryVersions index change event will do it.
@@ -64,6 +64,12 @@ namespace QTemplates
             {
                 cmbCategoryVersions.Items.Add(entry.Name);
                 cmbCategory.Items.Add(entry.Name);
+            }
+
+            cmbCategoryVersions.Text = "All";
+            if (cmbCategory.Items.Count > 0)
+            {
+                cmbCategory.SelectedIndex = 0;
             }
         }
  
@@ -90,10 +96,21 @@ namespace QTemplates
 
         private void BtnCreate_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrWhiteSpace(txtMessage.Text))
+            {
+                MessageBox.Show("The message area cannot be left blank.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            if (cmbCategory.Items.Count < 1)
+            {
+                MessageBox.Show("You do not have any categories created yet.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             var template = new Template()
             {
                 Title = txtTitle.Text,
-                CategoryId = _unitOfWork.Categories.FirstOrDefault(c => c.Name == cmbCategoryVersions.Text).CategoryId
+                CategoryId = _unitOfWork.Categories.FirstOrDefault(c => c.Name == cmbCategory.Text).CategoryId
             };
             _unitOfWork.Templates.Add(template);
             try
@@ -110,7 +127,7 @@ namespace QTemplates
             {
                 Message = txtMessage.Text,
                 TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == template.Title).TemplateId,
-                LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
+                LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == "English").LanguageId,
             };
             _unitOfWork.Versions.Add(version);
 
@@ -118,7 +135,7 @@ namespace QTemplates
             {
                 _unitOfWork.Complete();
                 MessageBox.Show($"Template with ID: {version.TemplateId} was created successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (cmbLang.Text == cmbLangVersions.Text && cmbCategory.Text == cmbCategoryVersions.Text)
+                if (cmbCategoryVersions.Text == "All" || cmbCategoryVersions.Text == cmbCategory.Text)
                 {
                     lstTemplates.Items.Add(template.Title);
                 }
