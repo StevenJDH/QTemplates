@@ -59,5 +59,15 @@ namespace QTemplates.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] QTemplates {
+            get {
+                object obj = ResourceManager.GetObject("QTemplates", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

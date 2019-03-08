@@ -19,6 +19,7 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
+using QTemplates.Classes;
 
 namespace QTemplates.Models
 {
@@ -29,7 +30,7 @@ namespace QTemplates.Models
         {
             ConnectionString = (new SQLiteConnectionStringBuilder() // @"data source=...\QTemplates.sqlite3;foreign keys=True"
                 {
-                    DataSource = @".\QTemplates.sqlite3",
+                    DataSource = AppConfiguration.Instance.GetDbPath(),
                     ForeignKeys = true
                 }).ConnectionString
         };
