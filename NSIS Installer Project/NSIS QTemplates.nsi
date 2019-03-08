@@ -53,8 +53,8 @@
   !define PRODUCT_WEB_SITE "https://github.com/StevenJDH/QTemplates"
   !define PRODUCT_UNINST_ROOT_KEY SHCTX
 
-  !define CONFIG_DIRECTORY "$APPDATA\ASCC\${PRODUCT_NAME}"
-  !define CONFIG_FILE "${CONFIG_DIRECTORY}\QTemplates.sqlite3"
+  !define CONFIG_DIRECTORY "$APPDATA\ASC-C\${PRODUCT_NAME}"
+  !define SQLITE_FILE "${CONFIG_DIRECTORY}\QTemplates.sqlite3"
   
   !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install.ico" ;Installer icon
   !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-uninstall.ico" ;Uninstaller icon
@@ -132,7 +132,6 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   SetOutPath "$INSTDIR"
   File "..\QTemplates\bin\Release\QInterfaces.dll"
   File "..\QTemplates\bin\Release\QTemplates.exe"
-  File "..\QTemplates\bin\Release\QTemplates.sqlite3"
   File "..\QTemplates\bin\Release\System.Data.SQLite.dll"
   File "..\QTemplates\bin\Release\System.Data.SQLite.EF6.dll"
   File "..\QTemplates\bin\Release\System.Data.SQLite.Linq.dll"
@@ -232,7 +231,6 @@ Section "un.Uninstall Core Files (required)" SectionCoreUninstall
   Delete "$INSTDIR\System.Data.SQLite.Linq.dll"
   Delete "$INSTDIR\System.Data.SQLite.EF6.dll"
   Delete "$INSTDIR\System.Data.SQLite.dll"
-  Delete "$INSTDIR\QTemplates.sqlite3"
   Delete "$INSTDIR\QTemplates.exe"
   Delete "$INSTDIR\QInterfaces.dll"
   Delete "$INSTDIR\Plugins\QTemplates.Example.Plugin.dll"
@@ -261,8 +259,8 @@ SectionEnd
 
 Section /o "un.Remove Configuration" SectionRemoveConfig
 
-  IfFileExists "${CONFIG_FILE}" 0
-    Delete "${CONFIG_FILE}"
+  IfFileExists "${SQLITE_FILE}" 0
+    Delete "${SQLITE_FILE}"
   IfFileExists "${CONFIG_DIRECTORY}\*.*" 0
     RMDir "${CONFIG_DIRECTORY}"
 
