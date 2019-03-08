@@ -96,6 +96,12 @@ namespace QTemplates
 
         private void BtnCreate_Click(object sender, EventArgs e)
         {
+            // TODO: Have the button automatically detect these first two and enable/disable accordingly.
+            if (String.IsNullOrWhiteSpace(txtTitle.Text))
+            {
+                MessageBox.Show("The title cannot be left blank.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
             if (String.IsNullOrWhiteSpace(txtMessage.Text))
             {
                 MessageBox.Show("The message area cannot be left blank.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -109,7 +115,7 @@ namespace QTemplates
 
             var template = new Template()
             {
-                Title = txtTitle.Text,
+                Title = txtTitle.Text.Trim(),
                 CategoryId = _unitOfWork.Categories.FirstOrDefault(c => c.Name == cmbCategory.Text).CategoryId
             };
             _unitOfWork.Templates.Add(template);
@@ -125,7 +131,7 @@ namespace QTemplates
 
             var version = new Models.Version()
             {
-                Message = txtMessage.Text,
+                Message = txtMessage.Text.Trim(),
                 TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == template.Title).TemplateId,
                 LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == "English").LanguageId,
             };
@@ -212,7 +218,7 @@ namespace QTemplates
 
             var version = new Models.Version()
             {
-                Message = txtMessage.Text,
+                Message = txtMessage.Text.Trim(),
                 TemplateId = _unitOfWork.Templates.FirstOrDefault( t => t.Title == lstTemplates.Text).TemplateId,
                 LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
             };
@@ -237,7 +243,7 @@ namespace QTemplates
             //{
             //    return;
             //}
-            template.Title = txtTitle.Text;
+            template.Title = txtTitle.Text.Trim();
             //template.CategoryId = _unitOfWork.Categories.GetId(cmbCategory.Text);
             _unitOfWork.EditRecord(template, t => t.Title);
             //_unitOfWork.EditRecord(template, t => t.CategoryId);
@@ -261,7 +267,7 @@ namespace QTemplates
             //{
             //    return;
             //}
-            version.Message = txtMessage.Text;
+            version.Message = txtMessage.Text.Trim();
             _unitOfWork.EditRecord(version, v => v.Message);
             _unitOfWork.Complete();
             MessageBox.Show($"Changes to the '{cmbLangVersions.Text}' version were saved successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
