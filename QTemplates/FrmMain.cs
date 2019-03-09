@@ -53,9 +53,16 @@ namespace QTemplates
 
             _host = new Host();
             _pluginsDictionary = PluginProvider.Instance.LoadPlugins("Plugins");
-            foreach (var entry in _pluginsDictionary)
+            if (_pluginsDictionary.Keys.Count > 0)
             {
-                mnuTools.DropDownItems.Add(new ToolStripMenuItem(entry.Key, null, MnuPluginSelected_Click));
+                foreach (var entry in _pluginsDictionary)
+                {
+                    mnuTools.DropDownItems.Add(new ToolStripMenuItem(entry.Key, null, MnuPluginSelected_Click));
+                }
+            }
+            else
+            {
+                mnuTools.DropDownItems.Add("::: No plugins found :::");
             }
            
             // Hotkey for showing template selector.
@@ -97,7 +104,7 @@ namespace QTemplates
         /// Overrides the defaults to allow the main form to start hidden. This method is used by the
         /// framework, we do not use it directly. Instead, control it via the _startupVisible instance
         /// variable. Then once things are loaded, set this variable to true as well as the form's
-        /// Visible property before trying to call show on it. Once show is called, the from's load
+        /// Visible property before trying to call show on it. Once show is called, the form's load
         /// event will be raised.
         /// </summary>
         /// <param name="value">True for the default and false for hidden startup</param>

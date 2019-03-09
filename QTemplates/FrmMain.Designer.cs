@@ -109,9 +109,9 @@
             // 
             // btnUse
             // 
-            this.btnUse.Location = new System.Drawing.Point(192, 392);
+            this.btnUse.Location = new System.Drawing.Point(88, 392);
             this.btnUse.Name = "btnUse";
-            this.btnUse.Size = new System.Drawing.Size(75, 32);
+            this.btnUse.Size = new System.Drawing.Size(96, 32);
             this.btnUse.TabIndex = 2;
             this.btnUse.Text = "Use";
             this.btnUse.UseVisualStyleBackColor = true;
@@ -149,7 +149,7 @@
             // 
             // btnManage
             // 
-            this.btnManage.Location = new System.Drawing.Point(96, 392);
+            this.btnManage.Location = new System.Drawing.Point(192, 392);
             this.btnManage.Name = "btnManage";
             this.btnManage.Size = new System.Drawing.Size(72, 32);
             this.btnManage.TabIndex = 7;
