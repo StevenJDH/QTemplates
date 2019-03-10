@@ -15,6 +15,7 @@ A lot of things still need to change and improve as I get a better idea of what 
 * Associate templates with multiple versions written in other languages, which keeps the list clean.
 * Template manager to create, edit, and delete templates.
 * Filter templates by language and category.
+* Multi-user support so that everyone can have their own templates.
 
 ## Plugin System
 For the plugins to work, ensure that there is a folder called "Plugins" next to the QTemplates application with your plugins inside this folder. For example, place the QTemplates.Example.Plugin.dll file, which is an example plugin I made, into the Plugins folder to make it appear in the Tools menu. This example plugin just shows you how information and functionality from QTemplates can be accessed by the plugin and how QTemplates can do the same when interacting with the plugin. Keep in mind that the plugin system is still being built and will have more features when finished.
@@ -23,6 +24,9 @@ For the plugins to work, ensure that there is a folder called "Plugins" next to 
 I was going to use my own implementation for this, but decided to use an SQLite database for its portability along with Entity Framework 6x using a partial Database First Approach since currently there are some limitations with SQLite. I've only used Entity Framework Core 2x with ASP.NET and SQL, so bare with me while I iron out the details for WinForms. Below is an ERD of the database design for reference. The only thing worth pointing out is the required relationship between the Template and Version entities. The idea is that a template will always have to have at least one version, in this case I have chosen English as the default. Right now this is handled in code, but in the future I might handle this via a trigger in the database itself.
 
 ![ERD](https://github.com/StevenJDH/QTemplates/raw/master/ERD_Diagram.png "ERD Diagram")
+
+## NSIS installer project
+I've included the NSIS (Nullsoft Scriptable Install System) script that I wrote to create the installer for QTemplates. The script was written with NSIS 3.04, which you can find here [http://nsis.sourceforge.net/Main_Page](http://nsis.sourceforge.net/Main_Page), and it may not work with earlier versions due to missing features in the scripting language. The QTemplates installer supports installing the program for all users, the current user, or for both at the same time. Silent installs and uninstalls can also be performed, and a restriction of at least Windows 7 is imposed to meet requirements for the .Net Framework version used.
 
 ## Do you have any questions?
 Many commonly asked questions are answered in the FAQ:
