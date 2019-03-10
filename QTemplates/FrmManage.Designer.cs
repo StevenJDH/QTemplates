@@ -39,7 +39,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.btnNewVersion = new System.Windows.Forms.Button();
+            this.btnCreateVersion = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbLangVersions = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -60,11 +60,13 @@
             // txtMessage
             // 
             this.txtMessage.Location = new System.Drawing.Point(272, 24);
+            this.txtMessage.MaxLength = 2048;
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtMessage.Size = new System.Drawing.Size(760, 376);
             this.txtMessage.TabIndex = 0;
+            this.txtMessage.TextChanged += new System.EventHandler(this.TxtMessage_TextChanged);
             // 
             // label3
             // 
@@ -84,7 +86,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(8, 24);
+            this.label1.Location = new System.Drawing.Point(16, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(240, 16);
             this.label1.TabIndex = 14;
@@ -115,14 +117,15 @@
             // 
             this.cmbLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLang.FormattingEnabled = true;
-            this.cmbLang.Location = new System.Drawing.Point(8, 40);
+            this.cmbLang.Location = new System.Drawing.Point(16, 40);
             this.cmbLang.Name = "cmbLang";
             this.cmbLang.Size = new System.Drawing.Size(240, 21);
             this.cmbLang.TabIndex = 11;
             // 
             // btnCreate
             // 
-            this.btnCreate.Location = new System.Drawing.Point(360, 32);
+            this.btnCreate.Enabled = false;
+            this.btnCreate.Location = new System.Drawing.Point(368, 32);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(115, 32);
             this.btnCreate.TabIndex = 17;
@@ -143,10 +146,12 @@
             // txtTitle
             // 
             this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTitle.Location = new System.Drawing.Point(12, 20);
+            this.txtTitle.Location = new System.Drawing.Point(16, 24);
+            this.txtTitle.MaxLength = 30;
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(264, 20);
+            this.txtTitle.Size = new System.Drawing.Size(256, 20);
             this.txtTitle.TabIndex = 19;
+            this.txtTitle.TextChanged += new System.EventHandler(this.TxtTitle_TextChanged);
             // 
             // label4
             // 
@@ -154,17 +159,18 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 16);
             this.label4.TabIndex = 20;
-            this.label4.Text = "Template title:";
+            this.label4.Text = "Title:";
             // 
-            // btnNewVersion
+            // btnCreateVersion
             // 
-            this.btnNewVersion.Location = new System.Drawing.Point(464, 32);
-            this.btnNewVersion.Name = "btnNewVersion";
-            this.btnNewVersion.Size = new System.Drawing.Size(88, 32);
-            this.btnNewVersion.TabIndex = 21;
-            this.btnNewVersion.Text = "New Version";
-            this.btnNewVersion.UseVisualStyleBackColor = true;
-            this.btnNewVersion.Click += new System.EventHandler(this.BtnNewVersion_Click);
+            this.btnCreateVersion.Enabled = false;
+            this.btnCreateVersion.Location = new System.Drawing.Point(368, 32);
+            this.btnCreateVersion.Name = "btnCreateVersion";
+            this.btnCreateVersion.Size = new System.Drawing.Size(115, 32);
+            this.btnCreateVersion.TabIndex = 21;
+            this.btnCreateVersion.Text = "Create Version";
+            this.btnCreateVersion.UseVisualStyleBackColor = true;
+            this.btnCreateVersion.Click += new System.EventHandler(this.BtnCreateVersion_Click);
             // 
             // label5
             // 
@@ -203,9 +209,10 @@
             // 
             // btnDeleteVersion
             // 
-            this.btnDeleteVersion.Location = new System.Drawing.Point(656, 32);
+            this.btnDeleteVersion.Enabled = false;
+            this.btnDeleteVersion.Location = new System.Drawing.Point(624, 32);
             this.btnDeleteVersion.Name = "btnDeleteVersion";
-            this.btnDeleteVersion.Size = new System.Drawing.Size(91, 32);
+            this.btnDeleteVersion.Size = new System.Drawing.Size(115, 32);
             this.btnDeleteVersion.TabIndex = 26;
             this.btnDeleteVersion.Text = "Delete Version";
             this.btnDeleteVersion.UseVisualStyleBackColor = true;
@@ -213,7 +220,8 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(616, 32);
+            this.btnDelete.Enabled = false;
+            this.btnDelete.Location = new System.Drawing.Point(624, 32);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(115, 32);
             this.btnDelete.TabIndex = 27;
@@ -223,7 +231,8 @@
             // 
             // btnSaveChanges
             // 
-            this.btnSaveChanges.Location = new System.Drawing.Point(488, 32);
+            this.btnSaveChanges.Enabled = false;
+            this.btnSaveChanges.Location = new System.Drawing.Point(496, 32);
             this.btnSaveChanges.Name = "btnSaveChanges";
             this.btnSaveChanges.Size = new System.Drawing.Size(115, 32);
             this.btnSaveChanges.TabIndex = 28;
@@ -233,9 +242,10 @@
             // 
             // btnSaveVersionChanges
             // 
-            this.btnSaveVersionChanges.Location = new System.Drawing.Point(560, 32);
+            this.btnSaveVersionChanges.Enabled = false;
+            this.btnSaveVersionChanges.Location = new System.Drawing.Point(496, 32);
             this.btnSaveVersionChanges.Name = "btnSaveVersionChanges";
-            this.btnSaveVersionChanges.Size = new System.Drawing.Size(88, 32);
+            this.btnSaveVersionChanges.Size = new System.Drawing.Size(115, 32);
             this.btnSaveVersionChanges.TabIndex = 29;
             this.btnSaveVersionChanges.Text = "Save Version";
             this.btnSaveVersionChanges.UseVisualStyleBackColor = true;
@@ -250,7 +260,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(768, 124);
+            this.tabControl1.Size = new System.Drawing.Size(762, 124);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 30;
             // 
@@ -267,13 +277,13 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(760, 98);
+            this.tabPage1.Size = new System.Drawing.Size(754, 98);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Template";
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.btnNewVersion);
+            this.tabPage2.Controls.Add(this.btnCreateVersion);
             this.tabPage2.Controls.Add(this.btnSaveVersionChanges);
             this.tabPage2.Controls.Add(this.btnDeleteVersion);
             this.tabPage2.Controls.Add(this.cmbLang);
@@ -281,9 +291,9 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(760, 98);
+            this.tabPage2.Size = new System.Drawing.Size(754, 98);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Versions";
+            this.tabPage2.Text = "Version";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -299,7 +309,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MintCream;
-            this.ClientSize = new System.Drawing.Size(1041, 537);
+            this.ClientSize = new System.Drawing.Size(1043, 539);
             this.ControlBox = false;
             this.Controls.Add(this.label7);
             this.Controls.Add(this.tabControl1);
@@ -342,7 +352,7 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button btnNewVersion;
+        private System.Windows.Forms.Button btnCreateVersion;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmbLangVersions;
         private System.Windows.Forms.Label label6;

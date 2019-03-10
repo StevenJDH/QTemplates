@@ -92,21 +92,13 @@ namespace QTemplates
                     .ToList()
                     .ForEach(t => lstTemplates.Items.Add(t));
             }
+
+            // Resets interface as nothing will be selected after a category change.
+            ResetInterface();
         }
 
         private void BtnCreate_Click(object sender, EventArgs e)
         {
-            // TODO: Have the button automatically detect these first two and enable/disable accordingly.
-            if (String.IsNullOrWhiteSpace(txtTitle.Text))
-            {
-                MessageBox.Show("The title cannot be left blank.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            if (String.IsNullOrWhiteSpace(txtMessage.Text))
-            {
-                MessageBox.Show("The message area cannot be left blank.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
             if (cmbCategory.Items.Count < 1)
             {
                 MessageBox.Show("You do not have any categories created yet.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -176,11 +168,22 @@ namespace QTemplates
             _unitOfWork.Complete();
             MessageBox.Show("The template and all of its associated translations have been removed.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             lstTemplates.Items.Remove(lstTemplates.Text);
+            ResetInterface();
+        }
+
+        private void ResetInterface()
+        {
+            btnSaveChanges.Enabled = false;
+            btnDelete.Enabled = false;
+            btnDeleteVersion.Enabled = false;
             cmbLangVersions.Items.Clear();
             txtTitle.Text = "";
             txtMessage.Text = "";
-            cmbLang.Text = "";
-            cmbCategory.Text = "";
+            cmbLang.SelectedIndex = -1;
+            if (cmbCategory.Items.Count > 0)
+            {
+                cmbCategory.SelectedIndex = 0;
+            }
         }
 
         private void BtnDeleteVersion_Click(object sender, EventArgs e)
@@ -188,10 +191,6 @@ namespace QTemplates
             if (cmbLangVersions.Text == "English")
             {
                 MessageBox.Show("The English version can only be removed by removing the template itself.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            else if (cmbLangVersions.Text == "")
-            {
                 return;
             }
 
@@ -203,7 +202,7 @@ namespace QTemplates
             cmbLangVersions.SelectedIndex = 0;
         }
 
-        private void BtnNewVersion_Click(object sender, EventArgs e)
+        private void BtnCreateVersion_Click(object sender, EventArgs e)
         {
             if (cmbLangVersions.Text == cmbLang.Text)
             {
@@ -219,7 +218,7 @@ namespace QTemplates
             var version = new Models.Version()
             {
                 Message = txtMessage.Text.Trim(),
-                TemplateId = _unitOfWork.Templates.FirstOrDefault( t => t.Title == lstTemplates.Text).TemplateId,
+                TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text).TemplateId,
                 LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
             };
             _unitOfWork.Versions.Add(version);
@@ -291,6 +290,7 @@ namespace QTemplates
             {
                 return;
             }
+
             cmbLangVersions.Items.Clear();
             var versions = _unitOfWork.Versions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
@@ -298,6 +298,37 @@ namespace QTemplates
                 .ToList();
             versions.ForEach(v => cmbLangVersions.Items.Add(v));
             cmbLangVersions.SelectedIndex = 0;
+        }
+
+        private void TxtMessage_TextChanged(object sender, EventArgs e)
+        {
+            ValidateTemplateControls();
+            ValidateVersionControls();
+        }
+
+        private void TxtTitle_TextChanged(object sender, EventArgs e)
+        {
+            ValidateTemplateControls();
+        }
+
+        private void ValidateTemplateControls()
+        {
+            bool state = (String.IsNullOrWhiteSpace(txtMessage.Text) == false && 
+                          String.IsNullOrWhiteSpace(txtTitle.Text) == false &&
+                          cmbCategory.Text != "");
+            btnCreate.Enabled = state;
+            btnSaveChanges.Enabled = (state && lstTemplates.Text != "");
+            btnDelete.Enabled = (lstTemplates.Text != "");
+        }
+
+        private void ValidateVersionControls()
+        {
+            bool state = (String.IsNullOrWhiteSpace(txtMessage.Text) == false && 
+                          String.IsNullOrWhiteSpace(lstTemplates.Text) == false &&
+                          cmbLang.Text != "");
+            btnCreateVersion.Enabled = state;
+            btnSaveVersionChanges.Enabled = state;
+            btnDeleteVersion.Enabled = (cmbLangVersions.Text != "");
         }
     }
 }
