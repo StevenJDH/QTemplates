@@ -28,6 +28,6 @@ namespace QInterfaces
     {
         string AppVersion { get; }
 
-        // TODO: Methods available from QTemplates for use by plugins, for example, global hotkey registration maybe.
+        string GetConfigurationPath();
     }
 }

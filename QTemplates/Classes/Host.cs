@@ -36,5 +36,10 @@ namespace QTemplates.Classes
                 return $"{version.Major}.{version.Minor}.{version.Build}";
             }
         }
+
+        public string GetConfigurationPath()
+        {
+            return AppConfiguration.Instance.GetConfigPath();
+        }
     }
 }

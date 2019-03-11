@@ -55,6 +55,12 @@ namespace QTemplates.Classes
         public string GetDbPath() => Path.Combine(_configPath, "QTemplates.sqlite3");
 
         /// <summary>
+        /// Gets the path where the configuration needs to be stored for the current user.
+        /// </summary>
+        /// <returns>Configuration folder path</returns>
+        public string GetConfigPath() => _configPath;
+
+        /// <summary>
         /// Sets up the personal database and loads any settings used by the application in general once implemented.
         /// </summary>
         private void LoadSettings()
@@ -64,15 +70,12 @@ namespace QTemplates.Classes
                 MessageBox.Show("QTemplates needs to set up your personal database as it could not find one already in place.",
                     "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                
                 Directory.CreateDirectory(_configPath); // Builds any missing folders in path.
                 File.WriteAllBytes(GetDbPath(), Properties.Resources.QTemplates);
-
 
                 MessageBox.Show("All done! You are now ready to start using the program.",
                     "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
     }
 }
