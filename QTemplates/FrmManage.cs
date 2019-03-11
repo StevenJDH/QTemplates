@@ -251,10 +251,10 @@ namespace QTemplates
             lstTemplates.Items.Remove(lstTemplates.Text);
             lstTemplates.Items.Add(txtTitle.Text);
             cmbLangVersions.Items.Clear();
-            txtTitle.Text = "";
-            txtMessage.Text = "";
             cmbLang.Text = "";
             cmbCategory.Text = "";
+            txtTitle.Text = "";
+            txtMessage.Text = "";
         }
 
         // TODO: Don't forget to support language change on version.
@@ -277,11 +277,10 @@ namespace QTemplates
             var version = _unitOfWork.Versions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
 
+            cmbLang.Text = version?.Language.Name ?? ""; // Has to appear before txtMessage for when validation is triggered.
+            cmbCategory.Text = version?.Template.Category.Name ?? "";
             txtTitle.Text = version?.Template.Title ?? "";
             txtMessage.Text = version?.Message ?? "";
-            cmbLang.Text = version?.Language.Name ?? "";
-            cmbCategory.Text = version?.Template.Category.Name ?? "";
-
         }
 
         private void LstTemplates_Click(object sender, EventArgs e)
@@ -292,11 +291,11 @@ namespace QTemplates
             }
 
             cmbLangVersions.Items.Clear();
-            var versions = _unitOfWork.Versions.GetVersionsWithAll()
+            _unitOfWork.Versions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
                 .Select(v => v.Language.Name)
-                .ToList();
-            versions.ForEach(v => cmbLangVersions.Items.Add(v));
+                .ToList()
+                .ForEach(v => cmbLangVersions.Items.Add(v));
             cmbLangVersions.SelectedIndex = 0;
         }
 
