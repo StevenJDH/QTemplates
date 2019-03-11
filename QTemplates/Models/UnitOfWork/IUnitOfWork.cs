@@ -32,6 +32,7 @@ namespace QTemplates.Models.UnitOfWork
         ILanguageRepository Languages { get; }
         ICategoryRepository Categories { get; }
         IVersionRepository Versions { get; }
+        bool IsDisposed { get; }
 
         void EditRecord<TEntity>(TEntity entity, Expression<Func<TEntity, string>> predicate)
             where TEntity : class;

@@ -30,15 +30,19 @@ namespace QTemplates.Models.UnitOfWork
     public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private bool _isDisposed;
 
         public ITemplateRepository Templates { get; private set; }
         public ILanguageRepository Languages { get; private set; }
         public ICategoryRepository Categories { get; private set; }
         public IVersionRepository Versions { get; private set; }
+        public bool IsDisposed { get; private set; }
+
 
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
+            IsDisposed = false;
             Templates = new TemplateRepository(_context);
             Languages = new LanguageRepository(_context);
             Categories = new CategoryRepository(_context);
@@ -53,6 +57,10 @@ namespace QTemplates.Models.UnitOfWork
 
         public int Complete() => _context.SaveChanges();
 
-        public void Dispose() => _context.Dispose();
+        public void Dispose()
+        {
+            _context.Dispose();
+            IsDisposed = true;
+        }
     }
 }

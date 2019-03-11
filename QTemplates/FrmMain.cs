@@ -167,7 +167,10 @@ namespace QTemplates
                 frm.ShowDialog();
             }
 
-            FilterList();
+            if (_unitOfWork.IsDisposed == false) // This is for when exit is clicked while the manage dialog is open.
+            {
+                FilterList();
+            }
         }
 
         private void CmbLang_DropDownClosed(object sender, EventArgs e)
