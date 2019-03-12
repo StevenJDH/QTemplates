@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -53,6 +54,25 @@ namespace QTemplates.Models.UnitOfWork
             where TEntity : class
         {
             _context.Entry(entity).Property(predicate).IsModified = true;
+        }
+
+        public void UndoChanges()
+        {
+            foreach (var entry in _context.ChangeTracker.Entries())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                        entry.State = EntityState.Unchanged;
+                        break;
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                    case EntityState.Deleted:
+                        entry.Reload();
+                        break;
+                }
+            }
         }
 
         public int Complete() => _context.SaveChanges();

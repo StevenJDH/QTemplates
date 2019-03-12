@@ -37,6 +37,8 @@ namespace QTemplates.Models.UnitOfWork
         void EditRecord<TEntity>(TEntity entity, Expression<Func<TEntity, string>> predicate)
             where TEntity : class;
 
+        void UndoChanges();
+
         int Complete();
     }
 }

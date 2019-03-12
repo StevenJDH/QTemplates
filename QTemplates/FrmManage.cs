@@ -48,7 +48,6 @@ namespace QTemplates
             this.Close();
         }
 
-        // TODO: Fix exception when calling close on context menu when this form is open.
         private void FrmManage_Load(object sender, EventArgs e)
         {
             // Loading the template list is not needed because the cmbCategoryVersions index change event will do it.
@@ -111,12 +110,14 @@ namespace QTemplates
                 CategoryId = _unitOfWork.Categories.FirstOrDefault(c => c.Name == cmbCategory.Text).CategoryId
             };
             _unitOfWork.Templates.Add(template);
+
             try
             {
                 _unitOfWork.Complete();
             }
             catch (DbUpdateException)
             {
+                _unitOfWork.UndoChanges();
                 MessageBox.Show($"Error: A template with the title '{txtTitle.Text}' already exists.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -132,45 +133,52 @@ namespace QTemplates
             try
             {
                 _unitOfWork.Complete();
-                MessageBox.Show($"Template with ID: {version.TemplateId} was created successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (cmbCategoryVersions.Text == "All" || cmbCategoryVersions.Text == cmbCategory.Text)
-                {
-                    lstTemplates.Items.Add(template.Title);
-                }
-                txtTitle.Text = "";
-                txtMessage.Text = "";
             }
-            catch (DbEntityValidationException ex)
+            catch (DbUpdateException ex) // TODO: if version creation fails, it should remove the initial template created.
             {
-                // TODO: if version creation fails, it should remove the initial template created.
-                var sb = new StringBuilder();
-                foreach (var err in ex.EntityValidationErrors)
-                {
-                    sb.AppendLine($"Entity of type {err.Entry.GetType().Name} in state {err.Entry.State} has the following validation errors:");
-                    foreach (var val in err.ValidationErrors)
-                    {
-                        sb.AppendLine($"- {val.PropertyName}: {val.ErrorMessage}");
-                    }
-                    sb.AppendLine();
-                }
-                MessageBox.Show(sb.ToString(), "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _unitOfWork.UndoChanges();
+                MessageBox.Show($"Error: {ex.Message}", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show($"Template with ID: {version.TemplateId} was created successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (cmbCategoryVersions.Text == "All" || cmbCategoryVersions.Text == cmbCategory.Text)
+            {
+                lstTemplates.Items.Add(template.Title);
+                lstTemplates.Text = template.Title;
+                LstTemplates_Click(this, EventArgs.Empty);
+            }
+            else
+            {
+                lstTemplates.ClearSelected();
+                ResetInterface();
             }
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
-            if (template == null)
+            _unitOfWork.Templates.Remove(template);
+            
+            try
             {
+                _unitOfWork.Complete();
+            }
+            catch (DbUpdateException ex)
+            {
+                _unitOfWork.UndoChanges();
+                MessageBox.Show($"Error: {ex.Message}", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            _unitOfWork.Templates.Remove(template);
-            _unitOfWork.Complete();
+
             MessageBox.Show("The template and all of its associated translations have been removed.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             lstTemplates.Items.Remove(lstTemplates.Text);
             ResetInterface();
         }
 
+        /// <summary>
+        /// Resets the interface so that all controls and validation will work correctly.
+        /// </summary>
         private void ResetInterface()
         {
             btnSaveChanges.Enabled = false;
@@ -196,7 +204,18 @@ namespace QTemplates
 
             var version = _unitOfWork.Versions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
             _unitOfWork.Versions.Remove(version);
-            _unitOfWork.Complete();
+            
+            try
+            {
+                _unitOfWork.Complete();
+            }
+            catch (DbUpdateException ex)
+            {
+                _unitOfWork.UndoChanges();
+                MessageBox.Show($"Error: {ex.Message}", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             MessageBox.Show($"The '{cmbLangVersions.Text}' version of the selected template was deleted successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cmbLangVersions.Items.Remove(cmbLangVersions.Text);
             cmbLangVersions.SelectedIndex = 0;
@@ -222,7 +241,17 @@ namespace QTemplates
                 LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
             };
             _unitOfWork.Versions.Add(version);
-            _unitOfWork.Complete();
+            
+            try
+            {
+                _unitOfWork.Complete();
+            }
+            catch (DbUpdateException ex)
+            {
+                _unitOfWork.UndoChanges();
+                MessageBox.Show($"Error: {ex.Message}", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             // LastOrDefault/Last methods are not supported with this SQLite implementation, so we do it this way.
             var versionCreated = _unitOfWork.Versions
@@ -236,25 +265,28 @@ namespace QTemplates
         // TODO: Don't forget to support category changes.
         private void BtnSaveChanges_Click(object sender, EventArgs e)
         {
-            var template = _unitOfWork.Templates
-                .FirstOrDefault(t => t.Title == lstTemplates.Text);
-            //if (version == null)
-            //{
-            //    return;
-            //}
+            var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
+
             template.Title = txtTitle.Text.Trim();
             //template.CategoryId = _unitOfWork.Categories.GetId(cmbCategory.Text);
             _unitOfWork.EditRecord(template, t => t.Title);
             //_unitOfWork.EditRecord(template, t => t.CategoryId);
-            _unitOfWork.Complete();
+
+            try
+            {
+                _unitOfWork.Complete();
+            }
+            catch (DbUpdateException)
+            {
+                _unitOfWork.UndoChanges(); // TODO: Run performance test using this method vs just using _unitOfWork.Templates.Find()
+                MessageBox.Show($"Error: A template with the title '{txtTitle.Text}' already exists.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             MessageBox.Show("Changes to the template were saved successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             lstTemplates.Items.Remove(lstTemplates.Text);
             lstTemplates.Items.Add(txtTitle.Text);
-            cmbLangVersions.Items.Clear();
-            cmbLang.Text = "";
-            cmbCategory.Text = "";
-            txtTitle.Text = "";
-            txtMessage.Text = "";
+            ResetInterface();
         }
 
         // TODO: Don't forget to support language change on version.
@@ -262,13 +294,21 @@ namespace QTemplates
         {
             var version = _unitOfWork.Versions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
-            //if (version == null)
-            //{
-            //    return;
-            //}
+
             version.Message = txtMessage.Text.Trim();
             _unitOfWork.EditRecord(version, v => v.Message);
-            _unitOfWork.Complete();
+
+            try
+            {
+                _unitOfWork.Complete();
+            }
+            catch (DbUpdateException ex)
+            {
+                _unitOfWork.UndoChanges();
+                MessageBox.Show($"Error: {ex.Message}", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             MessageBox.Show($"Changes to the '{cmbLangVersions.Text}' version were saved successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
