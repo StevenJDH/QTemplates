@@ -36,7 +36,7 @@ namespace QTemplates.Models.UnitOfWork
         public ITemplateRepository Templates { get; private set; }
         public ILanguageRepository Languages { get; private set; }
         public ICategoryRepository Categories { get; private set; }
-        public IVersionRepository Versions { get; private set; }
+        public ITemplateVersionRepository TemplateVersions { get; private set; }
         public bool IsDisposed { get; private set; }
 
 
@@ -47,7 +47,7 @@ namespace QTemplates.Models.UnitOfWork
             Templates = new TemplateRepository(_context);
             Languages = new LanguageRepository(_context);
             Categories = new CategoryRepository(_context);
-            Versions = new VersionRepository(_context);
+            TemplateVersions = new TemplateVersionRepository(_context);
         }
 
         public void EditRecord<TEntity>(TEntity entity, Expression<Func<TEntity, string>> predicate)

@@ -122,13 +122,13 @@ namespace QTemplates
                 return;
             }
 
-            var version = new Models.Version()
+            var version = new TemplateVersion()
             {
                 Message = txtMessage.Text.Trim(),
                 TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == template.Title).TemplateId,
                 LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == "English").LanguageId,
             };
-            _unitOfWork.Versions.Add(version);
+            _unitOfWork.TemplateVersions.Add(version);
 
             try
             {
@@ -202,8 +202,8 @@ namespace QTemplates
                 return;
             }
 
-            var version = _unitOfWork.Versions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
-            _unitOfWork.Versions.Remove(version);
+            var version = _unitOfWork.TemplateVersions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
+            _unitOfWork.TemplateVersions.Remove(version);
             
             try
             {
@@ -234,13 +234,13 @@ namespace QTemplates
                 return;
             }
 
-            var version = new Models.Version()
+            var version = new TemplateVersion()
             {
                 Message = txtMessage.Text.Trim(),
                 TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text).TemplateId,
                 LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId,
             };
-            _unitOfWork.Versions.Add(version);
+            _unitOfWork.TemplateVersions.Add(version);
             
             try
             {
@@ -254,10 +254,10 @@ namespace QTemplates
             }
 
             // LastOrDefault/Last methods are not supported with this SQLite implementation, so we do it this way.
-            var versionCreated = _unitOfWork.Versions
+            var versionCreated = _unitOfWork.TemplateVersions
                 .FirstOrDefault(v => v.TemplateId == version.TemplateId && v.LanguageId == version.LanguageId);
 
-            MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created with the ID: {versionCreated.VersionId} successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created with the ID: {versionCreated.TemplateVersionId} successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cmbLangVersions.Items.Add(cmbLang.Text);
             cmbLangVersions.Text = cmbLang.Text;
         }
@@ -292,7 +292,7 @@ namespace QTemplates
         // TODO: Don't forget to support language change on version.
         private void BtnSaveVersionChanges_Click(object sender, EventArgs e)
         {
-            var version = _unitOfWork.Versions
+            var version = _unitOfWork.TemplateVersions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
 
             version.Message = txtMessage.Text.Trim();
@@ -314,7 +314,7 @@ namespace QTemplates
 
         private void CmbLangVersions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var version = _unitOfWork.Versions
+            var version = _unitOfWork.TemplateVersions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
 
             cmbLang.Text = version?.Language.Name ?? ""; // Has to appear before txtMessage for when validation is triggered.
@@ -331,7 +331,7 @@ namespace QTemplates
             }
 
             cmbLangVersions.Items.Clear();
-            _unitOfWork.Versions.GetVersionsWithAll()
+            _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
                 .Select(v => v.Language.Name)
                 .ToList()

@@ -31,7 +31,7 @@ namespace QTemplates.Models
     {
         public Template()
         {
-            Versions = new HashSet<Version>();
+            TemplateVersions = new HashSet<TemplateVersion>();
         }
 
         public int TemplateId { get; set; }
@@ -49,6 +49,6 @@ namespace QTemplates.Models
         public Category Category { get; set; }
 
         [InverseProperty("Template")]
-        public ICollection<Version> Versions { get; set; }
+        public ICollection<TemplateVersion> TemplateVersions { get; set; }
     }
 }

@@ -26,19 +26,19 @@ using QTemplates.Models.Repositories.Interfaces;
 
 namespace QTemplates.Models.Repositories
 {
-    public sealed class VersionRepository : Repository<Version>, IVersionRepository
+    public sealed class TemplateVersionRepository : Repository<TemplateVersion>, ITemplateVersionRepository
     {
         private readonly AppDbContext _context;
 
-        public VersionRepository(AppDbContext context) : base(context)
+        public TemplateVersionRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public IEnumerable<Version> GetVersionsWithAll()
+        public IEnumerable<TemplateVersion> GetVersionsWithAll()
         {
             // The Includes are to eager load the navigation properties.
-            return _context.Versions
+            return _context.TemplateVersions
                 .Include(v => v.Language)
                 .Include(v => v.Template)
                 .Include(v => v.Template.Category)

@@ -30,7 +30,7 @@ namespace QTemplates.Models
     {
         public Language()
         {
-            Versions = new HashSet<Version>();
+            TemplateVersions = new HashSet<TemplateVersion>();
         }
 
         public int LanguageId { get; set; }
@@ -41,6 +41,6 @@ namespace QTemplates.Models
         public string Name { get; set; }
 
         [InverseProperty("Language")]
-        public ICollection<Version> Versions { get; set; }
+        public ICollection<TemplateVersion> TemplateVersions { get; set; }
     }
 }

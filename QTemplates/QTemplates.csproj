@@ -84,11 +84,11 @@
     <Compile Include="Models\Repositories\Interfaces\ILanguageRepository.cs" />
     <Compile Include="Models\Repositories\Interfaces\ITemplateRepository.cs" />
     <Compile Include="Models\Repositories\Interfaces\IRepository.cs" />
-    <Compile Include="Models\Repositories\Interfaces\IVersionRepository.cs" />
+    <Compile Include="Models\Repositories\Interfaces\ITemplateVersionRepository.cs" />
     <Compile Include="Models\Repositories\LanguageRepository.cs" />
     <Compile Include="Models\Repositories\TemplateRepository.cs" />
     <Compile Include="Models\Repositories\Repository.cs" />
-    <Compile Include="Models\Repositories\VersionRepository.cs" />
+    <Compile Include="Models\Repositories\TemplateVersionRepository.cs" />
     <Compile Include="Models\SQLiteConfiguration.cs" />
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
@@ -105,7 +105,7 @@
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Models\UnitOfWork\UnitOfWork.cs" />
-    <Compile Include="Models\Version.cs" />
+    <Compile Include="Models\TemplateVersion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmMain.resx">

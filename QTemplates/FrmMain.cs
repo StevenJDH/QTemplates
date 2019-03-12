@@ -192,7 +192,7 @@ namespace QTemplates
 
             if (cmbCategory.Text == "All")
             {
-                _unitOfWork.Versions.GetVersionsWithAll()
+                _unitOfWork.TemplateVersions.GetVersionsWithAll()
                     .Where(v => v.Language.Name == cmbLang.Text)
                     .Select(v => v.Template.Title)
                     .ToList()
@@ -200,7 +200,7 @@ namespace QTemplates
             }
             else
             {
-                _unitOfWork.Versions.GetVersionsWithAll()
+                _unitOfWork.TemplateVersions.GetVersionsWithAll()
                     .Where(v => v.Template.Category.Name == cmbCategory.Text && v.Language.Name == cmbLang.Text)
                     .Select(v => v.Template.Title)
                     .ToList()
@@ -215,7 +215,7 @@ namespace QTemplates
                 return;
             }
 
-            var version = _unitOfWork.Versions.GetVersionsWithAll()
+            var version = _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLang.Text);
 
             _lastTemplateUsed = version?.Message ?? "<[ Template not found ]>";

@@ -24,13 +24,13 @@ using System.Threading.Tasks;
 
 namespace QTemplates.Models.Repositories.Interfaces
 {
-    public interface IVersionRepository : IRepository<Version>
+    public interface ITemplateVersionRepository : IRepository<TemplateVersion>
     {
         /// <summary>
         /// Gets a flat collection of template versions with eager-loaded navigation properties 
         /// for Templates, Languages, and Categories with the returned version information.
         /// </summary>
         /// <returns>All versions and all navigation properties</returns>
-        IEnumerable<Version> GetVersionsWithAll();
+        IEnumerable<TemplateVersion> GetVersionsWithAll();
     }
 }

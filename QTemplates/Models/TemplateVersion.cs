@@ -26,9 +26,11 @@ using System.Threading.Tasks;
 
 namespace QTemplates.Models
 {
-    public class Version // TODO: maybe change this to TemplateVersion as this is a reserved keyword.
+    [Table("Version")]
+    public class TemplateVersion
     {
-        public int VersionId { get; set; }
+        [Column("VersionId")]
+        public int TemplateVersionId { get; set; }
 
         [Required]
         [StringLength(2048)]
@@ -44,10 +46,10 @@ namespace QTemplates.Models
         [Index("ix_template_language", 2, IsUnique = true)]
         public int? LanguageId { get; set; }
 
-        [InverseProperty("Versions")]
+        [InverseProperty("TemplateVersions")]
         public Template Template { get; set; }
 
-        [InverseProperty("Versions")]
+        [InverseProperty("TemplateVersions")]
         public Language Language { get; set; }
     }
 }

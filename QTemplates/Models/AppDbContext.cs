@@ -44,7 +44,7 @@ namespace QTemplates.Models
         public DbSet<Template> Templates { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Version> Versions { get; set; }
+        public DbSet<TemplateVersion> TemplateVersions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -31,7 +31,7 @@ namespace QTemplates.Models.UnitOfWork
         ITemplateRepository Templates { get; }
         ILanguageRepository Languages { get; }
         ICategoryRepository Categories { get; }
-        IVersionRepository Versions { get; }
+        ITemplateVersionRepository TemplateVersions { get; }
         bool IsDisposed { get; }
 
         void EditRecord<TEntity>(TEntity entity, Expression<Func<TEntity, string>> predicate)
