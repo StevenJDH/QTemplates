@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,15 +27,25 @@ namespace QTemplates
 {
     static class Program
     {
+        static readonly Mutex mutex = new Mutex(initiallyOwned: true, name: "88c88546-e82f-4c79-9ad3-11c9df375e0a");
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain());
+            if (mutex.WaitOne(timeout: TimeSpan.Zero, exitContext: true))
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new FrmMain());
+            }
+            else
+            {
+                MessageBox.Show("You can only run one instance of QTemplates at a time.", 
+                    "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
     }
 }
