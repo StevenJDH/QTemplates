@@ -125,8 +125,8 @@ namespace QTemplates
             var version = new TemplateVersion()
             {
                 Message = txtMessage.Text.Trim(),
-                TemplateId = _unitOfWork.Templates.FirstOrDefault(t => t.Title == template.Title).TemplateId,
-                LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == "English").LanguageId,
+                TemplateId = template.TemplateId,
+                LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == "English").LanguageId
             };
             _unitOfWork.TemplateVersions.Add(version);
 
@@ -223,17 +223,6 @@ namespace QTemplates
 
         private void BtnCreateVersion_Click(object sender, EventArgs e)
         {
-            if (cmbLangVersions.Text == cmbLang.Text)
-            {
-                MessageBox.Show($"There is already an '{cmbLangVersions.Text}' version.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            if (cmbLang.Text == "English")
-            {
-                MessageBox.Show("You cannot create another 'English' version as this is created by default.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
             var version = new TemplateVersion()
             {
                 Message = txtMessage.Text.Trim(),
@@ -253,11 +242,7 @@ namespace QTemplates
                 return;
             }
 
-            // LastOrDefault/Last methods are not supported with this SQLite implementation, so we do it this way.
-            var versionCreated = _unitOfWork.TemplateVersions
-                .FirstOrDefault(v => v.TemplateId == version.TemplateId && v.LanguageId == version.LanguageId);
-
-            MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created with the ID: {versionCreated.TemplateVersionId} successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created with the ID: {version.TemplateVersionId} successfully.", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cmbLangVersions.Items.Add(cmbLang.Text);
             cmbLangVersions.Text = cmbLang.Text;
         }
@@ -350,24 +335,41 @@ namespace QTemplates
             ValidateTemplateControls();
         }
 
+        private void cmbLang_DropDownClosed(object sender, EventArgs e)
+        {
+            ValidateVersionControls();
+        }
+
+        /// <summary>
+        /// The following are the template validation rules:
+        /// Create: Title, Message, and Category must be filled. Title must not be in the current list.
+        /// Modify: Title, Message, and Category must be filled. List must have a title selected, And Title must match the selected title.
+        /// Delete: List must have a title selected.
+        /// </summary>
         private void ValidateTemplateControls()
         {
             bool state = (String.IsNullOrWhiteSpace(txtMessage.Text) == false && 
                           String.IsNullOrWhiteSpace(txtTitle.Text) == false &&
                           cmbCategory.Text != "");
-            btnCreate.Enabled = state;
-            btnSaveChanges.Enabled = (state && lstTemplates.Text != "");
+            btnCreate.Enabled = (state &&  lstTemplates.Items.Contains(txtTitle.Text.Trim()) == false);
+            btnSaveChanges.Enabled = (state && lstTemplates.Text != "" && txtTitle.Text.Trim() == lstTemplates.Text);
             btnDelete.Enabled = (lstTemplates.Text != "");
         }
 
+        /// <summary>
+        /// The following are the template version validation rules:
+        /// Create: Title in list is selected, Message and Language are filled. Language cannot be the English default, and it must not be already created.
+        /// Modify: Title in list is selected, Message and Language are filled. Language must match selected language versions created or be a new Language.
+        /// Delete: There must be a language selected in the language versions created.
+        /// </summary>
         private void ValidateVersionControls()
         {
             bool state = (String.IsNullOrWhiteSpace(txtMessage.Text) == false && 
                           String.IsNullOrWhiteSpace(lstTemplates.Text) == false &&
                           cmbLang.Text != "");
-            btnCreateVersion.Enabled = state;
-            btnSaveVersionChanges.Enabled = state;
-            btnDeleteVersion.Enabled = (cmbLangVersions.Text != "");
+            btnCreateVersion.Enabled = (state && cmbLang.Text != "English" && cmbLangVersions.Items.Contains(cmbLang.Text) == false);
+            btnSaveVersionChanges.Enabled = (state && (cmbLangVersions.Text == cmbLang.Text || cmbLangVersions.Items.Contains(cmbLang.Text) == false));
+            btnDeleteVersion.Enabled = (cmbLangVersions.Text != ""); // Not validating for English to explain in message box how to delete.
         }
     }
 }
