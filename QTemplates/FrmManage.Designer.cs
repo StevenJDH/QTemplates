@@ -121,7 +121,7 @@
             this.cmbLang.Name = "cmbLang";
             this.cmbLang.Size = new System.Drawing.Size(240, 21);
             this.cmbLang.TabIndex = 11;
-            this.cmbLang.DropDownClosed += new System.EventHandler(this.cmbLang_DropDownClosed);
+            this.cmbLang.DropDownClosed += new System.EventHandler(this.CmbLang_DropDownClosed);
             // 
             // btnCreate
             // 

@@ -31,7 +31,6 @@ namespace QTemplates.Models.UnitOfWork
     public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-        private bool _isDisposed;
 
         public ITemplateRepository Templates { get; private set; }
         public ILanguageRepository Languages { get; private set; }
