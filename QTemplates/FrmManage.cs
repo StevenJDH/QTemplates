@@ -335,7 +335,7 @@ namespace QTemplates
             ValidateTemplateControls();
         }
 
-        private void cmbLang_DropDownClosed(object sender, EventArgs e)
+        private void CmbLang_DropDownClosed(object sender, EventArgs e)
         {
             ValidateVersionControls();
         }
@@ -343,7 +343,7 @@ namespace QTemplates
         /// <summary>
         /// The following are the template validation rules:
         /// Create: Title, Message, and Category must be filled. Title must not be in the current list.
-        /// Modify: Title, Message, and Category must be filled. List must have a title selected, And Title must match the selected title.
+        /// Modify: Title, Message, and Category must be filled. List must have a title selected.
         /// Delete: List must have a title selected.
         /// </summary>
         private void ValidateTemplateControls()
@@ -352,7 +352,7 @@ namespace QTemplates
                           String.IsNullOrWhiteSpace(txtTitle.Text) == false &&
                           cmbCategory.Text != "");
             btnCreate.Enabled = (state &&  lstTemplates.Items.Contains(txtTitle.Text.Trim()) == false);
-            btnSaveChanges.Enabled = (state && lstTemplates.Text != "" && txtTitle.Text.Trim() == lstTemplates.Text);
+            btnSaveChanges.Enabled = (state && lstTemplates.Text != "");
             btnDelete.Enabled = (lstTemplates.Text != "");
         }
 
@@ -369,7 +369,7 @@ namespace QTemplates
                           cmbLang.Text != "");
             btnCreateVersion.Enabled = (state && cmbLang.Text != "English" && cmbLangVersions.Items.Contains(cmbLang.Text) == false);
             btnSaveVersionChanges.Enabled = (state && (cmbLangVersions.Text == cmbLang.Text || cmbLangVersions.Items.Contains(cmbLang.Text) == false));
-            btnDeleteVersion.Enabled = (cmbLangVersions.Text != ""); // Not validating for English to explain in message box how to delete.
+            btnDeleteVersion.Enabled = (cmbLangVersions.Text != ""); // Not also validating for English to explain in message box how to delete it.
         }
     }
 }
