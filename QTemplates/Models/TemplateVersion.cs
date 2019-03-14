@@ -39,12 +39,12 @@ namespace QTemplates.Models
         [Required]
         [ForeignKey("Template")]
         [Index("ix_template_language", 1, IsUnique = true)]
-        public int? TemplateId { get; set; }
+        public int TemplateId { get; set; }
 
         [Required]
         [ForeignKey("Language")]
         [Index("ix_template_language", 2, IsUnique = true)]
-        public int? LanguageId { get; set; }
+        public int LanguageId { get; set; }
 
         [InverseProperty("TemplateVersions")]
         public Template Template { get; set; }

@@ -43,7 +43,7 @@ namespace QTemplates.Models
 
         [Required]
         [ForeignKey("Category")]
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         [InverseProperty("Templates")]
         public Category Category { get; set; }
