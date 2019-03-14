@@ -123,23 +123,21 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   SectionIn RO ;Makes the install option required/read-only.
   
   ;Files to install...
-  SetOutPath "$INSTDIR"
   SetOverwrite try
-  File "..\QTemplates\bin\Release\EntityFramework.dll"
-  File "..\QTemplates\bin\Release\EntityFramework.SqlServer.dll"
   SetOutPath "$INSTDIR\Plugins"
   File "..\QTemplates\bin\Release\Plugins\QTemplates.Example.Plugin.dll"
-  SetOutPath "$INSTDIR"
+  SetOutPath "$INSTDIR\x64"
+  File "..\QTemplates\bin\Release\x64\SQLite.Interop.dll"
+  SetOutPath "$INSTDIR\x86"
+  File "..\QTemplates\bin\Release\x86\SQLite.Interop.dll"
+  SetOutPath "$INSTDIR" ;Need to set '$INSTDIR' last so that 'Start in' for shorcuts are set correctly and app plugins load.
+  File "..\QTemplates\bin\Release\EntityFramework.dll"
+  File "..\QTemplates\bin\Release\EntityFramework.SqlServer.dll"
   File "..\QTemplates\bin\Release\QInterfaces.dll"
   File "..\QTemplates\bin\Release\QTemplates.exe"
   File "..\QTemplates\bin\Release\System.Data.SQLite.dll"
   File "..\QTemplates\bin\Release\System.Data.SQLite.EF6.dll"
   File "..\QTemplates\bin\Release\System.Data.SQLite.Linq.dll"
-  SetOutPath "$INSTDIR\x64"
-  File "..\QTemplates\bin\Release\x64\SQLite.Interop.dll"
-  SetOutPath "$INSTDIR\x86"
-  File "..\QTemplates\bin\Release\x86\SQLite.Interop.dll"
-
 SectionEnd
 
 Section "Start Menu Shortcut" SectionStartMenu
