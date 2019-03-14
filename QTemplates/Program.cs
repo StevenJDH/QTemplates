@@ -43,8 +43,8 @@ namespace QTemplates
             }
             else
             {
-                MessageBox.Show("You can only run one instance of QTemplates at a time.", 
-                    "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You can only run one instance of QTemplates at a time.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
     }

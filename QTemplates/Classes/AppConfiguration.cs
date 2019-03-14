@@ -41,7 +41,8 @@ namespace QTemplates.Classes
             }
             catch (IOException ex)
             {
-                MessageBox.Show($"{ex.GetType().Name}: {ex.Message}", "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.GetType().Name}: {ex.Message}", 
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Process.GetCurrentProcess().Kill();
             }
         }
@@ -68,13 +69,13 @@ namespace QTemplates.Classes
             if (File.Exists(GetDbPath()) == false)
             {
                 MessageBox.Show("QTemplates needs to set up your personal database as it could not find one already in place.",
-                    "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Directory.CreateDirectory(_configPath); // Builds any missing folders in path.
                 File.WriteAllBytes(GetDbPath(), Properties.Resources.QTemplates);
 
                 MessageBox.Show("All done! You are now ready to start using the program.",
-                    "QTemplates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
