@@ -202,7 +202,6 @@
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "QTemplates";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_Closing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);

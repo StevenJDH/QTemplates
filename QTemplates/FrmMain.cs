@@ -78,7 +78,7 @@ namespace QTemplates
                 SendKeys.Send("^(v)");
             });
 
-            //notifyIcon1.Icon = this.Icon;
+            this.Icon = notifyIcon1.Icon;
             notifyIcon1.Visible = true;
         }
 
@@ -132,15 +132,6 @@ namespace QTemplates
             FilterList();
         }
 
-        private void FrmMain_Closing(object sender, FormClosingEventArgs e)
-        {
-            notifyIcon1.Visible = false;
-            _globalHotKey.RemoveHotKey(123);
-            _globalHotKey.RemoveHotKey(456);
-            _globalHotKey.Dispose();
-            _unitOfWork.Dispose();
-        }
-
         private void NotifyIcon1_DoubleClick(object sender, MouseEventArgs e)
         {
             // Resets form state that enables the form to load to system tray directly on first load.
@@ -152,7 +143,15 @@ namespace QTemplates
 
         private void CmnuExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            notifyIcon1.Visible = false;
+            _globalHotKey.RemoveHotKey(123);
+            _globalHotKey.RemoveHotKey(456);
+            _globalHotKey.Dispose();
+            _unitOfWork.Dispose();
+
+            // Workaround to ensures that the Application.Run() message loop in Program.cs exits when
+            // form was never shown. If Close() is used in this scenario, process will remain open.
+            Application.Exit(); 
         }
 
         private void BtnHide_Click(object sender, EventArgs e)
