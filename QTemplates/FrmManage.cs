@@ -348,9 +348,14 @@ namespace QTemplates
 
         /// <summary>
         /// The following are the template validation rules:
-        /// Create: Title, Message, and Category must be filled. Title must not be in the current list.
-        /// Modify: Title, Message, and Category must be filled. List must have a title selected.
-        /// Delete: List must have a title selected.
+        /// Create:
+        ///     Title, Message, and Category must be filled.
+        ///     Title must not be in the current list.
+        /// Modify:
+        ///     Title, Message, and Category must be filled.
+        ///     List must have a title selected.
+        /// Delete:
+        ///     List must have a title selected.
         /// </summary>
         private void ValidateTemplateControls()
         {
@@ -364,9 +369,15 @@ namespace QTemplates
 
         /// <summary>
         /// The following are the template version validation rules:
-        /// Create: Title in list is selected, Message and Language are filled. Language cannot be the English default, and it must not be already created.
-        /// Modify: Title in list is selected, Message and Language are filled. Language must match selected language versions created or be a new Language.
-        /// Delete: There must be a language selected in the language versions created.
+        /// Create:
+        ///     Title in list is selected, Message and Language are filled.
+        ///     Language cannot be the English default, and it must not be already created.
+        /// Modify:
+        ///     Title in list is selected, Message and Language are filled.
+        ///     Language must match selected language versions created, or without changing the
+        ///     required English default, be a new Language.
+        /// Delete:
+        ///     There must be a language selected in the language versions created.
         /// </summary>
         private void ValidateVersionControls()
         {
@@ -374,7 +385,7 @@ namespace QTemplates
                           String.IsNullOrWhiteSpace(lstTemplates.Text) == false &&
                           cmbLang.Text != "");
             btnCreateVersion.Enabled = (state && cmbLang.Text != "English" && cmbLangVersions.Items.Contains(cmbLang.Text) == false);
-            btnSaveVersionChanges.Enabled = (state && (cmbLangVersions.Text == cmbLang.Text || cmbLangVersions.Items.Contains(cmbLang.Text) == false));
+            btnSaveVersionChanges.Enabled = (state && (cmbLangVersions.Text == cmbLang.Text || (cmbLangVersions.Items.Count > 1 && cmbLangVersions.Items.Contains(cmbLang.Text) == false)));
             btnDeleteVersion.Enabled = (cmbLangVersions.Text != ""); // Not also validating for English to explain in message box how to delete it.
         }
     }
