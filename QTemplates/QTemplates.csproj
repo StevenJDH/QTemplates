@@ -61,6 +61,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.110.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.110.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,8 +74,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AppConfiguration.cs" />
+    <Compile Include="Classes\Connection.cs" />
+    <Compile Include="Classes\GitHubAPI.cs" />
+    <Compile Include="Classes\GitHubLatestReleaseResponse.cs" />
     <Compile Include="Classes\Host.cs" />
     <Compile Include="Classes\PluginProvider.cs" />
+    <Compile Include="FrmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAbout.designer.cs">
+      <DependentUpon>FrmAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Classes\GlobalHotKey.cs" />
     <Compile Include="Models\Category.cs" />
@@ -108,6 +118,9 @@
     <Compile Include="Models\TemplateVersion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmAbout.resx">
+      <DependentUpon>FrmAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\donation-button.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QInterfaces\QInterfaces.csproj">
