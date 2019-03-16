@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
@@ -32,44 +31,13 @@ namespace QTemplates.Classes
     class GitHubAPI
     {
         /// <summary>
-        /// 
+        /// Gets the latest version of a release from the GitHub repository. Prereleases are ignored
+        /// by this API endpoint.
         /// </summary>
-        /// <returns></returns>
-        public async Task<bool> IsUpdateAvailable()
-        { 
-            GitHubLatestReleaseResponse response = await GetLatestVersionAsync("StevenJDH", "QTemplates");
-
-            if (response.message != null)
-            {
-                MessageBox.Show(response.message);
-                return false;
-            }
-
-            var gitVersion = new Version(response.tag_name);
-
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            var appVersion = new Version($"{version.Major}.{version.Minor}.{version.Build}"); // Application.ProductVersion 1.0.0.0
-
-            // Be aware that Version.Parse("1.0.0") is less than (<) Version.Parse("1.0.0.0") (i.e. are NOT equal). 
-            switch (appVersion.CompareTo(gitVersion))
-            {
-                default:
-                case 0: // Same as
-                case 1: // later than
-                    return false;
-                case -1: // earlier than
-                    return true;
-            }
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="author"></param>
-        /// <param name="repo"></param>
-        /// <returns></returns>
-        private async Task<GitHubLatestReleaseResponse> GetLatestVersionAsync(string author, string repo)
+        /// <param name="author">Author's username of the repo</param>
+        /// <param name="repo">Name of the repo to check</param>
+        /// <returns>Response with release details</returns>
+        public async Task<GitHubLatestReleaseResponse> GetLatestVersionAsync(string author, string repo)
         {
             string url = $"https://api.github.com/repos/{author.Trim()}/{repo.Trim()}/releases/latest";
 
@@ -78,26 +46,30 @@ namespace QTemplates.Classes
 
 
         /// <summary>
-        ///
-        /// GitHub requires a User-Agent supplied in request header with all API calls or you will
-        /// get a HTTP 403 Forbidden error code. See https://developer.github.com/v3/
+        /// Calls the provided GitHub API endpoint and returns the deserialized response.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="apiLink"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// GitHub requires a valid User-Agent header with all API request or you will get a HTTP 403 Forbidden
+        /// status code.
+        /// See <a href="https://developer.github.com/v3/#user-agent-required">User agent required</a> for details.
+        /// </remarks>
+        /// <typeparam name="T">The type of response expected by the endpoint</typeparam>
+        /// <param name="apiLink">The URL link for the API endpoint</param>
+        /// <returns>API response of the endpoint used</returns>
         private async Task<T> APIServiceCallAsync<T>(string apiLink)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
-            // 
             string userAgentFirefox = "Mozilla/6.0 (Windows NT 10.0; rv:36.0) Gecko/20100101 Firefox/65.0.1";
 
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("User-Agent", userAgentFirefox);
+                client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json"); // Recommended by GitHub.
+
                 using (HttpResponseMessage result = await client.GetAsync(apiLink))
                 {
                     string jsonData = await result.Content.ReadAsStringAsync();
-                    // Will provide error information if there is a problem.
+                    // Will provide error information in the response type if there is a problem.
                     return json.Deserialize<T>(jsonData);
                 }
             }

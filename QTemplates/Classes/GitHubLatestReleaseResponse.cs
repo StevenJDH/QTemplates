@@ -21,17 +21,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QTemplates.Classes
 {
     class GitHubLatestReleaseResponse
     {
         public string html_url { get; set; }
+
         public string tag_name { get; set; }
-        public bool draft { get; set; }
-        public bool prerelease { get; set; }
+
         public string published_at { get; set; }
+
         public string body { get; set; }
-        public string message { get; set; } // If not null, then we have an error.
+
+        public string message { get; set; }
+
+        /// <summary>
+        /// Checks to see if the release version on GitHub is newer than the current version running.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="message"/> is not null, then we likely have a HTTP 404 Not Found for no releases found.
+        /// </remarks>
+        /// <returns>True if update available or false is not</returns>
+        public bool IsUpdateAvailable()
+        {
+            if (message != null)
+            {
+                return false;
+            }
+
+            var gitVersion = new Version(tag_name);
+            var appVersion = new Version(Application.ProductVersion);
+
+            // Be aware that 1.0.0 is less than (<) 1.0.0.0, they are NOT equal. Use four places on GitHub.
+            switch (appVersion.CompareTo(gitVersion))
+            {
+                default:
+                case 0: // Same as
+                case 1: // later than
+                    return false;
+                case -1: // earlier than
+                    return true;
+            }
+        }
     }
 }
