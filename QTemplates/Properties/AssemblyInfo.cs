@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QTemplates")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A productivity tool that is used to inject text-based templates into any application and supports translations and plugins.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Steven Jenkins De Haro")]
 [assembly: AssemblyProduct("QTemplates")]
