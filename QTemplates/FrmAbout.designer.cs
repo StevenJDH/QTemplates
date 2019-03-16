@@ -60,7 +60,7 @@
             this.lblTitleVer.Name = "lblTitleVer";
             this.lblTitleVer.Size = new System.Drawing.Size(280, 16);
             this.lblTitleVer.TabIndex = 1;
-            this.lblTitleVer.Text = "QTemplates v0.0.0";
+            this.lblTitleVer.Text = "QTemplates v0.0.0.0";
             // 
             // groupBox1
             // 

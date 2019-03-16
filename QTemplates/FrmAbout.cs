@@ -23,7 +23,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -60,10 +59,8 @@ namespace QTemplates
 
         private void FrmAbout_Load(object sender, EventArgs e)
         {
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
             // Automatically sets title and version information in label.
-            lblTitleVer.Text = $"{Application.ProductName} v{version.Major}.{version.Minor}.{version.Build} Alpha 1";
+            lblTitleVer.Text = $"{Application.ProductName} v{Application.ProductVersion}";
 
             // We store the actual link this way in case we ever want to make changes to the link label.
             lnkGitHub.Links.Add(new LinkLabel.Link() { LinkData = "https://github.com/StevenJDH/QTemplates" });
