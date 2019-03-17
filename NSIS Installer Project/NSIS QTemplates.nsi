@@ -133,6 +133,7 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   SetOutPath "$INSTDIR" ;Need to set '$INSTDIR' last so that 'Start in' for shorcuts are set correctly and app plugins load.
   File "..\QTemplates\bin\Release\EntityFramework.dll"
   File "..\QTemplates\bin\Release\EntityFramework.SqlServer.dll"
+  File "..\QTemplates\bin\Release\Newtonsoft.Json.dll"
   File "..\QTemplates\bin\Release\QInterfaces.dll"
   File "..\QTemplates\bin\Release\QTemplates.exe"
   File "..\QTemplates\bin\Release\System.Data.SQLite.dll"
@@ -232,6 +233,7 @@ Section "un.Uninstall Core Files (required)" SectionCoreUninstall
   Delete "$INSTDIR\QTemplates.exe"
   Delete "$INSTDIR\QInterfaces.dll"
   Delete "$INSTDIR\Plugins\QTemplates.Example.Plugin.dll"
+  Delete "$INSTDIR\Newtonsoft.Json.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.dll"
   Delete "$INSTDIR\EntityFramework.dll"
 
