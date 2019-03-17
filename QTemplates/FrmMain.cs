@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -101,11 +102,10 @@ namespace QTemplates
         }
 
         /// <summary>
-        /// Overrides the defaults to allow the main form to start hidden. This method is used by the
-        /// framework, we do not use it directly. Instead, control it via the _startupVisible instance
-        /// variable. Then once things are loaded, set this variable to true as well as the form's
-        /// Visible property before trying to call show on it. Once show is called, the form's load
-        /// event will be raised.
+        /// Overrides the defaults to allow the main form to start hidden. This method is used by the framework,
+        /// we do not use it directly. Instead, control it via the <see cref="_startupVisible"/> instance
+        /// variable. Then once things are loaded, set this variable to true as well as the form's Visible
+        /// property before trying to call show on it. Once show is called, the form's load event will be raised.
         /// </summary>
         /// <param name="value">True for the default and false for hidden startup</param>
         protected override void SetVisibleCore(bool value)
@@ -163,7 +163,7 @@ namespace QTemplates
         {
             using (var frm = new FrmManage(_unitOfWork))
             {
-                frm.ShowDialog();
+                frm.ShowDialog(this);
             }
 
             if (_unitOfWork.IsDisposed == false) // This is for when exit is clicked while the manage dialog is open.
@@ -220,6 +220,45 @@ namespace QTemplates
             _lastTemplateUsed = version?.Message ?? "<[ Template not found ]>";
             Clipboard.SetText(_lastTemplateUsed);
             BtnHide_Click(this, EventArgs.Empty);
+        }
+
+        private void CmnuAbout_Click(object sender, EventArgs e)
+        {
+            using (FrmAbout frm = new FrmAbout())
+            {
+                frm.ShowDialog(this);
+            }
+        }
+
+        private async void MnuUpdateCheck_Click(object sender, EventArgs e)
+        {
+            if (Connection.IsInternetAvailable() == false)
+            {
+                MessageBox.Show("A connection to the Internet was not detected.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            GitHubLatestReleaseResponse response = await new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates");
+
+            if (response != null && response.IsUpdateAvailable())
+            {
+                if (MessageBox.Show($"A new version of QTemplates ({response.VersionTag}) is available! Do you want to download the update now?",
+                        Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        // Sends URL to the operating system for opening.
+                        Process.Start(response.ReleaseUrl);
+                    }
+                    catch (Exception) {/* Consuming exceptions */ }
+                }
+            }
+            else
+            {
+                MessageBox.Show($"You are using the latest version of QTemplates ({Application.ProductVersion}).",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

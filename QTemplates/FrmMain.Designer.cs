@@ -46,6 +46,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.mnuUpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,39 +62,41 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmnuAbout,
+            this.mnuUpdateCheck,
             this.toolStripSeparator1,
             this.mnuTools,
             this.toolStripSeparator2,
             this.cmnuExit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(108, 82);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 126);
             // 
             // cmnuAbout
             // 
             this.cmnuAbout.Name = "cmnuAbout";
-            this.cmnuAbout.Size = new System.Drawing.Size(107, 22);
+            this.cmnuAbout.Size = new System.Drawing.Size(180, 22);
             this.cmnuAbout.Text = "About";
+            this.cmnuAbout.Click += new System.EventHandler(this.CmnuAbout_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(104, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // mnuTools
             // 
             this.mnuTools.Name = "mnuTools";
-            this.mnuTools.Size = new System.Drawing.Size(107, 22);
+            this.mnuTools.Size = new System.Drawing.Size(180, 22);
             this.mnuTools.Text = "Tools";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(104, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // cmnuExit
             // 
             this.cmnuExit.Name = "cmnuExit";
-            this.cmnuExit.Size = new System.Drawing.Size(107, 22);
+            this.cmnuExit.Size = new System.Drawing.Size(180, 22);
             this.cmnuExit.Text = "Exit";
             this.cmnuExit.Click += new System.EventHandler(this.CmnuExit_Click);
             // 
@@ -181,6 +184,13 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Templates:";
             // 
+            // mnuUpdateCheck
+            // 
+            this.mnuUpdateCheck.Name = "mnuUpdateCheck";
+            this.mnuUpdateCheck.Size = new System.Drawing.Size(180, 22);
+            this.mnuUpdateCheck.Text = "Check for Updates";
+            this.mnuUpdateCheck.Click += new System.EventHandler(this.MnuUpdateCheck_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -226,6 +236,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripMenuItem mnuTools;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem mnuUpdateCheck;
     }
 }
 
