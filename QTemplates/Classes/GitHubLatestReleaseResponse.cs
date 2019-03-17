@@ -18,40 +18,55 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace QTemplates.Classes
 {
     class GitHubLatestReleaseResponse
     {
-        public string html_url { get; set; }
+        [JsonProperty("html_url")]
+        public string ReleaseUrl { get; set; }
 
-        public string tag_name { get; set; }
+        [JsonProperty("tag_name")]
+        public string VersionTag { get; set; }
 
-        public string published_at { get; set; }
+        [JsonProperty("prerelease")]
+        public bool IsPrerelease { get; set; }
 
-        public string body { get; set; }
+        [JsonProperty("published_at")]
+        public DateTime PublishedDateTime { get; set; }
 
-        public string message { get; set; }
+        [JsonProperty("body")]
+        public string ReleaseNotes { get; set; }
+
+        [JsonProperty("message")]
+        public string ErrorMessage { get; set; }
+
+        [JsonIgnore]
+        public bool HasError { get; set; }
 
         /// <summary>
         /// Checks to see if the release version on GitHub is newer than the current version running.
         /// </summary>
         /// <remarks>
-        /// If <see cref="message"/> is not null, then we likely have a HTTP 404 Not Found for no releases found.
+        /// If <see cref="HasError"/> is true, then we likely have a HTTP 404 Not Found for no releases found.
         /// </remarks>
         /// <returns>True if update available or false is not</returns>
         public bool IsUpdateAvailable()
         {
-            if (message != null)
+            if (HasError || Regex.IsMatch(VersionTag, @"(\d+)\.(\d+)\.(\d+)\.(\d+)") == false)
             {
                 return false;
             }
 
-            var gitVersion = new Version(tag_name);
+            var gitVersion = new Version(VersionTag);
             var appVersion = new Version(Application.ProductVersion);
 
             // Be aware that 1.0.0 is less than (<) 1.0.0.0, they are NOT equal. Use four places on GitHub.
@@ -63,6 +78,15 @@ namespace QTemplates.Classes
                     return false;
                 case -1: // earlier than
                     return true;
+            }
+        }
+
+        [OnDeserialized]
+        private void OnDeserializedMethod(StreamingContext context)
+        {
+            if (String.IsNullOrEmpty(ErrorMessage) == false)
+            {
+                HasError = true;
             }
         }
     }

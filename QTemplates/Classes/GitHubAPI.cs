@@ -17,33 +17,41 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace QTemplates.Classes
 {
     class GitHubAPI
     {
         /// <summary>
-        /// Gets the latest version of a release from the GitHub repository. Prereleases are ignored
-        /// by this API endpoint.
+        /// Gets the latest release or prerelease from the provided GitHub repository.
         /// </summary>
-        /// <param name="author">Author's username of the repo</param>
+        /// <remarks>
+        /// The 'releases/latest' endpoint omits prereleases so the endpoint below is a more flexible option.
+        /// </remarks>
+        /// <param name="owner">Owner of the repo</param>
         /// <param name="repo">Name of the repo to check</param>
+        /// <param name="prerelease">Optionally set to false to exclude prereleases</param>
         /// <returns>Response with release details</returns>
-        public async Task<GitHubLatestReleaseResponse> GetLatestVersionAsync(string author, string repo)
+        public async Task<GitHubLatestReleaseResponse> GetLatestVersionAsync(string owner, string repo, bool prerelease = true)
         {
-            string url = $"https://api.github.com/repos/{author.Trim()}/{repo.Trim()}/releases/latest";
+            string url = $"https://api.github.com/repos/{owner.Trim()}/{repo.Trim()}/releases";
+            var release = await APIServiceCallAsync<IEnumerable<GitHubLatestReleaseResponse>>(url);
 
-            return await APIServiceCallAsync<GitHubLatestReleaseResponse>(url);
+            if (prerelease)
+            {
+                return release.FirstOrDefault();
+            }
+            return release.FirstOrDefault(r => r.IsPrerelease == false);
         }
-
 
         /// <summary>
         /// Calls the provided GitHub API endpoint and returns the deserialized response.
@@ -58,7 +66,6 @@ namespace QTemplates.Classes
         /// <returns>API response of the endpoint used</returns>
         private async Task<T> APIServiceCallAsync<T>(string apiLink)
         {
-            JavaScriptSerializer json = new JavaScriptSerializer();
             string userAgentFirefox = "Mozilla/6.0 (Windows NT 10.0; rv:36.0) Gecko/20100101 Firefox/65.0.1";
 
             using (HttpClient client = new HttpClient())
@@ -70,7 +77,7 @@ namespace QTemplates.Classes
                 {
                     string jsonData = await result.Content.ReadAsStringAsync();
                     // Will provide error information in the response type if there is a problem.
-                    return json.Deserialize<T>(jsonData);
+                    return JsonConvert.DeserializeObject<T>(jsonData);
                 }
             }
         }
