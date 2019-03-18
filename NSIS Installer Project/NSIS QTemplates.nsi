@@ -46,7 +46,7 @@
 ;--------------------------------
 ;General
 
-  !define PRODUCT_VERSION "1.0.0"
+  !define PRODUCT_VERSION "1.0.0.19036"
   !define MIN_WIN_VER "7"
   !define COMPANY_NAME "Steven Jenkins De Haro"
   !define COPYRIGHT_TEXT "Copyright © 2019 ${COMPANY_NAME}"
@@ -74,7 +74,7 @@
 
   ;Installer properties
   VIFileVersion "${INSTALLER_VERSION}.0.0" ;Will use VIProductVersion if not defined. Requires x.x.x.x format.
-  VIProductVersion "${PRODUCT_VERSION}.0" ;Requires x.x.x.x format.
+  VIProductVersion "${PRODUCT_VERSION}" ;Requires x.x.x.x format.
   VIAddVersionKey ProductName "${PRODUCT_NAME}"
   VIAddVersionKey Comments "This program is being distributed under the terms of the GNU General Public License (GPL)."
   VIAddVersionKey CompanyName "${COMPANY_NAME}"
