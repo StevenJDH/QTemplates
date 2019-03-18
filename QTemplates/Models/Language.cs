@@ -36,7 +36,7 @@ namespace QTemplates.Models
         public int LanguageId { get; set; }
 
         [Required]
-        [StringLength(30)]
+        [StringLength(40)]
         [Index("ix_language_name", IsUnique = true)]
         public string Name { get; set; }
 

@@ -36,7 +36,7 @@ namespace QTemplates.Models
         public int CategoryId { get; set; }
 
         [Required]
-        [StringLength(60)]
+        [StringLength(40)]
         [Index("ix_category_name", IsUnique = true)]
         public string Name { get; set; }
 

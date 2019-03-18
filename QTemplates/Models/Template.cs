@@ -37,7 +37,7 @@ namespace QTemplates.Models
         public int TemplateId { get; set; }
 
         [Required]
-        [StringLength(30)]
+        [StringLength(40)]
         [Index("ix_template_title", IsUnique = true)]
         public string Title { get; set; }
 
