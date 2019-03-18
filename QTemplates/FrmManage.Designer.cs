@@ -148,7 +148,7 @@
             // 
             this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTitle.Location = new System.Drawing.Point(16, 24);
-            this.txtTitle.MaxLength = 30;
+            this.txtTitle.MaxLength = 40;
             this.txtTitle.Name = "txtTitle";
             this.txtTitle.Size = new System.Drawing.Size(256, 20);
             this.txtTitle.TabIndex = 19;
