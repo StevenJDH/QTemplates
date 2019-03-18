@@ -23,6 +23,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,6 +43,7 @@ namespace QTemplates
         private string _lastTemplateUsed;
         private readonly Dictionary<string, IPlugin> _pluginsDictionary;
         private readonly IHost _host;
+        private string _latestReleaseUrl;
 
         public FrmMain()
         {
@@ -81,6 +83,7 @@ namespace QTemplates
 
             this.Icon = notifyIcon1.Icon;
             notifyIcon1.Visible = true;
+            Task.Run(() => BackgroundUpdateCheck());
         }
 
         /// <summary>
@@ -239,8 +242,18 @@ namespace QTemplates
                 return;
             }
 
-            GitHubLatestReleaseResponse response = await new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates");
-
+            GitHubLatestReleaseResponse response;
+            try
+            {
+                response = await new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates");
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Error: Could not connect to GitHub's servers. Please check your connection.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             if (response != null && response.IsUpdateAvailable())
             {
                 if (MessageBox.Show($"A new version of QTemplates ({response.VersionTag}) is available! Do you want to download the update now?",
@@ -258,6 +271,52 @@ namespace QTemplates
             {
                 MessageBox.Show($"You are using the latest version of QTemplates ({Application.ProductVersion}).",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        /// <summary>
+        /// For use by a separate thread other than the UI thread to check for updates in the background.
+        /// </summary>
+        private void BackgroundUpdateCheck()
+        {
+            if (Connection.IsInternetAvailable() == false)
+            {
+                return;
+            }
+
+            GitHubLatestReleaseResponse response;
+            try
+            {
+                response = new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates").Result;
+            }
+            catch (Exception)
+            {
+                response = null;
+            }
+
+            if (response != null && response.IsUpdateAvailable())
+            {
+                _latestReleaseUrl = response.ReleaseUrl;
+                notifyIcon1.ShowBalloonTip(30000, "Update Available", 
+                    $"A new version of QTemplates ({response.VersionTag}) is available! Click this notification to download the update now.", ToolTipIcon.None);
+            }
+            else
+            {
+                _latestReleaseUrl = null;
+                notifyIcon1.ShowBalloonTip(1000, "Up-to-Date", 
+                    $"You are using the latest version of QTemplates ({Application.ProductVersion}).", ToolTipIcon.None);
+            }
+        }
+
+        private void NotifyIcon1_BalloonTipClicked(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(_latestReleaseUrl) == false)
+            {
+                try
+                {
+                    Process.Start(_latestReleaseUrl);
+                }
+                catch (Exception) {/* Consuming exceptions */ }
             }
         }
     }
