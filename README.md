@@ -5,9 +5,6 @@ Releases: [https://github.com/StevenJDH/QTemplates/releases](https://github.com/
 
 Changelog: [https://github.com/StevenJDH/QTemplates/wiki/Changelog](https://github.com/StevenJDH/QTemplates/wiki/Changelog)
 
-## Application is still in the alpha stages with a temporary interface.
-A lot of things still need to change and improve as I get a better idea of what I want to do with this application and how much time I have to work on it.
-
 ## Features
 * Sits in system tray listening for hotkeys and provides quick access to tools.
 * Ctrl+T opens the template selection window and Ctrl+Shift+T uses the last used template.
@@ -18,10 +15,25 @@ A lot of things still need to change and improve as I get a better idea of what 
 * Multi-user support so that everyone can have their own templates.
 * Supports checking for the latest release on GitHub.
 
-## Plugin System
+## Planned features
+* Looking into associating shortcut keys for individual templates.
+* Auto template injection after selecting a template from the template selection window.
+* More feature access via plugin system.
+* Options for backing up, importing, and reseting a database.
+* Logging system using either the Logs4Net or the NLog library.
+* Regular background update checking.
+* A proper update window with color-coded changelog.
+* Integrated spelling and grammar checker.
+
+## TODO
+* Added ability to manage available Categories and Languages.
+* Further stabilize and finish building out main application code.
+* Decide on final interface design and color theme.
+
+## Plugin system
 For the plugins to work, ensure that there is a folder called "Plugins" next to the QTemplates application with your plugins inside this folder. For example, place the QTemplates.Example.Plugin.dll file, which is an example plugin I made, into the Plugins folder to make it appear in the Tools menu. This example plugin just shows you how information and functionality from QTemplates can be accessed by the plugin and how QTemplates can do the same when interacting with the plugin. Keep in mind that the plugin system is still being built and will have more features when finished.
 
-## The Database and EF6
+## The database and EF6
 I was going to use my own implementation for this, but decided to use an SQLite database for its portability along with Entity Framework 6x using a partial Database First Approach since currently there are some limitations with SQLite. I've only used Entity Framework Core 2x with ASP.NET and SQL, so bare with me while I iron out the details for WinForms. Below is an ERD of the database design for reference. The only thing worth pointing out is the required relationship between the Template and Version entities. The idea is that a template will always have to have at least one version, in this case I have chosen English as the default. Right now this is handled in code, but in the future I might handle this via a trigger in the database itself.
 
 ![ERD](https://github.com/StevenJDH/QTemplates/raw/master/ERD_Diagram.png "ERD Diagram")
