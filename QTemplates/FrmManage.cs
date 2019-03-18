@@ -119,7 +119,7 @@ namespace QTemplates
             catch (DbUpdateException)
             {
                 _unitOfWork.UndoChanges();
-                MessageBox.Show($"Error: A template with the title '{txtTitle.Text}' already exists.", 
+                MessageBox.Show($"Error: A template with the title '{template.Title}' already exists.", 
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -143,7 +143,7 @@ namespace QTemplates
                 return;
             }
 
-            MessageBox.Show($"Template with ID: {version.TemplateId} was created successfully.", 
+            MessageBox.Show($"The '{template.Title}' template was created successfully.", 
                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             if (cmbCategoryVersions.Text == "All" || cmbCategoryVersions.Text == cmbCategory.Text)
             {
@@ -160,6 +160,12 @@ namespace QTemplates
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show($"Are you sure you want to delete the '{lstTemplates.Text}' template?", 
+                Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
+
             var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
             _unitOfWork.Templates.Remove(template);
             
@@ -202,10 +208,17 @@ namespace QTemplates
         {
             if (cmbLangVersions.Text == "English")
             {
-                MessageBox.Show("The English version can only be removed by removing the template itself.", 
+                MessageBox.Show("The English version can only be deleted by deleting the template itself.", 
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            if (MessageBox.Show($"Are you sure you want to delete the '{cmbLangVersions.Text}' version of the '{lstTemplates.Text}' template?",
+                    Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
+
 
             var version = _unitOfWork.TemplateVersions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
             _unitOfWork.TemplateVersions.Remove(version);
@@ -248,7 +261,7 @@ namespace QTemplates
                 return;
             }
 
-            MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created with the ID: {version.TemplateVersionId} successfully.", 
+            MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created successfully.", 
                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             cmbLangVersions.Items.Add(cmbLang.Text);
             cmbLangVersions.Text = cmbLang.Text;
@@ -256,6 +269,12 @@ namespace QTemplates
 
         private void BtnSaveChanges_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show($"Are you sure you want to update the '{lstTemplates.Text}' template?",
+                    Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
+
             var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
 
             template.Title = txtTitle.Text.Trim();
@@ -282,6 +301,12 @@ namespace QTemplates
 
         private void BtnSaveVersionChanges_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show($"Are you sure you want to update the '{cmbLangVersions.Text}' version of the '{lstTemplates.Text}' template?",
+                    Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
+
             var version = _unitOfWork.TemplateVersions
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
 
