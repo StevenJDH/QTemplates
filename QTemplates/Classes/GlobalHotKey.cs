@@ -105,7 +105,10 @@ namespace QTemplates.Classes
             return false;
         }
 
-        // Calls the method associated with each registered hotkey that is triggered.
+        /// <summary>
+        /// Calls the method associated with each registered hotkey that is triggered.
+        /// </summary>
+        /// <param name="m">Windows messages</param>
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == WM_HOTKEY_MSG_ID)
