@@ -118,17 +118,23 @@ namespace QTemplates
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            var languages = _unitOfWork.Languages.GetAll();
-            foreach (var entry in languages)
+            var languages = _unitOfWork.Languages.GetAll()
+                .OrderBy(l => l.Name)
+                .Select(l => l.Name)
+                .ToList();
+            foreach (var language in languages)
             {
-                cmbLang.Items.Add(entry.Name);
+                cmbLang.Items.Add(language);
             }
             cmbLang.Text = "English";
 
-            var categories = _unitOfWork.Categories.GetAll();
-            foreach (var entry in categories)
+            var categories = _unitOfWork.Categories.GetAll()
+                .OrderBy(c => c.Name)
+                .Select(c => c.Name)
+                .ToList();
+            foreach (var category in categories)
             {
-                cmbCategory.Items.Add(entry.Name);
+                cmbCategory.Items.Add(category);
             }
             cmbCategory.Text = "All";
 

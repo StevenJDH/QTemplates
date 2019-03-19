@@ -52,17 +52,23 @@ namespace QTemplates
         {
             // Loading the template list is not needed because the cmbCategoryVersions index change event will do it.
 
-            var languages = _unitOfWork.Languages.GetAll();
-            foreach (var entry in languages)
+            var languages = _unitOfWork.Languages.GetAll()
+                .OrderBy(l => l.Name)
+                .Select(l => l.Name)
+                .ToList();
+            foreach (var language in languages)
             {
-                cmbLang.Items.Add(entry.Name);
+                cmbLang.Items.Add(language);
             }
 
-            var categories = _unitOfWork.Categories.GetAll();
-            foreach (var entry in categories)
+            var categories = _unitOfWork.Categories.GetAll()
+                .OrderBy(c => c.Name)
+                .Select(c => c.Name)
+                .ToList();
+            foreach (var category in categories)
             {
-                cmbCategoryVersions.Items.Add(entry.Name);
-                cmbCategory.Items.Add(entry.Name);
+                cmbCategoryVersions.Items.Add(category);
+                cmbCategory.Items.Add(category);
             }
 
             cmbCategoryVersions.Text = "All";
@@ -136,9 +142,11 @@ namespace QTemplates
             {
                 _unitOfWork.Complete();
             }
-            catch (DbUpdateException ex) // TODO: if version creation fails, it should remove the initial template created.
+            catch (DbUpdateException ex)
             {
                 _unitOfWork.UndoChanges();
+                _unitOfWork.Templates.Remove(template); // If version creation fails, remove the initial template created.
+                _unitOfWork.Complete();
                 MessageBox.Show($"Error: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -286,7 +294,7 @@ namespace QTemplates
             }
             catch (DbUpdateException)
             {
-                _unitOfWork.UndoChanges(); // TODO: Run performance test using this method vs just using _unitOfWork.Templates.Find()
+                _unitOfWork.UndoChanges();
                 MessageBox.Show($"Error: A template with the title '{txtTitle.Text}' already exists.", 
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -349,10 +357,11 @@ namespace QTemplates
             cmbLangVersions.Items.Clear();
             _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
+                .OrderBy(v => v.Language.Name)
                 .Select(v => v.Language.Name)
                 .ToList()
                 .ForEach(v => cmbLangVersions.Items.Add(v));
-            cmbLangVersions.SelectedIndex = 0;
+            cmbLangVersions.Text = "English";
         }
 
         private void TxtMessage_TextChanged(object sender, EventArgs e)

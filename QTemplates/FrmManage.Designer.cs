@@ -98,6 +98,7 @@
             this.lstTemplates.Location = new System.Drawing.Point(8, 72);
             this.lstTemplates.Name = "lstTemplates";
             this.lstTemplates.Size = new System.Drawing.Size(256, 264);
+            this.lstTemplates.Sorted = true;
             this.lstTemplates.TabIndex = 13;
             this.lstTemplates.Click += new System.EventHandler(this.LstTemplates_Click);
             // 

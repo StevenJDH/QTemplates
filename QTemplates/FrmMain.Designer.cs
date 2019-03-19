@@ -146,6 +146,7 @@
             this.lstTemplates.Location = new System.Drawing.Point(8, 120);
             this.lstTemplates.Name = "lstTemplates";
             this.lstTemplates.Size = new System.Drawing.Size(256, 264);
+            this.lstTemplates.Sorted = true;
             this.lstTemplates.TabIndex = 4;
             // 
             // btnHide
