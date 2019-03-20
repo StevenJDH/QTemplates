@@ -253,9 +253,9 @@ namespace QTemplates
             {
                 response = await new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates");
             }
-            catch (HttpRequestException)
+            catch (Exception)
             {
-                MessageBox.Show("Error: Could not connect to GitHub's servers. Please check your connection.",
+                MessageBox.Show("Error: Could not connect to GitHub's servers. Please check your connection or try again later.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -297,7 +297,7 @@ namespace QTemplates
             }
             catch (Exception)
             {
-                response = null;
+                return;
             }
 
             if (response != null && response.IsUpdateAvailable())
