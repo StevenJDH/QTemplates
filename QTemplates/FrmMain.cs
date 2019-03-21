@@ -148,6 +148,9 @@ namespace QTemplates
             this.Visible = _startupVisible;
 
             this.Show();
+            // Ensures selection window appears as the active window.
+            this.TopMost = true;
+            this.TopMost = false;
         }
 
         private void CmnuExit_Click(object sender, EventArgs e)
