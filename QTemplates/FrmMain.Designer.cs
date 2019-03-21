@@ -148,6 +148,7 @@
             this.lstTemplates.Size = new System.Drawing.Size(256, 264);
             this.lstTemplates.Sorted = true;
             this.lstTemplates.TabIndex = 4;
+            this.lstTemplates.DoubleClick += new System.EventHandler(this.LstTemplates_DoubleClick);
             // 
             // btnHide
             // 
@@ -198,7 +199,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(274, 434);
-            this.ControlBox = false;
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

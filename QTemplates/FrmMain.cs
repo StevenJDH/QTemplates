@@ -44,6 +44,7 @@ namespace QTemplates
         private readonly Dictionary<string, IPlugin> _pluginsDictionary;
         private readonly IHost _host;
         private string _latestReleaseUrl;
+        private const int CP_DISABLED_CLOSE_BUTTON = 0x200;
 
         public FrmMain()
         {
@@ -334,6 +335,25 @@ namespace QTemplates
                     Process.Start(_latestReleaseUrl);
                 }
                 catch (Exception) {/* Consuming exceptions */ }
+            }
+        }
+
+        private void LstTemplates_DoubleClick(object sender, EventArgs e)
+        {
+            BtnUse_Click(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Disables the close button in the title bar of the form because the form's closing event only
+        /// runs if it was opened at least once, and we can't have two places wrapping things up.
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams param = base.CreateParams;
+                param.ClassStyle = param.ClassStyle | CP_DISABLED_CLOSE_BUTTON;
+                return param;
             }
         }
     }
