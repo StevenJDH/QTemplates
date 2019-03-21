@@ -253,13 +253,19 @@ namespace QTemplates
             {
                 response = await new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error: Could not connect to GitHub's servers. Please check your connection or try again later.",
-                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                // HTTP status ode 404 can indicate there are no pre/releases available yet, so we want to
+                // show as current version by setting response to null when we get one.
+                if (!(ex is HttpRequestException) && ex.Message.Contains("status code 404") == false)
+                {
+                    MessageBox.Show("Error: Could not connect to GitHub's servers. Please check your connection or try again later.",
+                        Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                response = null;
             }
-            
+
             if (response != null && response.IsUpdateAvailable())
             {
                 if (MessageBox.Show($"A new version of QTemplates ({response.VersionTag}) is available! Do you want to download the update now?",
@@ -297,6 +303,8 @@ namespace QTemplates
             }
             catch (Exception)
             {
+                // Returns here no matter what Exception is thrown as we can get an aggregated
+                // exception unlike a manual update check.
                 return;
             }
 

@@ -46,22 +46,16 @@ namespace QTemplates.Classes
         [JsonProperty("body")]
         public string ReleaseNotes { get; set; }
 
-        [JsonProperty("message")]
-        public string ErrorMessage { get; set; }
-
-        [JsonIgnore]
-        public bool HasError { get; set; }
-
         /// <summary>
         /// Checks to see if the release version on GitHub is newer than the current version running.
         /// </summary>
         /// <remarks>
-        /// If <see cref="HasError"/> is true, then we likely have a HTTP 404 Not Found for no releases found.
+        /// A check is done to ensure that version numbers use a x.x.x.x format.
         /// </remarks>
         /// <returns>True if update available or false is not</returns>
         public bool IsUpdateAvailable()
         {
-            if (HasError || Regex.IsMatch(VersionTag, @"(\d+)\.(\d+)\.(\d+)\.(\d+)") == false)
+            if (Regex.IsMatch(VersionTag, @"(\d+)\.(\d+)\.(\d+)\.(\d+)") == false)
             {
                 return false;
             }
@@ -78,15 +72,6 @@ namespace QTemplates.Classes
                     return false;
                 case -1: // earlier than
                     return true;
-            }
-        }
-
-        [OnDeserialized]
-        private void OnDeserializedMethod(StreamingContext context)
-        {
-            if (String.IsNullOrEmpty(ErrorMessage) == false)
-            {
-                HasError = true;
             }
         }
     }

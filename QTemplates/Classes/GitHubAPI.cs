@@ -73,11 +73,14 @@ namespace QTemplates.Classes
                 client.DefaultRequestHeaders.Add("User-Agent", userAgentFirefox);
                 client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json"); // Recommended by GitHub.
 
-                using (HttpResponseMessage result = await client.GetAsync(apiLink))
+                using (HttpResponseMessage response = await client.GetAsync(apiLink))
                 {
-                    string jsonData = await result.Content.ReadAsStringAsync();
-                    // Will provide error information in the response type if there is a problem.
-                    return JsonConvert.DeserializeObject<T>(jsonData);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        string jsonData = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<T>(jsonData);
+                    }
+                    throw new HttpRequestException($"Request failed with HTTP status code {(int)response.StatusCode} - {response.ReasonPhrase}.");
                 }
             }
         }
