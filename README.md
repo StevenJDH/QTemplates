@@ -26,7 +26,6 @@ Changelog: [https://github.com/StevenJDH/QTemplates/wiki/Changelog](https://gith
 * Integrated spelling and grammar checker.
 
 ## TODO
-* Added ability to manage available Categories and Languages.
 * Further stabilize and finish building out main application code.
 * Decide on final interface design and color theme.
 
