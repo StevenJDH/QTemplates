@@ -148,7 +148,10 @@ namespace QTemplates
             _startupVisible = true;
             this.Visible = _startupVisible;
 
+            btnUse.Focus();
+            lstTemplates.ClearSelected();
             this.Show();
+            
             // Ensures selection window appears as the active window.
             this.TopMost = true;
             this.TopMost = false;
@@ -181,7 +184,10 @@ namespace QTemplates
 
             if (_unitOfWork.IsDisposed == false) // This is for when exit is clicked while the manage dialog is open.
             {
-                FilterList();
+                cmbLang.Items.Clear();
+                cmbCategory.Items.Clear();
+                cmbCategory.Items.Add("All");
+                FrmMain_Load(this, EventArgs.Empty);
             }
         }
 
@@ -352,7 +358,7 @@ namespace QTemplates
             get
             {
                 CreateParams param = base.CreateParams;
-                param.ClassStyle = param.ClassStyle | CP_DISABLED_CLOSE_BUTTON;
+                param.ClassStyle |= CP_DISABLED_CLOSE_BUTTON;
                 return param;
             }
         }
