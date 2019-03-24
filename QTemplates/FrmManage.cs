@@ -44,14 +44,14 @@ namespace QTemplates
             _unitOfWork = unitOfWork;
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void BtnClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
         private void FrmManage_Load(object sender, EventArgs e)
         {
-            // Loading the template list is not needed because the cmbCategoryVersions index change event will do it.
+            // Loading the template list is not needed because the cmbCategoryFilter index change event will do it.
 
             var languages = _unitOfWork.Languages.GetAll()
                 .OrderBy(l => l.Name)
@@ -68,22 +68,22 @@ namespace QTemplates
                 .ToList();
             foreach (var category in categories)
             {
-                cmbCategoryVersions.Items.Add(category);
+                cmbCategoryFilter.Items.Add(category);
                 cmbCategory.Items.Add(category);
             }
 
-            cmbCategoryVersions.Text = "All";
+            cmbCategoryFilter.Text = "All";
             if (cmbCategory.Items.Count > 0)
             {
                 cmbCategory.SelectedIndex = 0;
             }
         }
  
-        private void CmbCategoryVersions_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbCategoryFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstTemplates.Items.Clear();
 
-            if (cmbCategoryVersions.Text == "All")
+            if (cmbCategoryFilter.Text == "All")
             {
                 _unitOfWork.Templates.GetAll()
                     .Select(t => t.Title)
@@ -93,7 +93,7 @@ namespace QTemplates
             else
             {
                 _unitOfWork.Templates.GetAll()
-                    .Where(c => c.Category.Name == cmbCategoryVersions.Text)
+                    .Where(c => c.Category.Name == cmbCategoryFilter.Text)
                     .Select(t => t.Title)
                     .ToList()
                     .ForEach(t => lstTemplates.Items.Add(t));
@@ -147,7 +147,7 @@ namespace QTemplates
 
             MessageBox.Show($"The '{template.Title}' template was created successfully.", 
                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            if (cmbCategoryVersions.Text == "All" || cmbCategoryVersions.Text == cmbCategory.Text)
+            if (cmbCategoryFilter.Text == "All" || cmbCategoryFilter.Text == cmbCategory.Text)
             {
                 lstTemplates.Items.Add(template.Title);
                 lstTemplates.Text = template.Title;
@@ -191,10 +191,10 @@ namespace QTemplates
         /// </summary>
         private void ResetInterface()
         {
-            btnSaveChanges.Enabled = false;
+            btnUpdate.Enabled = false;
             btnDelete.Enabled = false;
             btnDeleteVersion.Enabled = false;
-            cmbLangVersions.Items.Clear();
+            cmbLangAvailable.Items.Clear();
             lblLangAvailable.Text = "Languages available: 0";
             txtTitle.Text = "";
             txtMessage.Text = "";
@@ -207,31 +207,31 @@ namespace QTemplates
 
         private void BtnDeleteVersion_Click(object sender, EventArgs e)
         {
-            if (cmbLangVersions.Text == "English")
+            if (cmbLangAvailable.Text == "English")
             {
                 MessageBox.Show("The English version can only be deleted by deleting the template itself.", 
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (MessageBox.Show($"Are you sure you want to delete the '{cmbLangVersions.Text}' version of the '{lstTemplates.Text}' template?",
+            if (MessageBox.Show($"Are you sure you want to delete the '{cmbLangAvailable.Text}' version of the '{lstTemplates.Text}' template?",
                     Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
             }
 
 
-            var version = _unitOfWork.TemplateVersions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
+            var version = _unitOfWork.TemplateVersions.FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangAvailable.Text);
             _unitOfWork.TemplateVersions.Remove(version);
             
             try
             {
                 _unitOfWork.Complete();
-                MessageBox.Show($"The '{cmbLangVersions.Text}' version of the selected template was deleted successfully.",
+                MessageBox.Show($"The '{cmbLangAvailable.Text}' version of the selected template was deleted successfully.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                cmbLangVersions.Items.Remove(cmbLangVersions.Text);
-                lblLangAvailable.Text = $"Languages available: {cmbLangVersions.Items.Count}";
-                cmbLangVersions.Text = "English";
+                cmbLangAvailable.Items.Remove(cmbLangAvailable.Text);
+                lblLangAvailable.Text = $"Languages available: {cmbLangAvailable.Items.Count}";
+                cmbLangAvailable.Text = "English";
             }
             catch (DbUpdateException ex)
             {
@@ -255,9 +255,9 @@ namespace QTemplates
                 _unitOfWork.Complete();
                 MessageBox.Show($"The '{cmbLang.Text}' version of the selected template was created successfully.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                cmbLangVersions.Items.Add(cmbLang.Text);
-                lblLangAvailable.Text = $"Languages available: {cmbLangVersions.Items.Count}";
-                cmbLangVersions.Text = cmbLang.Text;
+                cmbLangAvailable.Items.Add(cmbLang.Text);
+                lblLangAvailable.Text = $"Languages available: {cmbLangAvailable.Items.Count}";
+                cmbLangAvailable.Text = cmbLang.Text;
             }
             catch (DbUpdateException ex)
             {
@@ -266,15 +266,22 @@ namespace QTemplates
             }
         }
 
-        private void BtnSaveChanges_Click(object sender, EventArgs e)
+        private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show($"Are you sure you want to update the '{lstTemplates.Text}' template?",
+            var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
+
+            if (MessageBox.Show($"Are you sure you want to update the '{lstTemplates.Text}' template?\n\n" +
+                                $"[ Before ]\n" +
+                                $"Title: {template.Title}\n" +
+                                $"Category: {template.Category.Name}\n\n" +
+                                $"[ After ]\n" +
+                                $"Title: {lstTemplates.Text}\n" +
+                                $"Category: {cmbCategory.Text}\n\n" +
+                                $"NOTE: Updating the message content is done from the Version tab.",
                     Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
             }
-
-            var template = _unitOfWork.Templates.FirstOrDefault(t => t.Title == lstTemplates.Text);
 
             template.Title = txtTitle.Text.Trim();
             template.CategoryId = _unitOfWork.Categories.FirstOrDefault(c => c.Name == cmbCategory.Text).CategoryId;
@@ -296,16 +303,16 @@ namespace QTemplates
             }
         }
 
-        private void BtnSaveVersionChanges_Click(object sender, EventArgs e)
+        private void BtnUpdateVersion_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show($"Are you sure you want to update the '{cmbLangVersions.Text}' version of the '{lstTemplates.Text}' template?",
+            if (MessageBox.Show($"Are you sure you want to update the '{cmbLangAvailable.Text}' version of the '{lstTemplates.Text}' template?",
                     Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
             }
 
             var version = _unitOfWork.TemplateVersions
-                .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
+                .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangAvailable.Text);
 
             version.Message = txtMessage.Text.Trim();
             version.LanguageId = _unitOfWork.Languages.FirstOrDefault(l => l.Name == cmbLang.Text).LanguageId;
@@ -313,7 +320,7 @@ namespace QTemplates
             try
             {
                 _unitOfWork.Complete();
-                MessageBox.Show($"Changes to the '{cmbLangVersions.Text}' version were saved successfully.",
+                MessageBox.Show($"Changes to the '{cmbLangAvailable.Text}' version were saved successfully.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // TODO: Update list in case language for version was changed.
             }
@@ -324,10 +331,10 @@ namespace QTemplates
             }
         }
 
-        private void CmbLangVersions_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbLangAvailable_SelectedIndexChanged(object sender, EventArgs e)
         {
             var version = _unitOfWork.TemplateVersions
-                .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangVersions.Text);
+                .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLangAvailable.Text);
 
             cmbLang.Text = version?.Language.Name ?? ""; // Has to appear before txtMessage for when validation is triggered.
             cmbCategory.Text = version?.Template.Category.Name ?? "";
@@ -335,22 +342,22 @@ namespace QTemplates
             txtMessage.Text = version?.Message ?? "";
         }
 
-        private void LstTemplates_Click(object sender, EventArgs e) // TODO: Look into changing this back to a selection index change event handler because using the arrow keys does do anything.
+        private void LstTemplates_Click(object sender, EventArgs e) // TODO: Look into changing this back to a selection index change event handler because using the arrow keys doesn't do anything.
         {
             if (lstTemplates.Text == "")
             {
                 return;
             }
 
-            cmbLangVersions.Items.Clear();
+            cmbLangAvailable.Items.Clear();
             _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
                 .OrderBy(v => v.Language.Name)
                 .Select(v => v.Language.Name)
                 .ToList()
-                .ForEach(v => cmbLangVersions.Items.Add(v));
-            lblLangAvailable.Text = $"Languages available: {cmbLangVersions.Items.Count}";
-            cmbLangVersions.Text = "English";
+                .ForEach(v => cmbLangAvailable.Items.Add(v));
+            lblLangAvailable.Text = $"Languages available: {cmbLangAvailable.Items.Count}";
+            cmbLangAvailable.Text = "English";
         }
 
         private void TxtMessage_TextChanged(object sender, EventArgs e)
@@ -374,8 +381,8 @@ namespace QTemplates
         /// Create:
         ///     Title, Message, and Category must be filled.
         ///     Title must not be in the current list.
-        /// Modify:
-        ///     Title, Message, and Category must be filled.
+        /// Update:
+        ///     Title and Category must be filled.
         ///     List must have a title selected.
         /// Delete:
         ///     List must have a title selected.
@@ -386,7 +393,7 @@ namespace QTemplates
                           String.IsNullOrWhiteSpace(txtTitle.Text) == false &&
                           cmbCategory.Text != "");
             btnCreate.Enabled = (state &&  lstTemplates.Items.ContainsEx(txtTitle.Text.Trim()) == false);
-            btnSaveChanges.Enabled = (state && lstTemplates.Text != "");
+            btnUpdate.Enabled = (String.IsNullOrWhiteSpace(txtTitle.Text) == false && cmbCategory.Text != "" && lstTemplates.Text != "");
             btnDelete.Enabled = (lstTemplates.Text != "");
         }
 
@@ -395,7 +402,7 @@ namespace QTemplates
         /// Create:
         ///     Title in list is selected, Message and Language are filled.
         ///     Language cannot be the English default, and it must not be already created.
-        /// Modify:
+        /// Update:
         ///     Title in list is selected, Message and Language are filled.
         ///     Language must match selected language versions created, or without changing the
         ///     required English default, be a new Language.
@@ -407,9 +414,9 @@ namespace QTemplates
             bool state = (String.IsNullOrWhiteSpace(txtMessage.Text) == false && 
                           String.IsNullOrWhiteSpace(lstTemplates.Text) == false &&
                           cmbLang.Text != "");
-            btnCreateVersion.Enabled = (state && cmbLang.Text != "English" && cmbLangVersions.Items.ContainsEx(cmbLang.Text) == false);
-            btnSaveVersionChanges.Enabled = (state && (cmbLangVersions.Text == cmbLang.Text || (cmbLangVersions.Items.Count > 1 && cmbLangVersions.Items.ContainsEx(cmbLang.Text) == false)));
-            btnDeleteVersion.Enabled = (cmbLangVersions.Text != ""); // Not also validating for English to explain in message box how to delete it.
+            btnCreateVersion.Enabled = (state && cmbLang.Text != "English" && cmbLangAvailable.Items.ContainsEx(cmbLang.Text) == false);
+            btnUpdateVersion.Enabled = (state && (cmbLangAvailable.Text == cmbLang.Text || (cmbLangAvailable.Items.Count > 1 && cmbLangAvailable.Items.ContainsEx(cmbLang.Text) == false)));
+            btnDeleteVersion.Enabled = (cmbLangAvailable.Text != ""); // Not also validating for English to explain in message box how to delete it.
         }
 
         private void BtnManageCategories_Click(object sender, EventArgs e)
@@ -438,8 +445,8 @@ namespace QTemplates
 
         private void ReloadComboBoxes()
         {
-            cmbCategoryVersions.Items.Clear();
-            cmbCategoryVersions.Items.Add("All");
+            cmbCategoryFilter.Items.Clear();
+            cmbCategoryFilter.Items.Add("All");
             cmbCategory.Items.Clear();
             cmbLang.Items.Clear();
             ResetInterface();

@@ -33,21 +33,21 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lstTemplates = new System.Windows.Forms.ListBox();
-            this.cmbCategoryVersions = new System.Windows.Forms.ComboBox();
+            this.cmbCategoryFilter = new System.Windows.Forms.ComboBox();
             this.cmbLang = new System.Windows.Forms.ComboBox();
             this.btnCreate = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnCreateVersion = new System.Windows.Forms.Button();
             this.lblLangAvailable = new System.Windows.Forms.Label();
-            this.cmbLangVersions = new System.Windows.Forms.ComboBox();
+            this.cmbLangAvailable = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbCategory = new System.Windows.Forms.ComboBox();
             this.btnDeleteVersion = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnSaveChanges = new System.Windows.Forms.Button();
-            this.btnSaveVersionChanges = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnUpdateVersion = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnManageCategories = new System.Windows.Forms.Button();
@@ -104,17 +104,17 @@
             this.lstTemplates.TabIndex = 13;
             this.lstTemplates.Click += new System.EventHandler(this.LstTemplates_Click);
             // 
-            // cmbCategoryVersions
+            // cmbCategoryFilter
             // 
-            this.cmbCategoryVersions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCategoryVersions.FormattingEnabled = true;
-            this.cmbCategoryVersions.Items.AddRange(new object[] {
+            this.cmbCategoryFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCategoryFilter.FormattingEnabled = true;
+            this.cmbCategoryFilter.Items.AddRange(new object[] {
             "All"});
-            this.cmbCategoryVersions.Location = new System.Drawing.Point(8, 24);
-            this.cmbCategoryVersions.Name = "cmbCategoryVersions";
-            this.cmbCategoryVersions.Size = new System.Drawing.Size(256, 21);
-            this.cmbCategoryVersions.TabIndex = 12;
-            this.cmbCategoryVersions.SelectedIndexChanged += new System.EventHandler(this.CmbCategoryVersions_SelectedIndexChanged);
+            this.cmbCategoryFilter.Location = new System.Drawing.Point(8, 24);
+            this.cmbCategoryFilter.Name = "cmbCategoryFilter";
+            this.cmbCategoryFilter.Size = new System.Drawing.Size(256, 21);
+            this.cmbCategoryFilter.TabIndex = 12;
+            this.cmbCategoryFilter.SelectedIndexChanged += new System.EventHandler(this.CmbCategoryFilter_SelectedIndexChanged);
             // 
             // cmbLang
             // 
@@ -137,15 +137,15 @@
             this.btnCreate.UseVisualStyleBackColor = true;
             this.btnCreate.Click += new System.EventHandler(this.BtnCreate_Click);
             // 
-            // btnCancel
+            // btnClose
             // 
-            this.btnCancel.Location = new System.Drawing.Point(8, 500);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(115, 32);
-            this.btnCancel.TabIndex = 18;
-            this.btnCancel.Text = "Close";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
+            this.btnClose.Location = new System.Drawing.Point(8, 500);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(115, 32);
+            this.btnClose.TabIndex = 18;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // txtTitle
             // 
@@ -184,15 +184,15 @@
             this.lblLangAvailable.TabIndex = 23;
             this.lblLangAvailable.Text = "Languages available: 0";
             // 
-            // cmbLangVersions
+            // cmbLangAvailable
             // 
-            this.cmbLangVersions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLangVersions.FormattingEnabled = true;
-            this.cmbLangVersions.Location = new System.Drawing.Point(8, 360);
-            this.cmbLangVersions.Name = "cmbLangVersions";
-            this.cmbLangVersions.Size = new System.Drawing.Size(256, 21);
-            this.cmbLangVersions.TabIndex = 22;
-            this.cmbLangVersions.SelectedIndexChanged += new System.EventHandler(this.CmbLangVersions_SelectedIndexChanged);
+            this.cmbLangAvailable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLangAvailable.FormattingEnabled = true;
+            this.cmbLangAvailable.Location = new System.Drawing.Point(8, 360);
+            this.cmbLangAvailable.Name = "cmbLangAvailable";
+            this.cmbLangAvailable.Size = new System.Drawing.Size(256, 21);
+            this.cmbLangAvailable.TabIndex = 22;
+            this.cmbLangAvailable.SelectedIndexChanged += new System.EventHandler(this.CmbLangAvailable_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -233,27 +233,27 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
-            // btnSaveChanges
+            // btnUpdate
             // 
-            this.btnSaveChanges.Enabled = false;
-            this.btnSaveChanges.Location = new System.Drawing.Point(496, 32);
-            this.btnSaveChanges.Name = "btnSaveChanges";
-            this.btnSaveChanges.Size = new System.Drawing.Size(115, 32);
-            this.btnSaveChanges.TabIndex = 28;
-            this.btnSaveChanges.Text = "Save Changes";
-            this.btnSaveChanges.UseVisualStyleBackColor = true;
-            this.btnSaveChanges.Click += new System.EventHandler(this.BtnSaveChanges_Click);
+            this.btnUpdate.Enabled = false;
+            this.btnUpdate.Location = new System.Drawing.Point(496, 32);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(115, 32);
+            this.btnUpdate.TabIndex = 28;
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.BtnUpdate_Click);
             // 
-            // btnSaveVersionChanges
+            // btnUpdateVersion
             // 
-            this.btnSaveVersionChanges.Enabled = false;
-            this.btnSaveVersionChanges.Location = new System.Drawing.Point(496, 32);
-            this.btnSaveVersionChanges.Name = "btnSaveVersionChanges";
-            this.btnSaveVersionChanges.Size = new System.Drawing.Size(115, 32);
-            this.btnSaveVersionChanges.TabIndex = 29;
-            this.btnSaveVersionChanges.Text = "Save Version";
-            this.btnSaveVersionChanges.UseVisualStyleBackColor = true;
-            this.btnSaveVersionChanges.Click += new System.EventHandler(this.BtnSaveVersionChanges_Click);
+            this.btnUpdateVersion.Enabled = false;
+            this.btnUpdateVersion.Location = new System.Drawing.Point(496, 32);
+            this.btnUpdateVersion.Name = "btnUpdateVersion";
+            this.btnUpdateVersion.Size = new System.Drawing.Size(115, 32);
+            this.btnUpdateVersion.TabIndex = 29;
+            this.btnUpdateVersion.Text = "Update Version";
+            this.btnUpdateVersion.UseVisualStyleBackColor = true;
+            this.btnUpdateVersion.Click += new System.EventHandler(this.BtnUpdateVersion_Click);
             // 
             // tabControl1
             // 
@@ -272,7 +272,7 @@
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Honeydew;
             this.tabPage1.Controls.Add(this.btnManageCategories);
-            this.tabPage1.Controls.Add(this.btnSaveChanges);
+            this.tabPage1.Controls.Add(this.btnUpdate);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.btnCreate);
             this.tabPage1.Controls.Add(this.cmbCategory);
@@ -300,7 +300,7 @@
             // 
             this.tabPage2.Controls.Add(this.btnManageLanguages);
             this.tabPage2.Controls.Add(this.btnCreateVersion);
-            this.tabPage2.Controls.Add(this.btnSaveVersionChanges);
+            this.tabPage2.Controls.Add(this.btnUpdateVersion);
             this.tabPage2.Controls.Add(this.btnDeleteVersion);
             this.tabPage2.Controls.Add(this.cmbLang);
             this.tabPage2.Controls.Add(this.label1);
@@ -340,12 +340,12 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.lblLangAvailable);
-            this.Controls.Add(this.cmbLangVersions);
-            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.cmbLangAvailable);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lstTemplates);
-            this.Controls.Add(this.cmbCategoryVersions);
+            this.Controls.Add(this.cmbCategoryFilter);
             this.Controls.Add(this.txtMessage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -372,21 +372,21 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox lstTemplates;
-        private System.Windows.Forms.ComboBox cmbCategoryVersions;
+        private System.Windows.Forms.ComboBox cmbCategoryFilter;
         private System.Windows.Forms.ComboBox cmbLang;
         private System.Windows.Forms.Button btnCreate;
-        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnCreateVersion;
         private System.Windows.Forms.Label lblLangAvailable;
-        private System.Windows.Forms.ComboBox cmbLangVersions;
+        private System.Windows.Forms.ComboBox cmbLangAvailable;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmbCategory;
         private System.Windows.Forms.Button btnDeleteVersion;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnSaveChanges;
-        private System.Windows.Forms.Button btnSaveVersionChanges;
+        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnUpdateVersion;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
