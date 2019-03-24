@@ -157,7 +157,7 @@ namespace QTemplates
         /// Create:
         ///     Input field must be filled.
         ///     Category must not be created already.
-        /// Modify:
+        /// Update:
         ///     Input field must be filled.
         ///     List must have a category selected.
         ///     Selected category in list must be different than the one in the input field, at least case-wise.

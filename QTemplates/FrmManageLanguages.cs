@@ -119,7 +119,7 @@ namespace QTemplates
                 return;
             }
 
-            if (MessageBox.Show($"Are you sure you want to delete the '{lstLang.Text}' language?",
+            if (MessageBox.Show($"Are you sure you want to delete the '{lstLang.Text}' language? Don't worry, there are no templates assigned to it.",
                     Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
@@ -158,7 +158,7 @@ namespace QTemplates
         /// Create:
         ///     Input field must be filled and not contain the required English default language.
         ///     Language must not be created already.
-        /// Modify:
+        /// Update:
         ///     Input field must be filled and not contain the required English default language.
         ///     List must have a language selected.
         ///     Selected language in list must be different than the one in the input field, at least case-wise.
