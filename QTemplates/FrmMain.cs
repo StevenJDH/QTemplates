@@ -61,7 +61,10 @@ namespace QTemplates
             {
                 foreach (var entry in _pluginsDictionary)
                 {
-                    mnuTools.DropDownItems.Add(new ToolStripMenuItem(entry.Key, null, MnuPluginSelected_Click));
+                    mnuTools.DropDownItems.Add(new ToolStripMenuItem(entry.Key, null, MnuPluginSelected_Click)
+                    {
+                        ToolTipText = entry.Value.Description
+                    });
                 }
             }
             else
