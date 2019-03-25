@@ -320,9 +320,11 @@ namespace QTemplates
             try
             {
                 _unitOfWork.Complete();
-                MessageBox.Show($"Changes to the '{cmbLangAvailable.Text}' version were saved successfully.",
+                MessageBox.Show("Changes to the selected template version were saved successfully.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // TODO: Update list in case language for version was changed.
+                cmbLangAvailable.Items.Remove(cmbLangAvailable.Text);
+                cmbLangAvailable.Items.Add(cmbLang.Text);
+                cmbLangAvailable.Text = cmbLang.Text;
             }
             catch (DbUpdateException ex)
             {
