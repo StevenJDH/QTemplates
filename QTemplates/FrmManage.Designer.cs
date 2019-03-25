@@ -102,7 +102,7 @@
             this.lstTemplates.Size = new System.Drawing.Size(256, 264);
             this.lstTemplates.Sorted = true;
             this.lstTemplates.TabIndex = 13;
-            this.lstTemplates.Click += new System.EventHandler(this.LstTemplates_Click);
+            this.lstTemplates.SelectedIndexChanged += new System.EventHandler(this.LstTemplates_SelectedIndexChanged);
             // 
             // cmbCategoryFilter
             // 

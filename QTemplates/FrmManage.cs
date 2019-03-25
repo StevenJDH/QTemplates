@@ -151,7 +151,6 @@ namespace QTemplates
             {
                 lstTemplates.Items.Add(template.Title);
                 lstTemplates.Text = template.Title;
-                LstTemplates_Click(this, EventArgs.Empty);
             }
             else
             {
@@ -344,13 +343,8 @@ namespace QTemplates
             txtMessage.Text = version?.Message ?? "";
         }
 
-        private void LstTemplates_Click(object sender, EventArgs e) // TODO: Look into changing this back to a selection index change event handler because using the arrow keys doesn't do anything.
+        private void LstTemplates_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstTemplates.Text == "")
-            {
-                return;
-            }
-
             cmbLangAvailable.Items.Clear();
             _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .Where(v => v.Template.Title == lstTemplates.Text)
