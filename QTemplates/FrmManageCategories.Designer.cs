@@ -81,7 +81,7 @@
             // 
             // txtCat
             // 
-            this.txtCat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.txtCat.BackColor = System.Drawing.SystemColors.Window;
             this.txtCat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCat.Location = new System.Drawing.Point(8, 176);
             this.txtCat.MaxLength = 40;

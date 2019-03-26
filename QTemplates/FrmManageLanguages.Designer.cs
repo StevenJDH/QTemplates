@@ -38,7 +38,7 @@
             // 
             // txtLang
             // 
-            this.txtLang.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.txtLang.BackColor = System.Drawing.SystemColors.Window;
             this.txtLang.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtLang.Location = new System.Drawing.Point(8, 176);
             this.txtLang.MaxLength = 40;

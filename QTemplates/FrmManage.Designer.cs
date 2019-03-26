@@ -72,7 +72,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(8, 56);
+            this.label3.Location = new System.Drawing.Point(5, 56);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(256, 16);
             this.label3.TabIndex = 16;
@@ -80,7 +80,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(8, 8);
+            this.label2.Location = new System.Drawing.Point(6, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(256, 16);
             this.label2.TabIndex = 15;
@@ -88,7 +88,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(16, 24);
+            this.label1.Location = new System.Drawing.Point(13, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(240, 16);
             this.label1.TabIndex = 14;
@@ -178,7 +178,7 @@
             // 
             // lblLangAvailable
             // 
-            this.lblLangAvailable.Location = new System.Drawing.Point(8, 344);
+            this.lblLangAvailable.Location = new System.Drawing.Point(5, 344);
             this.lblLangAvailable.Name = "lblLangAvailable";
             this.lblLangAvailable.Size = new System.Drawing.Size(256, 16);
             this.lblLangAvailable.TabIndex = 23;
@@ -197,7 +197,7 @@
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(16, 48);
+            this.label6.Location = new System.Drawing.Point(14, 48);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(256, 16);
             this.label6.TabIndex = 25;
@@ -271,7 +271,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.Honeydew;
+            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.tabPage1.Controls.Add(this.btnManageCategories);
             this.tabPage1.Controls.Add(this.btnUpdate);
             this.tabPage1.Controls.Add(this.label6);
@@ -299,6 +299,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.tabPage2.Controls.Add(this.btnManageLanguages);
             this.tabPage2.Controls.Add(this.btnCreateVersion);
             this.tabPage2.Controls.Add(this.btnUpdateVersion);
@@ -311,11 +312,10 @@
             this.tabPage2.Size = new System.Drawing.Size(754, 98);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Version";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // btnManageLanguages
             // 
-            this.btnManageLanguages.Location = new System.Drawing.Point(264, 38);
+            this.btnManageLanguages.Location = new System.Drawing.Point(260, 38);
             this.btnManageLanguages.Name = "btnManageLanguages";
             this.btnManageLanguages.Size = new System.Drawing.Size(68, 24);
             this.btnManageLanguages.TabIndex = 33;
@@ -325,7 +325,7 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(272, 8);
+            this.label7.Location = new System.Drawing.Point(269, 8);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(256, 16);
             this.label7.TabIndex = 31;
