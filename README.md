@@ -25,10 +25,6 @@ Changelog: [https://github.com/StevenJDH/QTemplates/wiki/Changelog](https://gith
 * A proper update window with color-coded changelog.
 * Integrated spelling and grammar checker.
 
-## TODO
-* Further stabilize and finish building out main application code.
-* Decide on final interface design and color theme.
-
 ## Plugin system
 For the plugins to work, ensure that there is a folder called "Plugins" next to the QTemplates application with your plugins inside this folder. For example, place the QTemplates.Example.Plugin.dll file, which is an example plugin I made, into the Plugins folder to make it appear in the Tools menu. This example plugin just shows you how information and functionality from QTemplates can be accessed by the plugin and how QTemplates can do the same when interacting with the plugin. Keep in mind that the plugin system is still being built and will have more features when finished.
 
