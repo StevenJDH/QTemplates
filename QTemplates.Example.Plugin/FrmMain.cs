@@ -29,26 +29,13 @@ using QInterfaces;
 
 namespace QTemplates.Example.Plugin
 {
-    public partial class FrmMain : Form, IPlugin
+    public partial class FrmMain : Form
     {
         private IHost _host;
 
-        public FrmMain()
+        public FrmMain(IHost host)
         {
             InitializeComponent();
-        }
-
-        public string Title => "Example Plugin";
-        public string Description => "An example plugin to show how plugins work.";
-
-        public void InvokeAction()
-        {
-            this.ShowDialog();
-        }
-
-        // Forces the use of IHost.
-        public void Initialize(IHost host)
-        {
             _host = host;
         }
 

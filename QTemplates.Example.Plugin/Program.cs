@@ -21,20 +21,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using QInterfaces;
 
 namespace QTemplates.Example.Plugin
 {
-    static class Program
+    public class Program : IPlugin
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain());
-        }
+        private IHost _host;
+
+        public string Title => "Example Plugin";
+
+        public string Description => "An example plugin to show how plugins work.";
+
+        public void Initialize(IHost host) => _host = host; // Forces the use of IHost.
+
+        public void InvokeAction() => new FrmMain(_host).ShowDialog();
     }
 }
