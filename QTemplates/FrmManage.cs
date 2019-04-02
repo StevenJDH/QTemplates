@@ -274,7 +274,7 @@ namespace QTemplates
                                 $"Title: {template.Title}\n" +
                                 $"Category: {template.Category.Name}\n\n" +
                                 $"[ After ]\n" +
-                                $"Title: {lstTemplates.Text}\n" +
+                                $"Title: {txtTitle.Text}\n" +
                                 $"Category: {cmbCategory.Text}\n\n" +
                                 $"NOTE: Updating the message content is done from the Version tab.",
                     Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
