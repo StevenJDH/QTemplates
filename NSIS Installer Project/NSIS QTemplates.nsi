@@ -55,6 +55,7 @@
 
   !define CONFIG_DIRECTORY "$APPDATA\ASC-C\${PRODUCT_NAME}"
   !define SQLITE_FILE "${CONFIG_DIRECTORY}\QTemplates.sqlite3"
+  !define MUTEX_OBJECT "88c88546-e82f-4c79-9ad3-11c9df375e0a" ;For detecting running instance.
   
   !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install.ico" ;Installer icon
   !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-uninstall.ico" ;Uninstaller icon
@@ -213,6 +214,13 @@ Function .onInit
     Quit ; will SetErrorLevel 2 - Installation aborted by script
   ${endif}
   
+  System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "${MUTEX_OBJECT}") i .R0'
+  IntCmp $R0 0 notRunning
+         System::Call 'Kernel32::CloseHandle(i $R0)'
+         MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
+         Abort
+  notRunning:
+  
   !insertmacro MULTIUSER_INIT
 
 FunctionEnd
@@ -280,6 +288,13 @@ SectionEnd
 
 Function un.onInit
 
+  System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "${MUTEX_OBJECT}") i .R0'
+  IntCmp $R0 0 notRunning
+         System::Call 'Kernel32::CloseHandle(i $R0)'
+         MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
+         Abort
+  notRunning:
+  
   !insertmacro MULTIUSER_UNINIT
 
 FunctionEnd
