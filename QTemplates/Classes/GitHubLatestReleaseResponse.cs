@@ -29,7 +29,7 @@ using Newtonsoft.Json;
 
 namespace QTemplates.Classes
 {
-    class GitHubLatestReleaseResponse
+    public sealed class GitHubLatestReleaseResponse
     {
         [JsonProperty("html_url")]
         public string ReleaseUrl { get; set; }
@@ -45,6 +45,24 @@ namespace QTemplates.Classes
 
         [JsonProperty("body")]
         public string ReleaseNotes { get; set; }
+
+        [JsonProperty("assets")]
+        public IEnumerable<ReleaseAsset> Assets { get; set; }
+
+        public class ReleaseAsset
+        {
+            [JsonProperty("name")]
+            public string FileName { get; set; }
+
+            [JsonProperty("content_type")]
+            public string ContentType { get; set; }
+
+            [JsonProperty("size")]
+            public uint FileSize { get; set; }
+
+            [JsonProperty("browser_download_url")]
+            public string DownloadUrl { get; set; }
+        }
 
         /// <summary>
         /// Checks to see if the release version on GitHub is newer than the current version running.
