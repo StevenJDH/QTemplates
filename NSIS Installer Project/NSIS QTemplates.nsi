@@ -216,12 +216,21 @@ Function .onInit
   
   System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "${MUTEX_OBJECT}") i .R0'
   IntCmp $R0 0 notRunning
-         System::Call 'Kernel32::CloseHandle(i $R0)'
-         MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
-         Abort
+    System::Call 'Kernel32::CloseHandle(i $R0)'
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
+    Abort
   notRunning:
   
   !insertmacro MULTIUSER_INIT
+
+FunctionEnd
+
+Function .onGUIEnd
+
+  ;Needed for self deleting if auto updating from %TEMP% directory.
+  ${If} $EXEDIR == $TEMP
+    SelfDel::Del ;See https://nsis.sourceforge.io/SelfDel_plug-in for Note regarding Kaspersky false-positive.
+  ${EndIf}
 
 FunctionEnd
 
