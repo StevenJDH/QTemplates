@@ -31,6 +31,7 @@ namespace QTemplates.Classes
     {
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
@@ -39,7 +40,7 @@ namespace QTemplates.Classes
         public const int CTRL = 0x0002;
         public const int SHIFT = 0x0004;
         public const int WIN = 0x0008;
-        public const int WM_HOTKEY_MSG_ID = 0x0312;
+        private const int WM_HOTKEY_MSG_ID = 0x0312;
 
         private struct HotKeyEntry
         {
