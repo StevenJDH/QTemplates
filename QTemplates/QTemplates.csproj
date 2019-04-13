@@ -76,12 +76,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AppConfiguration.cs" />
+    <Compile Include="Classes\Changelog.cs" />
     <Compile Include="Classes\Connection.cs" />
     <Compile Include="Classes\GitHubAPI.cs" />
     <Compile Include="Classes\GitHubLatestReleaseResponse.cs" />
     <Compile Include="Classes\Host.cs" />
+    <Compile Include="Classes\Interfaces\ISendable.cs" />
     <Compile Include="Classes\PluginProvider.cs" />
+    <Compile Include="Classes\KeyboardSimulator.cs" />
     <Compile Include="Extensions\ObjectCollectionExtensions.cs" />
+    <Compile Include="Extensions\WebBrowserExtensions.cs" />
     <Compile Include="FrmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +103,12 @@
     </Compile>
     <Compile Include="FrmManageLanguages.Designer.cs">
       <DependentUpon>FrmManageLanguages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmUpdater.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmUpdater.designer.cs">
+      <DependentUpon>FrmUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Classes\GlobalHotKey.cs" />
@@ -148,6 +158,9 @@
     <EmbeddedResource Include="FrmManageLanguages.resx">
       <DependentUpon>FrmManageLanguages.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmUpdater.resx">
+      <DependentUpon>FrmUpdater.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -177,6 +190,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\update_logo.png" />
+    <None Include="Resources\hand_point.png" />
+    <None Include="Resources\download.png" />
+    <None Include="Resources\clock_go.png" />
     <None Include="Resources\donation-button.png" />
   </ItemGroup>
   <ItemGroup>
