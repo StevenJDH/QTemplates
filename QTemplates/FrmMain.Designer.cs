@@ -57,7 +57,6 @@
             this.notifyIcon1.Text = "QTemplates";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.NotifyIcon1_BalloonTipClicked);
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_DoubleClick);
             // 
             // contextMenuStrip1
             // 

@@ -20,16 +20,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using QInterfaces;
 using QTemplates.Classes;
+using QTemplates.Classes.Interfaces;
 using QTemplates.Models;
 using QTemplates.Models.UnitOfWork;
 
@@ -40,11 +39,11 @@ namespace QTemplates
         private readonly GlobalHotKey _globalHotKey;
         private bool _startupVisible;
         private readonly IUnitOfWork _unitOfWork;
-        private string _lastTemplateUsed;
         private readonly Dictionary<string, IPlugin> _pluginsDictionary;
         private readonly IHost _host;
-        private string _latestReleaseUrl;
+        private GitHubLatestReleaseResponse _latestReleaseInfo;
         private const int CP_DISABLED_CLOSE_BUTTON = 0x200;
+        private readonly ISendable _keyboardInput;
 
         public FrmMain()
         {
@@ -53,7 +52,7 @@ namespace QTemplates
             _unitOfWork = new UnitOfWork(new AppDbContext());
             _globalHotKey = new GlobalHotKey();
             _startupVisible = false;
-            _lastTemplateUsed = "<[ No templates used yet ]>";
+            _keyboardInput = new KeyboardSimulator();
 
             _host = new Host();
             _pluginsDictionary = PluginProvider.Instance.LoadPlugins("Plugins");
@@ -75,14 +74,25 @@ namespace QTemplates
             // Hotkey for showing template selector.
             _globalHotKey.AddHotKey(123, GlobalHotKey.CTRL, Keys.T, () =>
             {
-                NotifyIcon1_DoubleClick(this, null);
+                _keyboardInput.HookWindow();
+
+                // Resets form state that enables the form to load to system tray directly on first load.
+                _startupVisible = true;
+                this.Visible = _startupVisible;
+
+                btnUse.Focus();
+                lstTemplates.ClearSelected();
+                this.Show();
+
+                // Ensures selection window appears as the active window.
+                this.TopMost = true;
+                this.TopMost = false;
             });
             // Hotkey for using last template automatically.
             _globalHotKey.AddHotKey(456, GlobalHotKey.CTRL + GlobalHotKey.SHIFT, Keys.T, () =>
             {
-                Clipboard.SetText(_lastTemplateUsed);
-                Thread.Sleep(600); // Delay to allow time for the text to set in clipboard or you only get SYN.
-                SendKeys.Send("^(v)");
+                _keyboardInput.ReleaseWindow(); // Hooks not needed as we only want current foreground window.
+                _keyboardInput.SendTextAgain();
             });
 
             this.Icon = notifyIcon1.Icon;
@@ -143,21 +153,6 @@ namespace QTemplates
             cmbCategory.Text = "All";
 
             FilterList();
-        }
-
-        private void NotifyIcon1_DoubleClick(object sender, MouseEventArgs e)
-        {
-            // Resets form state that enables the form to load to system tray directly on first load.
-            _startupVisible = true;
-            this.Visible = _startupVisible;
-
-            btnUse.Focus();
-            lstTemplates.ClearSelected();
-            this.Show();
-            
-            // Ensures selection window appears as the active window.
-            this.TopMost = true;
-            this.TopMost = false;
         }
 
         private void CmnuExit_Click(object sender, EventArgs e)
@@ -239,9 +234,9 @@ namespace QTemplates
             var version = _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLang.Text);
 
-            _lastTemplateUsed = version?.Message ?? "<[ Template not found ]>";
-            Clipboard.SetText(_lastTemplateUsed);
             BtnHide_Click(this, EventArgs.Empty);
+            // TODO: Add error handlers here.
+            _keyboardInput.SendText(version?.Message ?? "<[ Template not found ]>");
         }
 
         private void CmnuAbout_Click(object sender, EventArgs e)
@@ -279,17 +274,11 @@ namespace QTemplates
                 response = null;
             }
 
-            if (response != null && response.IsUpdateAvailable())
+            if (response?.IsUpdateAvailable() == true)
             {
-                if (MessageBox.Show($"A new version of QTemplates ({response.VersionTag}) is available! Do you want to download the update now?",
-                        Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                using (var frm = new FrmUpdater(response, this.Icon))
                 {
-                    try
-                    {
-                        // Sends URL to the operating system for opening.
-                        Process.Start(response.ReleaseUrl);
-                    }
-                    catch (Exception) {/* Consuming exceptions */ }
+                    frm.ShowDialog();
                 }
             }
             else
@@ -309,10 +298,9 @@ namespace QTemplates
                 return;
             }
 
-            GitHubLatestReleaseResponse response;
             try
             {
-                response = new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates").Result;
+                _latestReleaseInfo = new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates").Result;
             }
             catch (Exception)
             {
@@ -321,15 +309,14 @@ namespace QTemplates
                 return;
             }
 
-            if (response != null && response.IsUpdateAvailable())
+            if (_latestReleaseInfo?.IsUpdateAvailable() == true)
             {
-                _latestReleaseUrl = response.ReleaseUrl;
                 notifyIcon1.ShowBalloonTip(30000, "Update Available", 
-                    $"A new version of QTemplates ({response.VersionTag}) is available! Click this notification to download the update now.", ToolTipIcon.None);
+                    $"A new version of QTemplates ({_latestReleaseInfo.VersionTag}) is available! Click this notification for more information.", ToolTipIcon.None);
             }
             else
             {
-                _latestReleaseUrl = null;
+                _latestReleaseInfo = null;
                 notifyIcon1.ShowBalloonTip(1000, "Up-to-Date", 
                     $"You are using the latest version of QTemplates ({Application.ProductVersion}).", ToolTipIcon.None);
             }
@@ -337,13 +324,12 @@ namespace QTemplates
 
         private void NotifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(_latestReleaseUrl) == false)
+            if (_latestReleaseInfo != null)
             {
-                try
+                using (var frm = new FrmUpdater(_latestReleaseInfo, this.Icon))
                 {
-                    Process.Start(_latestReleaseUrl);
+                    frm.ShowDialog(this);
                 }
-                catch (Exception) {/* Consuming exceptions */ }
             }
         }
 
