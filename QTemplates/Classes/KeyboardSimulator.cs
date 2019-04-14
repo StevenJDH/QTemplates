@@ -91,7 +91,7 @@ namespace QTemplates.Classes
         /// </summary>
         /// <param name="windowHandle">Handle of window to bring to the foreground</param>
         /// <exception cref="T:System.ArgumentException">Target window is no longer available.</exception>
-        /// <exception cref="T:System.InvalidOperationException">WinAPI related errors.</exception>
+        /// <exception cref="T:System.Win32Exception">WinAPI related errors.</exception>
         private void SwitchWindow(IntPtr windowHandle)
         {
             if (IsWindow(windowHandle) == false)
@@ -112,7 +112,7 @@ namespace QTemplates.Classes
             if (foregroundThreadId == 0)
             {
                 string errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
-                throw new InvalidOperationException($"{errorMessage}.");
+                throw new Win32Exception($"Unable to get the thread ID of foreground window. {errorMessage}.");
             }
 
             // AttachThreadInput is needed so we can get the handle of a focused window in another application.
@@ -129,9 +129,8 @@ namespace QTemplates.Classes
             }
             else
             {
-                // Unable to attach threads for input.
                 string errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
-                throw new InvalidOperationException($"{errorMessage}.");
+                throw new Win32Exception($"Unable to attach threads for input. {errorMessage}.");
             }
         }
 
