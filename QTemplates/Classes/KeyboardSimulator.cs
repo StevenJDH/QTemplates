@@ -22,7 +22,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using QTemplates.Classes.Interfaces;
 
@@ -82,7 +81,6 @@ namespace QTemplates.Classes
         public void SendTextAgain()
         {
             Clipboard.SetText(_lastTemplateUsed);
-            Thread.Sleep(600); // Delay to allow time for the text to set in clipboard or you only get SYN.
             SendKeys.Send("^(v)");
         }
 
