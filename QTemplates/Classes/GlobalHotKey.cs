@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -36,6 +37,7 @@ namespace QTemplates.Classes
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         public const int NO_MOD = 0x0000;
+        public const int NOREPEAT = 0x4000;
         public const int ALT = 0X0001;
         public const int CTRL = 0x0002;
         public const int SHIFT = 0x0004;
@@ -119,10 +121,26 @@ namespace QTemplates.Classes
 
                 if (index >= 0)
                 {
+                    WaitForModifier_KeysUp();
                     _hotKeyEntryList.ElementAt(index).Method.Invoke();
                 }
             }
             base.WndProc(ref m);
+        }
+
+        /// <summary>
+        /// Simulates waiting for an all Modifiers KeyUp event to avoid conflicts with hotkey actions.
+        /// </summary>
+        private void WaitForModifier_KeysUp()
+        {
+            while (Control.ModifierKeys.HasFlag(Keys.Alt) ||
+                Control.ModifierKeys.HasFlag(Keys.Control) ||
+                Control.ModifierKeys.HasFlag(Keys.Shift) ||
+                Control.ModifierKeys.HasFlag(Keys.LWin))
+            {
+                // Waiting for ModifierKeys up....
+                Thread.Sleep(50);
+            }
         }
 
         /// <summary>
