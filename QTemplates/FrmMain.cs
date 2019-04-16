@@ -72,7 +72,7 @@ namespace QTemplates
             }
            
             // Hotkey for showing template selector.
-            _globalHotKey.AddHotKey(123, GlobalHotKey.CTRL, Keys.T, () =>
+            _globalHotKey.AddHotKey(123, GlobalHotKey.NOREPEAT + GlobalHotKey.CTRL, Keys.T, () =>
             {
                 _keyboardInput.HookWindow();
 
@@ -89,7 +89,7 @@ namespace QTemplates
                 this.TopMost = false;
             });
             // Hotkey for using last template automatically.
-            _globalHotKey.AddHotKey(456, GlobalHotKey.CTRL + GlobalHotKey.SHIFT, Keys.T, () =>
+            _globalHotKey.AddHotKey(456, GlobalHotKey.NOREPEAT + GlobalHotKey.CTRL + GlobalHotKey.SHIFT, Keys.T, () =>
             {
                 _keyboardInput.ReleaseWindow(); // Hooks not needed as we only want current foreground window.
                 _keyboardInput.SendTextAgain();
@@ -235,8 +235,16 @@ namespace QTemplates
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLang.Text);
 
             BtnHide_Click(this, EventArgs.Empty);
-            // TODO: Add error handlers here.
-            _keyboardInput.SendText(version?.Message ?? "<[ Template not found ]>");
+
+            try
+            {
+                _keyboardInput.SendText(version?.Message ?? "<[ Template not found ]>");
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is Win32Exception)
+            {
+                MessageBox.Show($"Error: {ex.Message} Use Ctrl+Shift+T to inject selected template manually.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void CmnuAbout_Click(object sender, EventArgs e)
