@@ -33,9 +33,9 @@ namespace QTemplates.Classes
             sb.AppendLine("<style>");
             sb.AppendLine("table { width: 442px; border-collapse: collapse; }");
             sb.AppendLine("table tr th { text-align: left; padding: 10px; }");
-            sb.AppendLine("table tr td { padding: 0px; }");
-            sb.AppendLine("table tr td ul { padding-right: 15px; margin-top: 15px; }");
-            sb.AppendLine("table tr td p { padding: 10px; }");
+            sb.AppendLine("table tr td { padding: 15px 10px; }");
+            sb.AppendLine("table tr td ul { padding-left: 25px; padding-right: 15px; margin: 0px; }");
+            sb.AppendLine("table tr td p { margin: 0px }");
             sb.AppendLine(".dashed-border { border: 1px dashed black; }");
             sb.AppendLine(".blue-title { background-color: #A5EAFA; }");
             sb.AppendLine(".green-title { background-color: #A5FAC0; }");
