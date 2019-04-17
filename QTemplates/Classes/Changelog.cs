@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QTemplates.Classes
 {
-    class Changelog // TODO: Update old HTML to HTML5 and use full HTML markup.
+    class Changelog
     {
         private enum TableSection { NewFeaturesImprovements, BugFixes, KnownIssuesLimitations, Notes, Other }
 
@@ -27,6 +27,23 @@ namespace QTemplates.Classes
         {
             var sb = new StringBuilder();
             var changelogEntries = ParseChangelog(changelogText);
+
+            sb.AppendLine("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">");
+            sb.AppendLine("<title>Changelog</title>");
+            sb.AppendLine("<style>");
+            sb.AppendLine("table { width: 442px; border-collapse: collapse; }");
+            sb.AppendLine("table tr th { text-align: left; padding: 10px; }");
+            sb.AppendLine("table tr td { padding: 0px; }");
+            sb.AppendLine("table tr td ul { padding-right: 15px; margin-top: 15px; }");
+            sb.AppendLine("table tr td p { padding: 10px; }");
+            sb.AppendLine(".dashed-border { border: 1px dashed black; }");
+            sb.AppendLine(".blue-title { background-color: #A5EAFA; }");
+            sb.AppendLine(".green-title { background-color: #A5FAC0; }");
+            sb.AppendLine(".red-title { background-color: #FAA5A5; }");
+            sb.AppendLine(".yellow-title { background-color: #F1F58E; }");
+            sb.AppendLine(".gray-title { background-color: #DCE1E5; }");
+            sb.AppendLine("</style>");
+            sb.AppendLine("</head><body>");
 
             sb.AppendLine(GetTableHeader(releaseVersion));
 
@@ -60,7 +77,6 @@ namespace QTemplates.Classes
                 sb.AppendLine(GetTableSection(TableSection.KnownIssuesLimitations, issuesList));
             }
 
-            //TODO: Decide whether to make this one entry or not.
             var notesList = changelogEntries
                 .Where(s => s.Section == TableSection.Notes)
                 .Select(s => s.Item)
@@ -70,6 +86,8 @@ namespace QTemplates.Classes
                 sb.AppendLine("<br>");
                 sb.AppendLine(GetNotesSection(notesList));
             }
+
+            sb.AppendLine("</body></html>");
 
             return sb.ToString();
         }
@@ -138,10 +156,8 @@ namespace QTemplates.Classes
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("<table width=\"442\" cellpadding=\"10\" cellspacing=\"0\">");
-            sb.AppendLine("<tr>");
-            sb.AppendLine($"<th bgcolor=\"#A5EAFA\" style=\"text-align: left\">Version {releaseVersion} Changelog</th>");
-            sb.AppendLine("</tr>");
+            sb.AppendLine("<table>");
+            sb.AppendLine($"<tr><th class=\"blue-title\">Version {releaseVersion} Changelog</th></tr>");
             sb.AppendLine("</table>");
 
             return sb.ToString();
@@ -156,32 +172,29 @@ namespace QTemplates.Classes
         private string GetTableSection(TableSection section, List<string> items)
         {
             string sectionName = "";
-            string color = "";
+            string classColor = "";
 
             switch (section)
             {
                 case TableSection.NewFeaturesImprovements:
                     sectionName = "New Features / Improvements";
-                    color = "#A5FAC0";
+                    classColor = "green-title";
                     break;
                 case TableSection.BugFixes:
                     sectionName = "Bug Fixes";
-                    color = "#FAA5A5";
+                    classColor = "red-title";
                     break;
                 case TableSection.KnownIssuesLimitations:
                     sectionName = "Known Issues / Limitations";
-                    color = "#F1F58E";
+                    classColor = "yellow-title";
                     break;
             }
 
             var sb = new StringBuilder();
 
-            sb.AppendLine("<table width=\"442\" cellpadding=\"10\" cellspacing=\"0\" style=\"border: 1px dashed black;\">");
-            sb.AppendLine("<tr>");
-            sb.AppendLine($"<th bgcolor=\"{color}\" style=\"text-align: left;\">{sectionName}</th>");
-            sb.AppendLine("</tr>");
-            sb.AppendLine("<tr>");
-            sb.AppendLine("<td style=\"padding-top: 15px; padding-bottom: 0px;\"><ul>");
+            sb.AppendLine("<table class=\"dashed-border\">");
+            sb.AppendLine($"<tr><th class=\"{classColor}\">{sectionName}</th></tr>");
+            sb.AppendLine("<tr><td><ul>");
             if (items?.Count > 0)
             {
                 items.ForEach(i => sb.AppendLine($"<li>{i}</li>"));
@@ -190,8 +203,7 @@ namespace QTemplates.Classes
             {
                 sb.AppendLine("<li>None.</li>");
             }
-            sb.AppendLine("</ul></td>");
-            sb.AppendLine("</tr>");
+            sb.AppendLine("</ul></td></tr>");
             sb.AppendLine("</table>");
 
             return sb.ToString();
@@ -206,12 +218,9 @@ namespace QTemplates.Classes
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("<table width=\"442\" cellpadding=\"10\" cellspacing=\"0\" style=\"border: 1px dashed black;\">");
-            sb.AppendLine("<tr>");
-            sb.AppendLine($"<th bgcolor=\"#DCE1E5\" style=\"text-align: left;\">Notes</th>");
-            sb.AppendLine("</tr>");
-            sb.AppendLine("<tr>");
-            sb.AppendLine("<td style=\"padding-top: 15px; padding-bottom: 15px;\">");
+            sb.AppendLine("<table class=\"dashed-border\">");
+            sb.AppendLine("<tr><th class=\"gray-title\">Notes</th></tr>");
+            sb.AppendLine("<tr><td>");
             if (items?.Count > 0)
             {
                 items.ForEach(i => sb.AppendLine($"<p>{i}</p>"));
@@ -220,11 +229,34 @@ namespace QTemplates.Classes
             {
                 sb.AppendLine("<p>None.</p>");
             }
-            sb.AppendLine("</td>");
-            sb.AppendLine("</tr>");
+            sb.AppendLine("</td></tr>");
             sb.AppendLine("</table>");
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Generates a loading view to be used as a placeholder while the changelog generates and loads.
+        /// </summary>
+        /// <returns>Loading HTML view</returns>
+        public string GetLoadingHTML()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">");
+            sb.AppendLine("<title>Loading</title>");
+            sb.AppendLine("<style>");
+            sb.AppendLine("body { font-size: 36px; text-align: center;	}");
+            sb.AppendLine(".medium-text { font-size: 48px; }");
+            sb.AppendLine(".large-text { font-size: 58px; }");
+            sb.AppendLine("</style>");
+            sb.AppendLine("</head><body>");
+            sb.AppendLine("<br>");
+            sb.AppendLine("<p>Lo<span class=\"medium-text\">a</span>ding.<span class=\"large-text\">..</span></p>");
+            sb.AppendLine("</body></html>");
 
             return sb.ToString();
         }
     }
 }
+ 

@@ -56,11 +56,13 @@ namespace QTemplates
         {
             var changelog = new Changelog();
 
-            wbReleaseNotes.NavigateToString("<body style=\"font-size: 36px; text-align: center;\"><p>&nbsp;</p><p>Lo<span style=\"font-size: 48px\">a</span>ding.<span style=\"font-size: 58px\">..</span></p></body>");
-            lblVersion.Text = $"Version {_response.VersionTag} is now available. You have version {Application.ProductVersion} installed. Would you like to update it now?";
+            wbReleaseNotes.NavigateToString(changelog.GetLoadingHTML());
+            lblVersion.Text = $"Version {_response.VersionTag} is now available. You have version " +
+                              $"{Application.ProductVersion} installed. Would you like to update it now?";
             await Task.Run(() =>
             {
-                wbReleaseNotes.NavigateToString(changelog.GetHTMLVersion(_response.VersionTag, _response.ReleaseNotes));
+                wbReleaseNotes.NavigateToString(changelog.GetHTMLVersion(_response.VersionTag, 
+                    _response.ReleaseNotes));
             });
         }
 
@@ -78,7 +80,8 @@ namespace QTemplates
 
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to update now?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            if (MessageBox.Show("Are you sure you want to update now?", Application.ProductName, 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
             }
