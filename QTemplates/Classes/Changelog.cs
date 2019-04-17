@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace QTemplates.Classes
 {
-    class Changelog
+    class Changelog // TODO: Update old HTML to HTML5 and use full HTML markup.
     {
-        private enum TableSection { FeatureImprovement, BugFix, KnownIssue, Note, Other }
+        private enum TableSection { NewFeaturesImprovements, BugFixes, KnownIssuesLimitations, Notes, Other }
 
         private struct ChangelogEntry
         {
@@ -29,19 +29,47 @@ namespace QTemplates.Classes
             var changelogEntries = ParseChangelog(changelogText);
 
             sb.AppendLine(GetTableHeader(releaseVersion));
-            sb.AppendLine("<br>");
 
-            // TODO: Maybe hide sections with 0 entries.
-            sb.AppendLine(GetTableSection(TableSection.FeatureImprovement,
-                changelogEntries.Where(s => s.Section == TableSection.FeatureImprovement).Select(s => s.Item).ToList()));
-            sb.AppendLine("<br>");
+            var featuresList = changelogEntries
+                .Where(s => s.Section == TableSection.NewFeaturesImprovements)
+                .Select(s => s.Item)
+                .ToList();
+            if (featuresList.Count > 0)
+            {
+                sb.AppendLine("<br>");
+                sb.AppendLine(GetTableSection(TableSection.NewFeaturesImprovements, featuresList));
+            }
 
-            sb.AppendLine(GetTableSection(TableSection.BugFix,
-                changelogEntries.Where(s => s.Section == TableSection.BugFix).Select(s => s.Item).ToList()));
-            sb.AppendLine("<br>");
+            var bugsList = changelogEntries
+                .Where(s => s.Section == TableSection.BugFixes)
+                .Select(s => s.Item)
+                .ToList();
+            if (bugsList.Count > 0)
+            {
+                sb.AppendLine("<br>");
+                sb.AppendLine(GetTableSection(TableSection.BugFixes, bugsList));
+            }
 
-            sb.AppendLine(GetTableSection(TableSection.KnownIssue,
-                changelogEntries.Where(s => s.Section == TableSection.KnownIssue).Select(s => s.Item).ToList()));
+            var issuesList = changelogEntries
+                .Where(s => s.Section == TableSection.KnownIssuesLimitations)
+                .Select(s => s.Item)
+                .ToList();
+            if (issuesList.Count > 0)
+            {
+                sb.AppendLine("<br>");
+                sb.AppendLine(GetTableSection(TableSection.KnownIssuesLimitations, issuesList));
+            }
+
+            //TODO: Decide whether to make this one entry or not.
+            var notesList = changelogEntries
+                .Where(s => s.Section == TableSection.Notes)
+                .Select(s => s.Item)
+                .ToList();
+            if (notesList.Count > 0)
+            { 
+                sb.AppendLine("<br>");
+                sb.AppendLine(GetNotesSection(notesList));
+            }
 
             return sb.ToString();
         }
@@ -54,41 +82,47 @@ namespace QTemplates.Classes
         private List<ChangelogEntry> ParseChangelog(string changelogText)
         {
             var changelogEntries = new List<ChangelogEntry>();
+            TableSection changelogGroup = TableSection.Other;
 
             using (var reader = new StringReader(changelogText.Trim()))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    ChangelogEntry changeEntry;
-                    if (line.Contains(":") == false)
+                    string parsedLine = line.Replace("*", "").Trim(); // Removes markdown.
+
+                    // Controls group associations for changelog entries.
+                    if (parsedLine.EndsWith(":"))
                     {
-                        continue;
+                        switch (parsedLine.ToLower())
+                        {
+                            case "new features / improvements:":
+                                changelogGroup = TableSection.NewFeaturesImprovements;
+                                break;
+                            case "bug fixes:":
+                                changelogGroup = TableSection.BugFixes;
+                                break;
+                            case "known issues / limitations:":
+                                changelogGroup = TableSection.KnownIssuesLimitations;
+                                break;
+                            case "notes:":
+                                changelogGroup = TableSection.Notes;
+                                break;
+                            default:
+                                changelogGroup = TableSection.Other;
+                                break;
+                        }
+                        continue; // Start adding entries for group with below.
                     }
-                    var parsedLine = line.Split(new[] { ':' }, 2);
-                    switch (parsedLine[0].Trim())
+
+                    // Adds changelog entries into current group.
+                    if (String.IsNullOrWhiteSpace(parsedLine) == false)
                     {
-                        case "ADDED":
-                        case "UPDATED":
-                        case "IMPROVED":
-                        case "CHANGED":
-                            changeEntry.Section = TableSection.FeatureImprovement;
-                            break;
-                        case "FIXED":
-                            changeEntry.Section = TableSection.BugFix;
-                            break;
-                        case "KNOWN ISSUE":
-                            changeEntry.Section = TableSection.KnownIssue;
-                            break;
-                        case "NOTE":
-                            changeEntry.Section = TableSection.Note;
-                            break;
-                        default:
-                            changeEntry.Section = TableSection.Other;
-                            break;
+                        ChangelogEntry changeEntry;
+                        changeEntry.Section = changelogGroup;
+                        changeEntry.Item = parsedLine;
+                        changelogEntries.Add(changeEntry);
                     }
-                    changeEntry.Item = parsedLine[1].Trim();
-                    changelogEntries.Add(changeEntry);
                 }
             }
 
@@ -126,16 +160,16 @@ namespace QTemplates.Classes
 
             switch (section)
             {
-                case TableSection.FeatureImprovement:
+                case TableSection.NewFeaturesImprovements:
                     sectionName = "New Features / Improvements";
                     color = "#A5FAC0";
                     break;
-                case TableSection.BugFix:
+                case TableSection.BugFixes:
                     sectionName = "Bug Fixes";
                     color = "#FAA5A5";
                     break;
-                case TableSection.KnownIssue:
-                    sectionName = "Known Issues";
+                case TableSection.KnownIssuesLimitations:
+                    sectionName = "Known Issues / Limitations";
                     color = "#F1F58E";
                     break;
             }
@@ -144,10 +178,10 @@ namespace QTemplates.Classes
 
             sb.AppendLine("<table width=\"442\" cellpadding=\"10\" cellspacing=\"0\" style=\"border: 1px dashed black;\">");
             sb.AppendLine("<tr>");
-            sb.AppendLine($"<th bgcolor=\"{color}\" style=\"text-align: left\">{sectionName}</th>");
+            sb.AppendLine($"<th bgcolor=\"{color}\" style=\"text-align: left;\">{sectionName}</th>");
             sb.AppendLine("</tr>");
             sb.AppendLine("<tr>");
-            sb.AppendLine("<td style=\"padding-top: 15px; padding-bottom: 0px\"><ul>");
+            sb.AppendLine("<td style=\"padding-top: 15px; padding-bottom: 0px;\"><ul>");
             if (items?.Count > 0)
             {
                 items.ForEach(i => sb.AppendLine($"<li>{i}</li>"));
@@ -156,7 +190,37 @@ namespace QTemplates.Classes
             {
                 sb.AppendLine("<li>None.</li>");
             }
-            sb.AppendLine("</ul> </td>");
+            sb.AppendLine("</ul></td>");
+            sb.AppendLine("</tr>");
+            sb.AppendLine("</table>");
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Generates the notes group for the HTML changelog.
+        /// </summary>
+        /// <param name="items">Items associated with notes section</param>
+        /// <returns>HTML notes group</returns>
+        private string GetNotesSection(List<string> items)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("<table width=\"442\" cellpadding=\"10\" cellspacing=\"0\" style=\"border: 1px dashed black;\">");
+            sb.AppendLine("<tr>");
+            sb.AppendLine($"<th bgcolor=\"#DCE1E5\" style=\"text-align: left;\">Notes</th>");
+            sb.AppendLine("</tr>");
+            sb.AppendLine("<tr>");
+            sb.AppendLine("<td style=\"padding-top: 15px; padding-bottom: 15px;\">");
+            if (items?.Count > 0)
+            {
+                items.ForEach(i => sb.AppendLine($"<p>{i}</p>"));
+            }
+            else
+            {
+                sb.AppendLine("<p>None.</p>");
+            }
+            sb.AppendLine("</td>");
             sb.AppendLine("</tr>");
             sb.AppendLine("</table>");
 
