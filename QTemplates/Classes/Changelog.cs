@@ -107,7 +107,9 @@ namespace QTemplates.Classes
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string parsedLine = line.Replace("*", "").Trim(); // Removes markdown.
+                    // Removes markdown.
+                    string parsedLine = line.Replace("*", "")
+                        .Replace("#", "").Trim();
 
                     // Controls group associations for changelog entries.
                     if (parsedLine.EndsWith(":"))
