@@ -1,5 +1,5 @@
 # QTemplates
-This program, also known as [Q]uick Templates, is productivity tool that is used to inject text-based templates into any application to save you time. I originally started making this tool primarily for my work to save people time when doing tedious tasks and to standardize things, but then decided to evolve it on here. There are other applications like this out there, but QTemplates supports plugins for when you need to add quick access to customized tools and translated templates that are grouped together.
+This program, also known as [Q]uick Templates, is productivity tool that is used to inject text-based templates into any application to save you time. I originally started making this tool primarily for my work to speed things up when doing tedious tasks and to standardize things, but then decided to evolve it on here. There are other applications like this out there, but QTemplates supports plugins for when you need to add quick access to customized tools and translated templates that are grouped together.
 
 Releases: [https://github.com/StevenJDH/QTemplates/releases](https://github.com/StevenJDH/QTemplates/releases)
 
@@ -7,6 +7,8 @@ Changelog: [https://github.com/StevenJDH/QTemplates/wiki/Changelog](https://gith
 
 ## Features
 * Sits in system tray listening for hotkeys and provides quick access to tools.
+* Auto template injection after selecting a template from the template selection window.
+* Remembers the intended window for the template even if it is not the active window anymore.
 * Ctrl+T opens the template selection window and Ctrl+Shift+T uses the last used template.
 * A plugin system to add more features in the form of tools.
 * Associate templates with multiple versions written in other languages, which keeps the list clean.
@@ -14,15 +16,14 @@ Changelog: [https://github.com/StevenJDH/QTemplates/wiki/Changelog](https://gith
 * Filter templates by language and category.
 * Multi-user support so that everyone can have their own templates.
 * Supports checking for the latest release on GitHub.
+* Updater window with color-coded changelog to update directly from application.
 
 ## Planned features
 * Looking into associating shortcut keys for individual templates.
-* Auto template injection after selecting a template from the template selection window.
 * More feature access via plugin system.
 * Options for backing up, importing, and reseting a database.
 * Logging system using either the Logs4Net or the NLog library.
 * Regular background update checking.
-* A proper update window with color-coded changelog.
 * Integrated spelling and grammar checker.
 
 ## Plugin system
