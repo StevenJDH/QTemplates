@@ -24,6 +24,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QTemplates.Classes
 {
@@ -50,7 +51,17 @@ namespace QTemplates.Classes
                 string[] dllFiles = Directory.GetFiles(pluginFolderPath, "*.dll");
                 foreach (string dllFile in dllFiles)
                 {
-                    Assembly.LoadFile(Path.GetFullPath(dllFile));
+                    try
+                    {
+                        Assembly.LoadFile(Path.GetFullPath(dllFile)); // UnsafeLoadFrom() will ignore ZoneId.
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        MessageBox.Show($"Error: Failed to load the '{Path.GetFileName(dllFile)}' plugin " +
+                                        "because the file is blocked by an ADS Zone Identifier. Please view " +
+                                        "the file's properties, and select 'Unblock' to fix.",
+                            Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 CreateInstances(ExamineAssemblies());
             }
