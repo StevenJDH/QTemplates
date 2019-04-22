@@ -26,6 +26,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 using QInterfaces;
 using QTemplates.Classes;
 using QTemplates.Classes.Interfaces;
@@ -44,6 +45,7 @@ namespace QTemplates
         private GitHubLatestReleaseResponse _latestReleaseInfo;
         private const int CP_DISABLED_CLOSE_BUTTON = 0x200;
         private readonly ISendable _keyboardInput;
+        private readonly ILogger _logger;
 
         public FrmMain()
         {
@@ -53,9 +55,11 @@ namespace QTemplates
             _globalHotKey = new GlobalHotKey();
             _startupVisible = false;
             _keyboardInput = new KeyboardSimulator();
+            _logger = AppConfiguration.Instance.AppLogger;
 
             _host = new Host();
             _pluginsDictionary = PluginProvider.Instance.LoadPlugins("Plugins");
+            _logger.Debug($"Plugins loaded: {_pluginsDictionary.Keys.Count}");
             if (_pluginsDictionary.Keys.Count > 0)
             {
                 foreach (var entry in _pluginsDictionary)
@@ -242,6 +246,7 @@ namespace QTemplates
             }
             catch (Exception ex) when (ex is ArgumentException || ex is Win32Exception)
             {
+                _logger.Error(ex, "Got exception.");
                 MessageBox.Show($"Error: {ex.Message} Use Ctrl+Shift+T to inject selected template manually.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -259,6 +264,7 @@ namespace QTemplates
         {
             if (Connection.IsInternetAvailable() == false)
             {
+                _logger.Warn("A connection to the Internet was not detected.");
                 MessageBox.Show("A connection to the Internet was not detected.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -275,10 +281,12 @@ namespace QTemplates
                 // show as current version by setting response to null when we get one.
                 if (!(ex is HttpRequestException) && ex.Message.Contains("status code 404") == false)
                 {
+                    _logger.Error(ex, "Got exception.");
                     MessageBox.Show("Error: Could not connect to GitHub's servers. Please check your connection or try again later.",
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                _logger.Warn(ex, "Possible exception or no pre/releases available yet.");
                 response = null;
             }
 
@@ -303,6 +311,7 @@ namespace QTemplates
         {
             if (Connection.IsInternetAvailable() == false)
             {
+                _logger.Warn("A connection to the Internet was not detected.");
                 return;
             }
 
@@ -310,8 +319,9 @@ namespace QTemplates
             {
                 _latestReleaseInfo = new GitHubAPI().GetLatestVersionAsync("StevenJDH", "QTemplates").Result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.Error(ex, "Got exception.");
                 // Returns here no matter what Exception is thrown as we can get an aggregated
                 // exception unlike a manual update check.
                 return;

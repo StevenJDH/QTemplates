@@ -26,15 +26,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
+using QTemplates.Classes;
 
 namespace QTemplates
 {
     public partial class FrmAbout : Form
     {
+        private readonly ILogger _logger;
+
         public FrmAbout()
         {
             InitializeComponent();
             lblButton.BackColor = Color.Transparent;
+            _logger = AppConfiguration.Instance.AppLogger;
         }
 
         private void BtnOK_Click(object sender, EventArgs e)
@@ -49,7 +54,11 @@ namespace QTemplates
                 // Sends URL to the operating system for opening.
                 Process.Start("https://www.paypal.me/stevenjdh");
             }
-            catch (Exception) {/* Consuming exceptions */ }
+            catch (Exception ex)
+            {
+                // Consuming exceptions
+                _logger.Error(ex, "Got exception.");
+            }
         }
 
         private void PnlButtonImage_Click(object sender, EventArgs e)
@@ -73,7 +82,11 @@ namespace QTemplates
                 // Casts URL back to string and sends it to the operating system for opening.
                 Process.Start(e.Link.LinkData.ToString());
             }
-            catch (Exception) {/* Consuming exceptions */ }
+            catch (Exception ex)
+            {
+                // Consuming exceptions
+                _logger.Error(ex, "Got exception.");
+            }
         }
     }
 }

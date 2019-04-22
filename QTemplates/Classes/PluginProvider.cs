@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 
 namespace QTemplates.Classes
 {
@@ -32,10 +33,12 @@ namespace QTemplates.Classes
     {
         public static PluginProvider Instance { get; private set; }
         private static Dictionary<string, IPlugin> _plugins;
+        private readonly ILogger _logger;
 
         private PluginProvider()
         {
             _plugins = new Dictionary<string, IPlugin>();
+            _logger = AppConfiguration.Instance.AppLogger;
         }
 
         static PluginProvider()
@@ -57,6 +60,7 @@ namespace QTemplates.Classes
                     }
                     catch (NotSupportedException ex)
                     {
+                        _logger.Error(ex, "Got exception.");
                         MessageBox.Show($"Error: Failed to load the '{Path.GetFileName(dllFile)}' plugin " +
                                         "because the file is blocked by an ADS Zone Identifier. Please view " +
                                         "the file's properties, and select 'Unblock' to fix.",

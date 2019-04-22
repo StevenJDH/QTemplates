@@ -28,6 +28,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 using QTemplates.Classes;
 using QTemplates.Extensions;
 
@@ -37,6 +38,7 @@ namespace QTemplates
     {
         private readonly GitHubLatestReleaseResponse _response;
         private readonly string _tempUpdateFile;
+        private readonly ILogger _logger;
         private const int CP_DISABLED_CLOSE_BUTTON = 0x200;
 
         public FrmUpdater(GitHubLatestReleaseResponse response, Icon frmIcon)
@@ -45,6 +47,7 @@ namespace QTemplates
             _response = response;
             this.Icon = frmIcon;
             _tempUpdateFile = Path.Combine(Path.GetTempPath(), $"QUpdate-{Guid.NewGuid().ToString("N")}.exe");
+            _logger = AppConfiguration.Instance.AppLogger;
         }
 
         private void BtnLater_Click(object sender, EventArgs e)
@@ -73,7 +76,11 @@ namespace QTemplates
                 // Sends URL to the operating system for opening.
                 Process.Start(_response.ReleaseUrl);
             }
-            catch (Exception) {/* Consuming exceptions */ }
+            catch (Exception ex)
+            {
+                // Consuming exceptions
+                _logger.Error(ex, "Got exception.");
+            }
 
             this.Close();
         }
@@ -119,6 +126,7 @@ namespace QTemplates
         {
             if (e.Error != null)
             {
+                _logger.Error(e.Error, "Got exception.");
                 MessageBox.Show($"Error: {e.Error.Message}",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 pbDownload.Value = 0;

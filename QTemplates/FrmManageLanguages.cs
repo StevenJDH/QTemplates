@@ -26,6 +26,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
+using QTemplates.Classes;
 using QTemplates.Extensions;
 using QTemplates.Models;
 using QTemplates.Models.UnitOfWork;
@@ -35,11 +37,13 @@ namespace QTemplates
     public partial class FrmManageLanguages : Form
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger _logger;
 
         public FrmManageLanguages(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
             _unitOfWork = unitOfWork;
+            _logger = AppConfiguration.Instance.AppLogger;
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -74,6 +78,7 @@ namespace QTemplates
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex, "Got exception.");
                 _unitOfWork.UndoChanges();
                 MessageBox.Show($"Error: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -101,6 +106,7 @@ namespace QTemplates
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex, "Got exception.");
                 _unitOfWork.UndoChanges();
                 MessageBox.Show($"Error: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -138,6 +144,7 @@ namespace QTemplates
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex, "Got exception.");
                 _unitOfWork.UndoChanges();
                 MessageBox.Show($"Error: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
