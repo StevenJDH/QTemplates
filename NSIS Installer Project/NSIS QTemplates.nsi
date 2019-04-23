@@ -135,6 +135,7 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   File "..\QTemplates\bin\Release\EntityFramework.dll"
   File "..\QTemplates\bin\Release\EntityFramework.SqlServer.dll"
   File "..\QTemplates\bin\Release\Newtonsoft.Json.dll"
+  File "..\QTemplates\bin\Release\NLog.dll"
   File "..\QTemplates\bin\Release\QInterfaces.dll"
   File "..\QTemplates\bin\Release\QTemplates.exe"
   File "..\QTemplates\bin\Release\System.Data.SQLite.dll"
@@ -153,7 +154,7 @@ SectionIn 1 2
     CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\QTemplates.exe"
     CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "/AllUsers"
   ${EndIf}
-  
+
 SectionEnd
 
 Section "Desktop Shortcut" SectionDesktop
@@ -164,7 +165,7 @@ SectionIn 1
   ${Else}
     CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\QTemplates.exe"
   ${EndIf}
-  
+
 SectionEnd
 
 Section -Post
@@ -191,7 +192,7 @@ Section -Post
   ;The following two reg entries are for the Windows' uninstall button so it displays as Uninstall only.
   WriteRegDWORD ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "NoModify" 1
   WriteRegDWORD ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "NoRepair" 1
-  
+
 SectionEnd
 
 ;--------------------------------
@@ -251,6 +252,7 @@ Section "un.Uninstall Core Files (required)" SectionCoreUninstall
   Delete "$INSTDIR\QInterfaces.dll"
   Delete "$INSTDIR\Plugins\QTemplates.Example.Plugin.dll"
   Delete "$INSTDIR\Newtonsoft.Json.dll"
+  Delete "$INSTDIR\NLog.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.dll"
   Delete "$INSTDIR\EntityFramework.dll"
 
@@ -271,6 +273,9 @@ Section "un.Uninstall Core Files (required)" SectionCoreUninstall
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+
+  SetShellVarContext current ;Ensures use of %AppData% and not %ProgramData% since an NSIS bug keeps changing it.
+  RMDir /r "${CONFIG_DIRECTORY}\Logs" ;Removes all files and sub-folders.
 
 SectionEnd
 
