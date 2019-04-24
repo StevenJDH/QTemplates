@@ -281,10 +281,7 @@ SectionEnd
 
 Section /o "un.Remove Configuration" SectionRemoveConfig
 
-  IfFileExists "${SQLITE_FILE}" 0
-    Delete "${SQLITE_FILE}"
-  IfFileExists "${CONFIG_DIRECTORY}\*.*" 0
-    RMDir "${CONFIG_DIRECTORY}"
+  RMDir /r "${CONFIG_DIRECTORY}"
 
 SectionEnd
 
