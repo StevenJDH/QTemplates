@@ -73,6 +73,8 @@ namespace QTemplates.Classes
         /// </summary>
         private void LoadSettings()
         {
+            AppLogger = GetLogger();
+
             if (File.Exists(GetDbPath()) == false)
             {
                 MessageBox.Show("QTemplates needs to set up your personal database as it could not find one already in place.",
@@ -80,13 +82,11 @@ namespace QTemplates.Classes
 
                 Directory.CreateDirectory(_configPath); // Builds any missing folders in path.
                 File.WriteAllBytes(GetDbPath(), Properties.Resources.QTemplates);
-                AppLogger.Info("Personal datqbase created successully.");
+                AppLogger.Info("Personal database created successfully.");
 
                 MessageBox.Show("All done! You are now ready to start using the program.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            AppLogger = GetLogger();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace QTemplates.Classes
                 {
                     new JsonAttribute("longDate", "${longdate}"),
                     new JsonAttribute("Logger", "${logger}"),
-                    new JsonAttribute("level", "${level}"),
+                    new JsonAttribute("level", "${level:uppercase=true}"),
                     new JsonAttribute("message", "${message}"),
                     new JsonAttribute("type", "${exception:format=Type}"),
                     new JsonAttribute("exception", "${exception}"),
