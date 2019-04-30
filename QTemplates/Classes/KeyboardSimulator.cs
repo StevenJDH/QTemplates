@@ -65,7 +65,12 @@ namespace QTemplates.Classes
 
         public bool HookWindow()
         {
-            _foregroundHWnd = GetForegroundWindow();
+            // If template selection window is closed, capture handle.
+            if (_foregroundHWnd == IntPtr.Zero)
+            {
+                _foregroundHWnd = GetForegroundWindow();
+            }
+            
             return IsWindow(_foregroundHWnd);
         }
 
