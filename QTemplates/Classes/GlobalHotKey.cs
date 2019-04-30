@@ -48,7 +48,6 @@ namespace QTemplates.Classes
         {
             public int Id;
             public Action Method;
-
         }
 
         private readonly List<HotKeyEntry> _hotKeyEntryList;
@@ -131,12 +130,15 @@ namespace QTemplates.Classes
         /// <summary>
         /// Simulates waiting for an all Modifiers KeyUp event to avoid conflicts with hotkey actions.
         /// </summary>
+        /// <remarks >
+        /// We don't check for the Control key because it will show as always pressed if template selection
+        /// windows is opened and we use the hotkey to open it while it is open.
+        /// </remarks>
         private void WaitForModifier_KeysUp()
         {
             while (Control.ModifierKeys.HasFlag(Keys.Alt) ||
-                Control.ModifierKeys.HasFlag(Keys.Control) ||
-                Control.ModifierKeys.HasFlag(Keys.Shift) ||
-                Control.ModifierKeys.HasFlag(Keys.LWin))
+                    Control.ModifierKeys.HasFlag(Keys.Shift) ||
+                    Control.ModifierKeys.HasFlag(Keys.LWin))
             {
                 // Waiting for ModifierKeys up....
                 Thread.Sleep(50);
