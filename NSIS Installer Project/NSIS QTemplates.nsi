@@ -70,7 +70,7 @@
   ;Name, title bar caption, file, and branding
   Name "${PRODUCT_NAME}"
   Caption "${PRODUCT_NAME} ${PRODUCT_VERSION}" ;Default is used if left empty or removed.
-  OutFile "${PRODUCT_NAME}_Setup.exe"
+  OutFile "${PRODUCT_NAME}_v${PRODUCT_VERSION}_Setup.exe"
   BrandingText "${COPYRIGHT_TEXT}"
 
   ;Installer properties
@@ -125,6 +125,31 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   
   ;Files to install...
   SetOverwrite try
+  SetOutPath "$INSTDIR\Dictionaries"
+  File "..\QTemplates\bin\Release\Dictionaries\de_AT.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\de_AT.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\de_CH.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\de_CH.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\de_DE.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\de_DE.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\en_GB.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\en_GB.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\en_US.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\en_US.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\eo.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\eo.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\es_ES.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\es_ES.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\fr_Fr.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\fr_Fr.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\it_IT.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\it_IT.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\nl.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\nl.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\pl.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\pl.dic"
+  File "..\QTemplates\bin\Release\Dictionaries\sv_SE.aff"
+  File "..\QTemplates\bin\Release\Dictionaries\sv_SE.dic"
   SetOutPath "$INSTDIR\Plugins"
   File "..\QTemplates\bin\Release\Plugins\QTemplates.Example.Plugin.dll"
   SetOutPath "$INSTDIR\x64"
@@ -134,6 +159,9 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   SetOutPath "$INSTDIR" ;Need to set '$INSTDIR' last so that 'Start in' for shorcuts are set correctly and app plugins load.
   File "..\QTemplates\bin\Release\EntityFramework.dll"
   File "..\QTemplates\bin\Release\EntityFramework.SqlServer.dll"
+  File "..\QTemplates\bin\Release\Hunspellx64.dll"
+  File "..\QTemplates\bin\Release\Hunspellx86.dll"
+  File "..\QTemplates\bin\Release\NHunspell.dll"
   File "..\QTemplates\bin\Release\Newtonsoft.Json.dll"
   File "..\QTemplates\bin\Release\NLog.dll"
   File "..\QTemplates\bin\Release\QInterfaces.dll"
@@ -141,6 +169,7 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   File "..\QTemplates\bin\Release\System.Data.SQLite.dll"
   File "..\QTemplates\bin\Release\System.Data.SQLite.EF6.dll"
   File "..\QTemplates\bin\Release\System.Data.SQLite.Linq.dll"
+
 SectionEnd
 
 Section "Start Menu Shortcut" SectionStartMenu
@@ -243,6 +272,30 @@ Section "un.Uninstall Core Files (required)" SectionCoreUninstall
 
   ;Stuff to uninstall/remove....
   Delete "$INSTDIR\Uninstall.exe"
+  Delete "$INSTDIR\Dictionaries\de_AT.aff"
+  Delete "$INSTDIR\Dictionaries\de_AT.dic"
+  Delete "$INSTDIR\Dictionaries\de_CH.aff"
+  Delete "$INSTDIR\Dictionaries\de_CH.dic"
+  Delete "$INSTDIR\Dictionaries\de_DE.aff"
+  Delete "$INSTDIR\Dictionaries\de_DE.dic"
+  Delete "$INSTDIR\Dictionaries\en_GB.aff"
+  Delete "$INSTDIR\Dictionaries\en_GB.dic"
+  Delete "$INSTDIR\Dictionaries\en_US.aff"
+  Delete "$INSTDIR\Dictionaries\en_US.dic"
+  Delete "$INSTDIR\Dictionaries\eo.aff"
+  Delete "$INSTDIR\Dictionaries\eo.dic"
+  Delete "$INSTDIR\Dictionaries\es_ES.aff"
+  Delete "$INSTDIR\Dictionaries\es_ES.dic"
+  Delete "$INSTDIR\Dictionaries\fr_Fr.aff"
+  Delete "$INSTDIR\Dictionaries\fr_Fr.dic"
+  Delete "$INSTDIR\Dictionaries\it_IT.aff"
+  Delete "$INSTDIR\Dictionaries\it_IT.dic"
+  Delete "$INSTDIR\Dictionaries\nl.aff"
+  Delete "$INSTDIR\Dictionaries\nl.dic"
+  Delete "$INSTDIR\Dictionaries\pl.aff"
+  Delete "$INSTDIR\Dictionaries\pl.dic"
+  Delete "$INSTDIR\Dictionaries\sv_SE.aff"
+  Delete "$INSTDIR\Dictionaries\sv_SE.dic"
   Delete "$INSTDIR\x86\SQLite.Interop.dll"
   Delete "$INSTDIR\x64\SQLite.Interop.dll"
   Delete "$INSTDIR\System.Data.SQLite.Linq.dll"
@@ -255,6 +308,9 @@ Section "un.Uninstall Core Files (required)" SectionCoreUninstall
   Delete "$INSTDIR\NLog.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.dll"
   Delete "$INSTDIR\EntityFramework.dll"
+  Delete "$INSTDIR\Hunspellx64.dll"
+  Delete "$INSTDIR\Hunspellx86.dll"
+  Delete "$INSTDIR\NHunspell.dll"
 
   ${If} $MultiUser.InstallMode == "CurrentUser"
     Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall (Current User).lnk"
