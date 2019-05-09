@@ -458,5 +458,19 @@ namespace QTemplates
             ResetInterface();
             FrmManage_Load(this, EventArgs.Empty);
         }
+
+        private void BtnSpellCheck_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmSpellChecker(txtMessage.Text, cmbLang.Text, this))
+            {
+                txtMessage.Text = frm.CorrectedText;
+            }
+        }
+
+        private void CmbCategoryFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Prevents mouse scrolling via mouse wheel and arrow keys.
+            e.Handled = true;
+        }
     }
 }

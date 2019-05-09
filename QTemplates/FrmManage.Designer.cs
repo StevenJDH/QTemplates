@@ -54,6 +54,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnManageLanguages = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnSpellCheck = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -115,6 +116,7 @@
             this.cmbCategoryFilter.Size = new System.Drawing.Size(256, 21);
             this.cmbCategoryFilter.TabIndex = 12;
             this.cmbCategoryFilter.SelectedIndexChanged += new System.EventHandler(this.CmbCategoryFilter_SelectedIndexChanged);
+            this.cmbCategoryFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CmbCategoryFilter_KeyDown);
             // 
             // cmbLang
             // 
@@ -331,6 +333,16 @@
             this.label7.TabIndex = 31;
             this.label7.Text = "Message:";
             // 
+            // btnSpellCheck
+            // 
+            this.btnSpellCheck.Location = new System.Drawing.Point(152, 392);
+            this.btnSpellCheck.Name = "btnSpellCheck";
+            this.btnSpellCheck.Size = new System.Drawing.Size(115, 32);
+            this.btnSpellCheck.TabIndex = 32;
+            this.btnSpellCheck.Text = "Check Spelling";
+            this.btnSpellCheck.UseVisualStyleBackColor = true;
+            this.btnSpellCheck.Click += new System.EventHandler(this.BtnSpellCheck_Click);
+            // 
             // FrmManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,6 +350,7 @@
             this.BackColor = System.Drawing.Color.MintCream;
             this.ClientSize = new System.Drawing.Size(1043, 541);
             this.ControlBox = false;
+            this.Controls.Add(this.btnSpellCheck);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.lblLangAvailable);
@@ -394,5 +407,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnManageCategories;
         private System.Windows.Forms.Button btnManageLanguages;
+        private System.Windows.Forms.Button btnSpellCheck;
     }
 }

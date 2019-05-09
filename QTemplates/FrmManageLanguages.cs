@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,10 +59,21 @@ namespace QTemplates
                 .Select(l => l.Name)
                 .ToList()
                 .ForEach(l => lstLang.Items.Add(l));
+
+            UpdateAutoComplete();
         }
 
         private void BtnAdd_Click(object sender, EventArgs e)
         {
+            if (txtLang.AutoCompleteCustomSource.Cast<string>()
+                    .FirstOrDefault(l => l.ToLower() == txtLang.Text.ToLower().Trim()) == null)
+            {
+                _logger.Warn($"Cannot add '{txtLang.Text.Trim()}' as it is an invalid language.");
+                MessageBox.Show($"Please use one of the suggested languages when typing, since '{txtLang.Text.Trim()}' is not a valid language.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             var lang = new Language()
             {
                 Name = txtLang.Text.Trim(),
@@ -75,6 +87,7 @@ namespace QTemplates
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 lstLang.Items.Add(lang.Name);
                 lstLang.Text = lang.Name;
+                UpdateAutoComplete();
             }
             catch (DbUpdateException ex)
             {
@@ -86,6 +99,15 @@ namespace QTemplates
 
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
+            if (txtLang.AutoCompleteCustomSource.Cast<string>()
+                    .FirstOrDefault(l => l.ToLower() == txtLang.Text.ToLower().Trim()) == null)
+            {
+                _logger.Warn($"Cannot update '{lstLang.Text}' with '{txtLang.Text.Trim()}' as it is an invalid language.");
+                MessageBox.Show($"Please use one of the suggested languages when typing, since '{txtLang.Text.Trim()}' is not a valid language.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             if (MessageBox.Show($"Are you sure you want to update the '{lstLang.Text}' language?",
                     Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
@@ -103,6 +125,7 @@ namespace QTemplates
                 lstLang.Items.Remove(lstLang.Text);
                 lstLang.Items.Add(lang.Name);
                 txtLang.Text = "";
+                UpdateAutoComplete();
             }
             catch (DbUpdateException ex)
             {
@@ -110,6 +133,21 @@ namespace QTemplates
                 _unitOfWork.UndoChanges();
                 MessageBox.Show($"Error: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Updates the auto-complete list of languages to be used for templates.
+        /// </summary>
+        private void UpdateAutoComplete()
+        {
+            var languages = CultureInfo.GetCultures(CultureTypes.AllCultures)
+                .Select(l => l.EnglishName)
+                .Where(l => l != "English")
+                .Except(lstLang.Items.Cast<string>().ToList())
+                .ToArray();
+
+            txtLang.AutoCompleteCustomSource.Clear();
+            txtLang.AutoCompleteCustomSource.AddRange(languages);
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)

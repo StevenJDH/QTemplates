@@ -38,6 +38,8 @@
             // 
             // txtLang
             // 
+            this.txtLang.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.txtLang.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtLang.BackColor = System.Drawing.SystemColors.Window;
             this.txtLang.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtLang.Location = new System.Drawing.Point(8, 176);
