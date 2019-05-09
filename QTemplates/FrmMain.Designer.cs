@@ -116,6 +116,7 @@
             this.cmbLang.Size = new System.Drawing.Size(256, 21);
             this.cmbLang.TabIndex = 2;
             this.cmbLang.DropDownClosed += new System.EventHandler(this.CmbLang_DropDownClosed);
+            this.cmbLang.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CmbLang_KeyDown);
             // 
             // btnUse
             // 
@@ -138,6 +139,7 @@
             this.cmbCategory.Size = new System.Drawing.Size(256, 21);
             this.cmbCategory.TabIndex = 3;
             this.cmbCategory.DropDownClosed += new System.EventHandler(this.CmbCategory_DropDownClosed);
+            this.cmbCategory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CmbCategory_KeyDown);
             // 
             // lstTemplates
             // 

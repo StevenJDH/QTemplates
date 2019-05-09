@@ -78,6 +78,10 @@ namespace QTemplates
             // Hotkey for showing template selector.
             _globalHotKey.AddHotKey(123, GlobalHotKey.NOREPEAT + GlobalHotKey.CTRL, Keys.T, () =>
             {
+                if (IsFormOpen(typeof(FrmMain)))
+                {
+                    return;
+                }
                 _keyboardInput.HookWindow();
 
                 // Resets form state that enables the form to load to system tray directly on first load.
@@ -87,6 +91,7 @@ namespace QTemplates
                 btnUse.Focus();
                 lstTemplates.ClearSelected();
                 this.Show();
+                this.Focus();
 
                 // Ensures selection window appears as the active window.
                 this.TopMost = true;
@@ -95,7 +100,6 @@ namespace QTemplates
             // Hotkey for using last template automatically.
             _globalHotKey.AddHotKey(456, GlobalHotKey.NOREPEAT + GlobalHotKey.CTRL + GlobalHotKey.SHIFT, Keys.T, () =>
             {
-                _keyboardInput.ReleaseWindow(); // Hooks not needed as we only want current foreground window.
                 _keyboardInput.SendTextAgain();
             });
 
@@ -250,13 +254,19 @@ namespace QTemplates
                 MessageBox.Show($"Error: {ex.Message} Use Ctrl+Shift+T to inject selected template manually.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            // Removes the hook since template selection window is now closed.
+            _keyboardInput.ReleaseWindow();
         }
 
         private void CmnuAbout_Click(object sender, EventArgs e)
         {
-            using (FrmAbout frm = new FrmAbout())
+            if (IsFormOpen(typeof(FrmAbout)) == false)
             {
-                frm.ShowDialog(this);
+                using (FrmAbout frm = new FrmAbout())
+                {
+                    frm.ShowDialog(this);
+                }
             }
         }
 
@@ -292,9 +302,12 @@ namespace QTemplates
 
             if (response?.IsUpdateAvailable() == true)
             {
-                using (var frm = new FrmUpdater(response, this.Icon))
+                if (IsFormOpen(typeof(FrmUpdater)) == false)
                 {
-                    frm.ShowDialog();
+                    using (var frm = new FrmUpdater(response, this.Icon))
+                    {
+                        frm.ShowDialog();
+                    }
                 }
             }
             else
@@ -342,7 +355,7 @@ namespace QTemplates
 
         private void NotifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (_latestReleaseInfo != null)
+            if (_latestReleaseInfo != null && IsFormOpen(typeof(FrmUpdater)) == false)
             {
                 using (var frm = new FrmUpdater(_latestReleaseInfo, this.Icon))
                 {
@@ -368,6 +381,42 @@ namespace QTemplates
                 param.ClassStyle |= CP_DISABLED_CLOSE_BUTTON;
                 return param;
             }
+        }
+
+        /// <summary>
+        /// Checks to see if a particular form is open, but does not include hidden forms.
+        /// </summary>
+        /// <param name="form">Form to check for</param>
+        /// <returns>True if open, false if not</returns>
+        /// <example>
+        /// <code>
+        /// if (IsFormOpen(typeof(FrmMain)))
+        /// {
+        ///    // ....
+        /// }
+        /// </code>
+        /// </example>
+        public bool IsFormOpen(Type form)
+        {
+            foreach (Form openForm in Application.OpenForms)
+            {
+                if (openForm.GetType().Name == form.Name && openForm.Visible)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void CmbLang_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Prevents mouse scrolling via mouse wheel and arrow keys.
+            e.Handled = true;
+        }
+
+        private void CmbCategory_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }
