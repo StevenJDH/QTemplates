@@ -100,7 +100,7 @@ namespace QTemplates
             {
                 _logger.Error("Got exception.");
                 MessageBox.Show($"Error: {ex.Message}", Application.ProductName,
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 this.Close();
             }
