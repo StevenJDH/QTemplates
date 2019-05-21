@@ -418,5 +418,10 @@ namespace QTemplates
         {
             e.Handled = true;
         }
+
+        private void FrmMain_Shown(object sender, EventArgs e)
+        {
+            this.Focus();
+        }
     }
 }
