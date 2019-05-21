@@ -94,8 +94,12 @@ namespace QTemplates.Classes
 
         public void SendTextAgain()
         {
+            var clipboardBackup = Clipboard.GetText();
+
             Clipboard.SetText(_lastTemplateUsed);
             SendKeys.Send("^(v)");
+
+            Clipboard.SetText(clipboardBackup);
         }
 
         /// <summary>
