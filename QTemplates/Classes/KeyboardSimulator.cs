@@ -56,11 +56,13 @@ namespace QTemplates.Classes
         private const int SC_RESTORE = 0xF120;
         private IntPtr _foregroundHWnd;
         private string _lastTemplateUsed;
+        private WindowEffect _winEffect;
 
         public KeyboardSimulator()
         {
             _foregroundHWnd = IntPtr.Zero;
             _lastTemplateUsed = "<[ No templates used yet ]>";
+            _winEffect = new WindowEffect();
         }
 
         public bool HookWindow()
@@ -70,8 +72,15 @@ namespace QTemplates.Classes
             {
                 _foregroundHWnd = GetForegroundWindow();
             }
-            
-            return IsWindow(_foregroundHWnd);
+
+            if (IsWindow(_foregroundHWnd))
+            {
+                _winEffect.FlashWindow(_foregroundHWnd);
+                return true;
+            }
+
+            _foregroundHWnd = IntPtr.Zero;
+            return false;
         }
 
         public bool SendText(string text)
@@ -79,7 +88,7 @@ namespace QTemplates.Classes
             _lastTemplateUsed = text;
             SwitchWindow(_foregroundHWnd);
             SendTextAgain();
-
+            
             return true;
         }
 

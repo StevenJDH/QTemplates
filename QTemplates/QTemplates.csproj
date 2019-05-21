@@ -95,6 +95,7 @@
     <Compile Include="Classes\Interfaces\ISendable.cs" />
     <Compile Include="Classes\PluginProvider.cs" />
     <Compile Include="Classes\KeyboardSimulator.cs" />
+    <Compile Include="Classes\WindowEffect.cs" />
     <Compile Include="Extensions\ObjectCollectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\WebBrowserExtensions.cs" />
