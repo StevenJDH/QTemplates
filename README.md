@@ -1,5 +1,5 @@
 # QTemplates
-This program, also known as [Q]uick Templates, is productivity tool that is used to inject text-based templates into any application to save you time. I originally started making this tool primarily for my work to speed things up when doing tedious tasks and to standardize things, but then decided to evolve it on here. There are other applications like this out there, but QTemplates supports plugins for when you need to add quick access to customized tools and translated templates that are grouped together.
+This program, also known as [Q]uick Templates, is productivity tool that is used to inject text-based templates into any application to save you time. I originally started making this tool primarily as a personal tool to speed things up when doing tedious tasks and as replacement for scripts that use AutoHotKey for templating, but then I decided to evolve it on here. There are other applications like this out there, but QTemplates supports plugins for when you need to add quick access to customized tools and translated templates that are grouped together.
 
 Releases: [https://github.com/StevenJDH/QTemplates/releases](https://github.com/StevenJDH/QTemplates/releases)
 
