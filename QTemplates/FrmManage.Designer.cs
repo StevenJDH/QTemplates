@@ -49,15 +49,15 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnUpdateVersion = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabTemplate = new System.Windows.Forms.TabPage();
             this.btnManageCategories = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabVersion = new System.Windows.Forms.TabPage();
             this.btnManageLanguages = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.btnSpellCheck = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabTemplate.SuspendLayout();
+            this.tabVersion.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtMessage
@@ -69,6 +69,7 @@
             this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtMessage.Size = new System.Drawing.Size(760, 376);
             this.txtMessage.TabIndex = 0;
+            this.txtMessage.ReadOnlyChanged += new System.EventHandler(this.TxtMessage_ReadOnlyChanged);
             this.txtMessage.TextChanged += new System.EventHandler(this.TxtMessage_TextChanged);
             // 
             // label3
@@ -260,8 +261,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabTemplate);
+            this.tabControl1.Controls.Add(this.tabVersion);
             this.tabControl1.ItemSize = new System.Drawing.Size(200, 18);
             this.tabControl1.Location = new System.Drawing.Point(272, 408);
             this.tabControl1.Multiline = true;
@@ -270,24 +271,25 @@
             this.tabControl1.Size = new System.Drawing.Size(762, 124);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 30;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
-            // tabPage1
+            // tabTemplate
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.tabPage1.Controls.Add(this.btnManageCategories);
-            this.tabPage1.Controls.Add(this.btnUpdate);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.btnCreate);
-            this.tabPage1.Controls.Add(this.cmbCategory);
-            this.tabPage1.Controls.Add(this.btnDelete);
-            this.tabPage1.Controls.Add(this.txtTitle);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(754, 98);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Template";
+            this.tabTemplate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.tabTemplate.Controls.Add(this.btnManageCategories);
+            this.tabTemplate.Controls.Add(this.btnUpdate);
+            this.tabTemplate.Controls.Add(this.label6);
+            this.tabTemplate.Controls.Add(this.btnCreate);
+            this.tabTemplate.Controls.Add(this.cmbCategory);
+            this.tabTemplate.Controls.Add(this.btnDelete);
+            this.tabTemplate.Controls.Add(this.txtTitle);
+            this.tabTemplate.Controls.Add(this.label4);
+            this.tabTemplate.Location = new System.Drawing.Point(4, 22);
+            this.tabTemplate.Name = "tabTemplate";
+            this.tabTemplate.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTemplate.Size = new System.Drawing.Size(754, 98);
+            this.tabTemplate.TabIndex = 0;
+            this.tabTemplate.Text = "Template";
             // 
             // btnManageCategories
             // 
@@ -299,21 +301,21 @@
             this.btnManageCategories.UseVisualStyleBackColor = true;
             this.btnManageCategories.Click += new System.EventHandler(this.BtnManageCategories_Click);
             // 
-            // tabPage2
+            // tabVersion
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.tabPage2.Controls.Add(this.btnManageLanguages);
-            this.tabPage2.Controls.Add(this.btnCreateVersion);
-            this.tabPage2.Controls.Add(this.btnUpdateVersion);
-            this.tabPage2.Controls.Add(this.btnDeleteVersion);
-            this.tabPage2.Controls.Add(this.cmbLang);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(754, 98);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Version";
+            this.tabVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.tabVersion.Controls.Add(this.btnManageLanguages);
+            this.tabVersion.Controls.Add(this.btnCreateVersion);
+            this.tabVersion.Controls.Add(this.btnUpdateVersion);
+            this.tabVersion.Controls.Add(this.btnDeleteVersion);
+            this.tabVersion.Controls.Add(this.cmbLang);
+            this.tabVersion.Controls.Add(this.label1);
+            this.tabVersion.Location = new System.Drawing.Point(4, 22);
+            this.tabVersion.Name = "tabVersion";
+            this.tabVersion.Padding = new System.Windows.Forms.Padding(3);
+            this.tabVersion.Size = new System.Drawing.Size(754, 98);
+            this.tabVersion.TabIndex = 1;
+            this.tabVersion.Text = "Version";
             // 
             // btnManageLanguages
             // 
@@ -371,9 +373,9 @@
             this.Text = "Manage Templates";
             this.Load += new System.EventHandler(this.FrmManage_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
+            this.tabTemplate.ResumeLayout(false);
+            this.tabTemplate.PerformLayout();
+            this.tabVersion.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -402,8 +404,8 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnUpdateVersion;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabTemplate;
+        private System.Windows.Forms.TabPage tabVersion;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnManageCategories;
         private System.Windows.Forms.Button btnManageLanguages;

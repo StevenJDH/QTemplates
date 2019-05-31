@@ -152,10 +152,13 @@ namespace QTemplates
 
             MessageBox.Show($"The '{template.Title}' template was created successfully.", 
                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             if (cmbCategoryFilter.Text == "All" || cmbCategoryFilter.Text == cmbCategory.Text)
             {
                 lstTemplates.Items.Add(template.Title);
                 lstTemplates.Text = template.Title;
+                ValidateTemplateControls();
+                lstTemplates.Focus();
             }
             else
             {
@@ -399,6 +402,7 @@ namespace QTemplates
                           String.IsNullOrWhiteSpace(txtTitle.Text) == false &&
                           cmbCategory.Text != "");
             btnCreate.Enabled = (state &&  lstTemplates.Items.ContainsEx(txtTitle.Text.Trim()) == false);
+            txtMessage.ReadOnly = !(btnCreate.Enabled || String.IsNullOrWhiteSpace(txtTitle.Text) || lstTemplates.Text == "" || tabControl1.SelectedTab == tabVersion);
             btnUpdate.Enabled = (String.IsNullOrWhiteSpace(txtTitle.Text) == false && cmbCategory.Text != "" && lstTemplates.Text != "");
             btnDelete.Enabled = (lstTemplates.Text != "");
         }
@@ -471,6 +475,17 @@ namespace QTemplates
         {
             // Prevents mouse scrolling via mouse wheel and arrow keys.
             e.Handled = true;
+        }
+
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateTemplateControls();
+        }
+
+        private void TxtMessage_ReadOnlyChanged(object sender, EventArgs e)
+        {
+            txtMessage.BackColor = txtMessage.ReadOnly ? 
+                Color.FromArgb(246, 246, 246) : SystemColors.Window;
         }
     }
 }
