@@ -404,6 +404,7 @@ namespace QTemplates
                           cmbCategory.Text != "");
             btnCreate.Enabled = (state &&  lstTemplates.Items.ContainsEx(txtTitle.Text.Trim()) == false);
             txtMessage.ReadOnly = !(btnCreate.Enabled || String.IsNullOrWhiteSpace(txtTitle.Text) || lstTemplates.Text == "" || tabControl1.SelectedTab == tabVersion);
+            btnSpellCheck.Enabled = !txtMessage.ReadOnly;
             btnUpdate.Enabled = (String.IsNullOrWhiteSpace(txtTitle.Text) == false && cmbCategory.Text != "" && lstTemplates.Text != "");
             btnDelete.Enabled = (lstTemplates.Text != "");
         }
