@@ -267,6 +267,7 @@ namespace QTemplates
                 cmbLangAvailable.Items.Add(cmbLang.Text);
                 lblLangAvailable.Text = $"Languages available: {cmbLangAvailable.Items.Count}";
                 cmbLangAvailable.Text = cmbLang.Text;
+                ValidateVersionControls();
             }
             catch (DbUpdateException ex)
             {

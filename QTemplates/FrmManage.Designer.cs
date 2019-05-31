@@ -221,7 +221,7 @@
             this.btnDeleteVersion.Location = new System.Drawing.Point(624, 32);
             this.btnDeleteVersion.Name = "btnDeleteVersion";
             this.btnDeleteVersion.Size = new System.Drawing.Size(115, 32);
-            this.btnDeleteVersion.TabIndex = 26;
+            this.btnDeleteVersion.TabIndex = 23;
             this.btnDeleteVersion.Text = "Delete Version";
             this.btnDeleteVersion.UseVisualStyleBackColor = true;
             this.btnDeleteVersion.Click += new System.EventHandler(this.BtnDeleteVersion_Click);
@@ -254,7 +254,7 @@
             this.btnUpdateVersion.Location = new System.Drawing.Point(496, 32);
             this.btnUpdateVersion.Name = "btnUpdateVersion";
             this.btnUpdateVersion.Size = new System.Drawing.Size(115, 32);
-            this.btnUpdateVersion.TabIndex = 29;
+            this.btnUpdateVersion.TabIndex = 22;
             this.btnUpdateVersion.Text = "Update Version";
             this.btnUpdateVersion.UseVisualStyleBackColor = true;
             this.btnUpdateVersion.Click += new System.EventHandler(this.BtnUpdateVersion_Click);
