@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using QTemplates.Classes.Interfaces;
 
@@ -99,6 +100,8 @@ namespace QTemplates.Classes
             Clipboard.SetText(_lastTemplateUsed);
             SendKeys.Send("^(v)");
 
+            // Workaround to allow Windows to catch up otherwise clipboard restores before above line finishes.
+            Thread.Sleep(500);
             Clipboard.SetText(clipboardBackup);
         }
 
