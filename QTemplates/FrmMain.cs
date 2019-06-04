@@ -178,6 +178,7 @@ namespace QTemplates
 
         private void BtnHide_Click(object sender, EventArgs e)
         {
+            _keyboardInput.ReleaseWindow();
             this.Hide();
         }
 
@@ -242,7 +243,7 @@ namespace QTemplates
             var version = _unitOfWork.TemplateVersions.GetVersionsWithAll()
                 .FirstOrDefault(v => v.Template.Title == lstTemplates.Text && v.Language.Name == cmbLang.Text);
 
-            BtnHide_Click(this, EventArgs.Empty);
+            this.Hide();
 
             try
             {
