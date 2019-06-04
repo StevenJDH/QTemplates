@@ -39,12 +39,14 @@ namespace QTemplates
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
+        private ToolTip _toolTip;
 
         public FrmManage(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
             _unitOfWork = unitOfWork;
             _logger = AppConfiguration.Instance.AppLogger;
+            _toolTip = new ToolTip();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -385,7 +387,7 @@ namespace QTemplates
         {
             ValidateVersionControls();
         }
-
+        
         /// <summary>
         /// The following are the template validation rules:
         /// Create:
@@ -405,6 +407,7 @@ namespace QTemplates
             btnCreate.Enabled = (state &&  lstTemplates.Items.ContainsEx(txtTitle.Text.Trim()) == false);
             txtMessage.ReadOnly = !(btnCreate.Enabled || String.IsNullOrWhiteSpace(txtTitle.Text) || lstTemplates.Text == "" || tabControl1.SelectedTab == tabVersion);
             btnSpellCheck.Enabled = !txtMessage.ReadOnly;
+            _toolTip.SetToolTip(txtMessage, txtMessage.ReadOnly ? "Use Version tab to edit message content." : "");
             btnUpdate.Enabled = (String.IsNullOrWhiteSpace(txtTitle.Text) == false && cmbCategory.Text != "" && lstTemplates.Text != "");
             btnDelete.Enabled = (lstTemplates.Text != "");
         }
