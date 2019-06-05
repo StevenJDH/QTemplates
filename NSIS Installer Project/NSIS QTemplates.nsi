@@ -46,7 +46,7 @@
 ;--------------------------------
 ;General
 
-  !define PRODUCT_VERSION "1.0.0.19051"
+  !define PRODUCT_VERSION "1.0.0.19061"
   !define MIN_WIN_VER "7"
   !define COMPANY_NAME "Steven Jenkins De Haro"
   !define COPYRIGHT_TEXT "Copyright © 2019 ${COMPANY_NAME}"
