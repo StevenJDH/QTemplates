@@ -101,8 +101,10 @@
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+    ; These indented statements modify settings for MUI_PAGE_FINISH
+    !define MUI_FINISHPAGE_RUN "$INSTDIR\QTemplates.exe"
+    !define MUI_FINISHPAGE_RUN_TEXT "Start QTemplates"
   !insertmacro MUI_PAGE_FINISH
-  
   !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_COMPONENTS
   !insertmacro MUI_UNPAGE_CONFIRM
