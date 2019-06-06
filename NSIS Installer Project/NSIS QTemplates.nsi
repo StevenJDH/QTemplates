@@ -103,8 +103,9 @@
   !insertmacro MUI_PAGE_INSTFILES
     ; These indented statements modify settings for MUI_PAGE_FINISH
     !define MUI_FINISHPAGE_RUN "$INSTDIR\QTemplates.exe"
-    !define MUI_FINISHPAGE_RUN_TEXT "Start QTemplates"
+    !define MUI_FINISHPAGE_RUN_TEXT "Start ${PRODUCT_NAME}"
   !insertmacro MUI_PAGE_FINISH
+  
   !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_COMPONENTS
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -241,18 +242,21 @@ SectionEnd
 
 Function .onInit
 
-  ${ifnot} ${AtLeastWin${MIN_WIN_VER}}
+  ${IfNot} ${AtLeastWin${MIN_WIN_VER}}
     MessageBox MB_ICONSTOP "This program requires at least Windows ${MIN_WIN_VER}." /SD IDOK
     Quit ; will SetErrorLevel 2 - Installation aborted by script
-  ${endif}
-  
-  System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "${MUTEX_OBJECT}") i .R0'
-  IntCmp $R0 0 notRunning
-    System::Call 'Kernel32::CloseHandle(i $R0)'
-    MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
-    Abort
-  notRunning:
-  
+  ${EndIf}
+
+  ;Only check if not doing an in app update, since the app will close itself for the update.
+  ${IfNot} $EXEDIR == $TEMP
+    System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "${MUTEX_OBJECT}") i .R0'
+    IntCmp $R0 0 notRunning
+      System::Call 'Kernel32::CloseHandle(i $R0)'
+      MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
+      Abort
+    notRunning:
+  ${EndIf}
+
   !insertmacro MULTIUSER_INIT
 
 FunctionEnd
@@ -359,9 +363,9 @@ Function un.onInit
 
   System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "${MUTEX_OBJECT}") i .R0'
   IntCmp $R0 0 notRunning
-         System::Call 'Kernel32::CloseHandle(i $R0)'
-         MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
-         Abort
+    System::Call 'Kernel32::CloseHandle(i $R0)'
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${PRODUCT_NAME} is running. Please close it first." /SD IDOK
+    Abort
   notRunning:
   
   !insertmacro MULTIUSER_UNINIT
