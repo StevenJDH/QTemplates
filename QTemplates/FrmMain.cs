@@ -82,6 +82,12 @@ namespace QTemplates
                 {
                     return;
                 }
+                if (IsFormOpen(typeof(FrmManage)))
+                {
+                    MessageBox.Show("The template manager window is still open.",
+                        Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
                 _keyboardInput.HookWindow();
 
                 // Resets form state that enables the form to load to system tray directly on first load.
@@ -184,8 +190,14 @@ namespace QTemplates
 
         private void BtnManage_Click(object sender, EventArgs e)
         {
+            if (IsFormOpen(typeof(FrmManage)))
+            {
+                return;
+            }
+
             using (var frm = new FrmManage(_unitOfWork))
             {
+                frm.ShowInTaskbar = sender.GetType().Name != btnManage.GetType().Name;
                 frm.ShowDialog(this);
             }
 
@@ -252,7 +264,8 @@ namespace QTemplates
             catch (Exception ex) when (ex is ArgumentException || ex is Win32Exception)
             {
                 _logger.Error(ex, "Got exception.");
-                MessageBox.Show($"Error: {ex.Message} Use Ctrl+Shift+T to inject selected template manually.",
+                // New line needed here like this so suggestion doesn't run together with the error returned.
+                MessageBox.Show($"Error: {ex.Message}\nUse Ctrl+Shift+T to inject selected template manually.",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -423,6 +436,16 @@ namespace QTemplates
         private void FrmMain_Shown(object sender, EventArgs e)
         {
             this.Focus();
+        }
+
+        private void CmnuManage_Click(object sender, EventArgs e)
+        {
+            BtnManage_Click(this, EventArgs.Empty);
+        }
+
+        private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            BtnManage_Click(this, EventArgs.Empty);
         }
     }
 }

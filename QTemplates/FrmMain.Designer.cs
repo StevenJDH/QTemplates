@@ -36,6 +36,7 @@
             this.mnuUpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmnuManage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.cmbLang = new System.Windows.Forms.ComboBox();
@@ -57,53 +58,63 @@
             this.notifyIcon1.Text = "QTemplates";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.NotifyIcon1_BalloonTipClicked);
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.NotifyIcon1_DoubleClick);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmnuAbout,
-            this.mnuUpdateCheck,
-            this.toolStripSeparator1,
+            this.cmnuManage,
             this.mnuTools,
+            this.toolStripSeparator1,
+            this.mnuUpdateCheck,
+            this.cmnuAbout,
             this.toolStripSeparator2,
             this.cmnuExit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(172, 104);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 148);
             // 
             // cmnuAbout
             // 
             this.cmnuAbout.Name = "cmnuAbout";
-            this.cmnuAbout.Size = new System.Drawing.Size(171, 22);
+            this.cmnuAbout.Size = new System.Drawing.Size(187, 22);
             this.cmnuAbout.Text = "About";
             this.cmnuAbout.Click += new System.EventHandler(this.CmnuAbout_Click);
             // 
             // mnuUpdateCheck
             // 
             this.mnuUpdateCheck.Name = "mnuUpdateCheck";
-            this.mnuUpdateCheck.Size = new System.Drawing.Size(171, 22);
+            this.mnuUpdateCheck.Size = new System.Drawing.Size(187, 22);
             this.mnuUpdateCheck.Text = "Check for Updates";
             this.mnuUpdateCheck.Click += new System.EventHandler(this.MnuUpdateCheck_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(168, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
             // 
             // mnuTools
             // 
             this.mnuTools.Name = "mnuTools";
-            this.mnuTools.Size = new System.Drawing.Size(171, 22);
+            this.mnuTools.Size = new System.Drawing.Size(187, 22);
             this.mnuTools.Text = "Tools";
+            // 
+            // cmnuManage
+            // 
+            this.cmnuManage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmnuManage.Name = "cmnuManage";
+            this.cmnuManage.Size = new System.Drawing.Size(187, 22);
+            this.cmnuManage.Text = "Manage Templates...";
+            this.cmnuManage.Click += new System.EventHandler(this.CmnuManage_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(168, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(184, 6);
             // 
             // cmnuExit
             // 
             this.cmnuExit.Name = "cmnuExit";
-            this.cmnuExit.Size = new System.Drawing.Size(171, 22);
+            this.cmnuExit.Size = new System.Drawing.Size(187, 22);
             this.cmnuExit.Text = "Exit";
             this.cmnuExit.Click += new System.EventHandler(this.CmnuExit_Click);
             // 
@@ -243,6 +254,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuTools;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnuUpdateCheck;
+        private System.Windows.Forms.ToolStripMenuItem cmnuManage;
     }
 }
 
