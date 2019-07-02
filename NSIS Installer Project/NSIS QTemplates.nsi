@@ -159,7 +159,7 @@ Section "${PRODUCT_NAME} Core Files (required)" SectionCore
   File "..\QTemplates\bin\Release\x64\SQLite.Interop.dll"
   SetOutPath "$INSTDIR\x86"
   File "..\QTemplates\bin\Release\x86\SQLite.Interop.dll"
-  SetOutPath "$INSTDIR" ;Need to set '$INSTDIR' last so that 'Start in' for shorcuts are set correctly and app plugins load.
+  SetOutPath "$INSTDIR" ;Need to set '$INSTDIR' last so that 'Start in' for shortcuts are set correctly and app plugins load.
   File "..\QTemplates\bin\Release\EntityFramework.dll"
   File "..\QTemplates\bin\Release\EntityFramework.SqlServer.dll"
   File "..\QTemplates\bin\Release\Hunspellx64.dll"
