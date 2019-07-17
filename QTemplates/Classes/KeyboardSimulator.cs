@@ -95,14 +95,23 @@ namespace QTemplates.Classes
 
         public void SendTextAgain()
         {
-            var clipboardBackup = Clipboard.GetText();
+            var clipboardTextBackup = Clipboard.GetText();
+            var clipboardObjectBackup = Clipboard.GetDataObject();
 
             Clipboard.SetText(_lastTemplateUsed);
             SendKeys.Send("^(v)");
 
             // Workaround to allow Windows to catch up otherwise clipboard restores before above line finishes.
             Thread.Sleep(500);
-            Clipboard.SetText(clipboardBackup);
+
+            if (String.IsNullOrWhiteSpace(clipboardTextBackup) == false)
+            {
+                Clipboard.SetText(clipboardTextBackup);
+            }
+            else
+            {
+                Clipboard.SetDataObject(clipboardObjectBackup);
+            }
         }
 
         /// <summary>
