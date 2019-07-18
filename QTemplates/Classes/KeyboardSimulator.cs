@@ -35,6 +35,10 @@ namespace QTemplates.Classes
         private static extern bool IsWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsIconic(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
 
         [DllImport("kernel32.dll")]
@@ -57,7 +61,7 @@ namespace QTemplates.Classes
         private const int SC_RESTORE = 0xF120;
         private IntPtr _foregroundHWnd;
         private string _lastTemplateUsed;
-        private WindowEffect _winEffect;
+        private readonly WindowEffect _winEffect;
 
         public KeyboardSimulator()
         {
@@ -146,8 +150,12 @@ namespace QTemplates.Classes
             // AttachThreadInput is needed so we can get the handle of a focused window in another application.
             if (AttachThreadInput(currentThreadId, foregroundThreadId, true))
             {
-                // Restore original window in case it is minimized otherwise SetForegroundWindow() won't work.
-                SendMessage(windowHandle, WM_SYSCOMMAND, SC_RESTORE, 0);
+                // Restore original window only if minimized otherwise SetForegroundWindow() won't work correctly.
+                // This check is needed to avoid resizing hooked window sometimes when not minimized.
+                if (IsIconic(windowHandle))
+                {
+                    SendMessage(windowHandle, WM_SYSCOMMAND, SC_RESTORE, 0);
+                }
                 // Switches back to original Window intended for the text injection.
                 SetForegroundWindow(windowHandle);
                 // Now detach since we got the focused handle
