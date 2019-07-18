@@ -111,7 +111,7 @@ namespace QTemplates
 
             this.Icon = notifyIcon1.Icon;
             notifyIcon1.Visible = true;
-            Task.Run(() => BackgroundUpdateCheck());
+            Task.Run(() => BackgroundUpdateCheck(showUpToDateMessage: true));
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace QTemplates
             }
             catch (Exception ex)
             {
-                // HTTP status ode 404 can indicate there are no pre/releases available yet, so we want to
+                // HTTP status code 404 can indicate there are no pre/releases available yet, so we want to
                 // show as current version by setting response to null when we get one.
                 if (!(ex is HttpRequestException) && ex.Message.Contains("status code 404") == false)
                 {
@@ -316,6 +316,8 @@ namespace QTemplates
 
             if (response?.IsUpdateAvailable() == true)
             {
+                tmrUpdateCheck.Enabled = false; // Stops the regular update checking to avoid nagging user.
+
                 if (IsFormOpen(typeof(FrmUpdater)) == false)
                 {
                     using (var frm = new FrmUpdater(response, this.Icon))
@@ -334,7 +336,8 @@ namespace QTemplates
         /// <summary>
         /// For use by a separate thread other than the UI thread to check for updates in the background.
         /// </summary>
-        private void BackgroundUpdateCheck()
+        /// <param name="showUpToDateMessage">True to show Up-to-Date message, or false to hide it.</param>
+        private void BackgroundUpdateCheck(bool showUpToDateMessage)
         {
             if (Connection.IsInternetAvailable() == false)
             {
@@ -356,15 +359,21 @@ namespace QTemplates
 
             if (_latestReleaseInfo?.IsUpdateAvailable() == true)
             {
+                tmrUpdateCheck.Enabled = false; // Stops the regular update checking to avoid nagging user.
                 notifyIcon1.ShowBalloonTip(30000, "Update Available", 
                     $"A new version of QTemplates ({_latestReleaseInfo.VersionTag}) is available! Click this notification for more information.", ToolTipIcon.None);
             }
-            else
+            else if (showUpToDateMessage)
             {
                 _latestReleaseInfo = null;
                 notifyIcon1.ShowBalloonTip(1000, "Up-to-Date", 
                     $"You are using the latest version of QTemplates ({Application.ProductVersion}).", ToolTipIcon.None);
             }
+        }
+
+        private void TmrUpdateCheck_Tick(object sender, EventArgs e)
+        {
+            Task.Run(() => BackgroundUpdateCheck(showUpToDateMessage: false));
         }
 
         private void NotifyIcon1_BalloonTipClicked(object sender, EventArgs e)

@@ -32,11 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuUpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.cmnuManage = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuUpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmnuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.cmbLang = new System.Windows.Forms.ComboBox();
@@ -48,6 +48,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.tmrUpdateCheck = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,32 +72,7 @@
             this.toolStripSeparator2,
             this.cmnuExit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 148);
-            // 
-            // cmnuAbout
-            // 
-            this.cmnuAbout.Name = "cmnuAbout";
-            this.cmnuAbout.Size = new System.Drawing.Size(187, 22);
-            this.cmnuAbout.Text = "About";
-            this.cmnuAbout.Click += new System.EventHandler(this.CmnuAbout_Click);
-            // 
-            // mnuUpdateCheck
-            // 
-            this.mnuUpdateCheck.Name = "mnuUpdateCheck";
-            this.mnuUpdateCheck.Size = new System.Drawing.Size(187, 22);
-            this.mnuUpdateCheck.Text = "Check for Updates";
-            this.mnuUpdateCheck.Click += new System.EventHandler(this.MnuUpdateCheck_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
-            // 
-            // mnuTools
-            // 
-            this.mnuTools.Name = "mnuTools";
-            this.mnuTools.Size = new System.Drawing.Size(187, 22);
-            this.mnuTools.Text = "Tools";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 126);
             // 
             // cmnuManage
             // 
@@ -105,6 +81,31 @@
             this.cmnuManage.Size = new System.Drawing.Size(187, 22);
             this.cmnuManage.Text = "Manage Templates...";
             this.cmnuManage.Click += new System.EventHandler(this.CmnuManage_Click);
+            // 
+            // mnuTools
+            // 
+            this.mnuTools.Name = "mnuTools";
+            this.mnuTools.Size = new System.Drawing.Size(187, 22);
+            this.mnuTools.Text = "Tools";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
+            // 
+            // mnuUpdateCheck
+            // 
+            this.mnuUpdateCheck.Name = "mnuUpdateCheck";
+            this.mnuUpdateCheck.Size = new System.Drawing.Size(187, 22);
+            this.mnuUpdateCheck.Text = "Check for Updates";
+            this.mnuUpdateCheck.Click += new System.EventHandler(this.MnuUpdateCheck_Click);
+            // 
+            // cmnuAbout
+            // 
+            this.cmnuAbout.Name = "cmnuAbout";
+            this.cmnuAbout.Size = new System.Drawing.Size(187, 22);
+            this.cmnuAbout.Text = "About";
+            this.cmnuAbout.Click += new System.EventHandler(this.CmnuAbout_Click);
             // 
             // toolStripSeparator2
             // 
@@ -207,6 +208,12 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Templates:";
             // 
+            // tmrUpdateCheck
+            // 
+            this.tmrUpdateCheck.Enabled = true;
+            this.tmrUpdateCheck.Interval = 900000;
+            this.tmrUpdateCheck.Tick += new System.EventHandler(this.TmrUpdateCheck_Tick);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -255,6 +262,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnuUpdateCheck;
         private System.Windows.Forms.ToolStripMenuItem cmnuManage;
+        private System.Windows.Forms.Timer tmrUpdateCheck;
     }
 }
 
