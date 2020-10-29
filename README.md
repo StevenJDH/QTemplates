@@ -1,4 +1,9 @@
 # QTemplates
+
+![GitHub All Releases](https://img.shields.io/github/downloads/StevenJDH/QTemplates/total)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/StevenJDH/QTemplates?include_prereleases)
+![GitHub](https://img.shields.io/github/license/StevenJDH/QTemplates)
+
 This program, also known as [Q]uick Templates, is productivity tool that is used to inject text-based templates into any application to save you time. I originally started making this tool primarily as a personal tool to speed things up when doing tedious tasks and as a replacement for scripts that use AutoHotKey for templating, but then I decided to evolve it on here. There are other applications like this out there, but QTemplates supports plugins for when you need to add quick access to customized tools and translated templates that are grouped together.
 
 Releases: [https://github.com/StevenJDH/QTemplates/releases](https://github.com/StevenJDH/QTemplates/releases)
@@ -39,9 +44,6 @@ I've included the NSIS (Nullsoft Scriptable Install System) script that I wrote 
 ## Do you have any questions?
 Many commonly asked questions are answered in the FAQ:
 [https://github.com/StevenJDH/QTemplates/wiki/FAQ](https://github.com/StevenJDH/QTemplates/wiki/FAQ)
-
-## Need to contact me?
-I can be reached here directly at [https://21.co/stevenjdh](https://21.co/stevenjdh "Contact Page")
 
 ## Want to show your support?
 
